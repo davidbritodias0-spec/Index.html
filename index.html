@@ -5,49 +5,50 @@
     <title>Transformers G1</title>
     <style>
         * {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
-        body {background-color:#000; color:#fff; padding:20px; display:flex; flex-wrap:wrap; gap:25px; justify-content:center;}
+        body {
+            background-color:#000; 
+            color:#fff; 
+            padding:20px; 
+            display:flex; 
+            flex-wrap:wrap; 
+            gap:25px; 
+            justify-content:center;
+            transition: background-color 0.4s ease;
+        }
         h1 {width:100%; text-align:center; color:#ffd700; margin-bottom:10px; font-size:28px;}
         .audio-container {width:100%; display:flex; justify-content:center; margin-bottom:25px;}
         audio {background-color: #222; border-radius: 30px; border: 2px solid #ffd700;}
         
-        /* Estrutura do Card de 3 Lados */<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Transformers G1</title>
-    <style>
-        * {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
-        body {background-color:#000; color:#fff; padding:20px; display:flex; flex-wrap:wrap; gap:25px; justify-content:center;}
-        h1 {width:100%; text-align:center; color:#ffd700; margin-bottom:10px; font-size:28px;}
-        .audio-container {width:100%; display:flex; justify-content:center; margin-bottom:25px;}
-        audio {background-color: #222; border-radius: 30px; border: 2px solid #ffd700;}
-        
-        /* Estrutura do Card de 3 Lados */
         .card {width:230px; height:340px; position:relative; perspective:1000px; cursor:pointer;}
         .card-inner {width:100%; height:100%; position:absolute; transform-style:preserve-3d; transition:transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
         
-        /* Os Três Lados da Carta com afastamento Z para formar o prisma */
-        .lado {position:absolute; width:100%; height:100%; border-radius:12px; backface-visibility:hidden; overflow:hidden; border:3px solid; display:flex; flex-direction:column;}
+        .lado {position:absolute; width:100%; height:100%; border-radius:12px; backface-visibility:hidden; overflow:hidden; border:3px solid; display:flex; flex-direction:column; transition: box-shadow 0.3s ease, filter 0.3s ease;}
         .lado img {width:100%; height:260px; object-fit:contain; background:#fff; padding:8px;}
         .lado h3 {text-align:center; padding:10px; font-size:17px; background:#111;}
         
-        /* Configurações específicas das facções */
         .autobot .lado {border-color:#e50000; background:#111;}
         .autobot h3 {color:#e50000;}
+        .autobot.brilhar .lado {
+            box-shadow: 0 0 20px #e50000, inset 0 0 10px #e50000;
+            filter: drop-shadow(0 0 5px #e50000);
+        }
+        
         .decepticon .lado {border-color:#7b2cbf; background:#111;}
         .decepticon h3 {color:#7b2cbf;}
+        .decepticon.brilhar .lado {
+            box-shadow: 0 0 20px #7b2cbf, inset 0 0 10px #7b2cbf;
+            filter: drop-shadow(0 0 5px #7b2cbf);
+        }
         
-        /* Posicionamento 3D dos lados (Afastados 66px para criar profundidade) */
         .logo {transform: rotateY(0deg) translateZ(66px); z-index: 3;}
-        .logo img {background:#222 !important;} 
+        .logo img {background:#222;}
         
         .lider {transform: rotateY(120deg) translateZ(66px); z-index: 2;}
         
-        .dados {transform: rotateY(240deg) translateZ(66px); z-index: 1; background:#222 !important; padding:18px; justify-content:center;}
+        .dados {transform: rotateY(240deg) translateZ(66px); z-index: 1; background:#222; padding:18px; justify-content:center;}
         .dados p {margin:8px 0; font-size:15px; line-height:1.4;}
         .dados strong {color:#ffd700;}
         
-        /* Rotações da estrutura interna */
         .estagio-1 {transform: rotateY(0deg);}
         .estagio-2 {transform: rotateY(-120deg);}
         .estagio-3 {transform: rotateY(-240deg);}
@@ -57,10 +58,11 @@
     <h1>TRANSFORMERS G1</h1>
     
     <div class="audio-container">
-        <audio src="tema.mp3" controls loop></audio>
+        <audio id="bg-music" src="tema.mp3" controls loop></audio>
     </div>
     
-    <!-- Card do Optimus Prime -->
+    <audio id="transform-sound" src="transformacao.mp3"></audio>
+    
     <div class="card autobot" onclick="girarCard(this)">
         <div class="card-inner estagio-1" data-estagio="1">
             <div class="lado logo">
@@ -76,12 +78,11 @@
                 <p><strong>Função:</strong> Líder Supremo</p>
                 <p><strong>Altura:</strong> 6,5 metros</p>
                 <p><strong>Planeta:</strong> Cybertron</p>
-                <p><strong>Modo:</strong> Caminhão</p>
+                <p><strong>Modo:</strong> Caminhão de carga</p>
             </div>
         </div>
     </div>
 
-    <!-- Card do Megatron (Corrigido o evento onclick) -->
     <div class="card decepticon" onclick="girarCard(this)">
         <div class="card-inner estagio-1" data-estagio="1">
             <div class="lado logo">
@@ -97,15 +98,48 @@
                 <p><strong>Função:</strong> Líder</p>
                 <p><strong>Altura:</strong> 6 metros</p>
                 <p><strong>Planeta:</strong> Cybertron</p>
-                <p><strong>Modo:</strong> Pistola</p>
+                <p><strong>Modo:</strong> Pistola de fusão</p>
             </div>
         </div>
     </div>
 
     <script>
+        const audio = document.getElementById('bg-music');
+        const somTransformacao = document.getElementById('transform-sound');
+
+        somTransformacao.volume = 0.2;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            audio.play().catch(() => {
+                const iniciarAudio = () => {
+                    audio.play();
+                    document.removeEventListener('click', iniciarAudio);
+                };
+                document.addEventListener('click', iniciarAudio);
+            });
+        });
+
         function girarCard(card) {
             const inner = card.querySelector('.card-inner');
             let estagioAtual = parseInt(inner.getAttribute('data-estagio'));
+            
+            somTransformacao.currentTime = 0;
+            somTransformacao.play().catch(err => console.log("Áudio bloqueado ou não encontrado"));
+
+            card.classList.add('brilhar');
+            setTimeout(() => {
+                card.classList.remove('brilhar');
+            }, 800);
+
+            // Pisca o fundo do site com a cor da facção clicada e volta para o preto
+            if (card.classList.contains('autobot')) {
+                document.body.style.backgroundColor = '#2a0000';
+            } else if (card.classList.contains('decepticon')) {
+                document.body.style.backgroundColor = '#180030';
+            }
+            setTimeout(() => {
+                document.body.style.backgroundColor = '#000000';
+            }, 400);
             
             inner.classList.remove('estagio-1', 'estagio-2', 'estagio-3');
             
