@@ -1,298 +1,228 @@
-<h1>TRANSFORMERS G1</h1>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformers G1</title>
+    <style>
+        * {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
+        body {
+            background-color:#000; color:#fff; padding:20px 10px; 
+            display:flex; flex-direction: column; align-items: center;
+            min-height: 100vh; transition: background-color 0.4s ease; overflow-x: hidden;
+        }
+        h1 {width:100%; text-align:center; color:#ffd700; margin-bottom:10px; font-size:24px;}
+        .audio-container {width:100%; display:flex; justify-content:center; margin-bottom:20px;}
+        audio {background-color: #222; border-radius: 30px; border: 2px solid #ffd700; max-width: 100%;}
+        .cards-wrapper {display: flex; gap: 15px; justify-content: center; width: 100%; max-width: 500px; margin-bottom: 25px;}
+        .card {width:165px; height:250px; position:relative; perspective:1000px; cursor:pointer;}
+        .card-inner {width:100%; height:100%; position:absolute; transform-style:preserve-3d; transition:transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+        .lado {position:absolute; width:100%; height:100%; border-radius:12px; backface-visibility:hidden; overflow:hidden; border:3px solid; display:flex; flex-direction:column; transition: box-shadow 0.3s ease, filter 0.3s ease;}
+        .lado img {width:100%; height:180px; object-fit:contain; background:#fff; padding:8px;}
+        .lado h3 {text-align:center; padding:8px 4px; font-size:13px; background:#111;}
+        .autobot .lado {border-color:#e50000; background:#111;}
+        .autobot h3 {color:#e50000;}
+        .autobot.brilhar .lado {box-shadow: 0 0 20px #e50000, inset 0 0 10px #e50000; filter: drop-shadow(0 0 5px #e50000);}
+        .decepticon .lado {border-color:#7b2cbf; background:#111;}
+        .decepticon h3 {color:#7b2cbf;}
+        .decepticon.brilhar .lado {box-shadow: 0 0 20px #7b2cbf, inset 0 0 10px #7b2cbf; filter: drop-shadow(0 0 5px #7b2cbf);}
+        .logo {transform: rotateY(0deg) translateZ(48px); z-index: 3;}
+        .logo img {background:#222;}
+        .lider {transform: rotateY(120deg) translateZ(48px); z-index: 2;}
+        .dados {transform: rotateY(240deg) translateZ(48px); z-index: 1; background:#111 !important; padding:12px 8px; justify-content:center;}
+        .dados p {margin:5px 0; font-size:11px; line-height:1.3; border-bottom: 1px solid #222; padding-bottom: 2px;}
+        .dados strong {color:#ffd700; display: block; font-size: 10px; text-transform: uppercase;}
+        .estagio-1 {transform: rotateY(0deg);}
+        .estagio-2 {transform: rotateY(-120deg);}
+        .estagio-3 {transform: rotateY(-240deg);}
+        .hud-container {
+            width: 100%; max-width: 360px; background: rgba(15, 15, 15, 0.95); border: 2px solid #222;
+            border-radius: 12px; padding: 15px; box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; gap: 12px; margin-top: 10px;
+            opacity: 0; visibility: hidden; transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+        }
+        .hud-container.visivel {opacity: 1; visibility: visible; transform: translateY(0);}
+        .hud-titulo {font-size: 11px; color: #ffd700; text-align: center; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px dashed #333; padding-bottom: 6px;}
+        .hud-subtitulo {text-align: center; font-size: 13px; font-weight: bold; color: #aaa; margin-bottom: 5px; text-transform: uppercase;}
+        .barra-status {display: flex; flex-direction: column; gap: 4px;}
+        .label-container {display: flex; justify-content: space-between; font-size: 11px; color: #ccc;}
+        .grid-energia {width: 100%; height: 12px; background: #111; border: 1px solid #333; border-radius: 3px; overflow: hidden;}
+        .preenchimento-energia {height: 100%; width: 0%; transition: width 0.6s ease, background-color 0.4s; box-shadow: 0 0 8px currentColor;}
+    </style>
+</head>
+<body>
 
-<div class="audio-container">
-    <audio id="bg-music" src="tema.mp3" controls loop></audio>
-</div>
-
-<audio id="transform-sound" src="transformacao.mp3" preload="auto"></audio>
-
-<div class="cards-wrapper">
-    <!-- Card do Optimus Prime -->
-    <div class="card autobot" onclick="girarCard(this, 'optimus')">
-        <div class="card-inner estagio-1" data-estagio="1">
-            <div class="lado logo">
-                <img src="logo_autobot.jpg" alt="Logo Autobot">
-                <h3>Optimus Prime</h3>
-            </div>
-            <div class="lado lider">
-                <img src="optimus.jpg" alt="Optimus Prime">
-                <h3>Optimus Prime</h3>
-            </div>
-            <div class="lado dados">
-                <p><strong>Facção</strong>Autobots</p>
-                <p><strong>Função</strong>Líder Supremo</p>
-                <p><strong>Altura</strong>6,5 metros</p>
-                <p><strong>Planeta</strong>Cybertron</p>
-                <p><strong>Modo</strong>Caminhão de carga</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Card do Megatron -->
-    <div class="card decepticon" onclick="girarCard(this, 'megatron')">
-        <div class="card-inner estagio-1" data-estagio="1">
-            <div class="lado logo">
-                <img src="logo_decepticon.jpg" alt="Logo Decepticon">
-                <h3>Megatron</h3>
-            </div>
-            <div class="lado lider">
-                <img src="megatron.jpg" alt="Megatron">
-                <h3>Megatron</h3>
-            </div>
-            <div class="lado dados">
-                <p><strong>Facção</strong>Decepticons</p>
-                <p><strong>Função</strong>Líder</p>
-                <p><strong>Altura</strong>6 metros</p>
-                <p><strong>Planeta</strong>Cybertron</p>
-                <p><strong>Modo</strong>Pistola de fusão</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- PAINEL HUD DE COMBATE -->
-<div id="hud-combate" class="hud-container">
-    <div class="hud-titulo">SISTEMA DE DIAGNÓSTICO TÁTICO</div>
-    <div id="hud-nome" class="hud-subtitulo">SELECIONE UM LÍDER</div>
+        <h1>TRANSFORMERS G1</h1>
     
-    <div class="barra-status">
-        <div class="label-container"><span>FORÇA (STR)</span><span id="val-forca">0</span></div>
-        <div class="grid-energia"><div id="bar-forca" class="preenchimento-energia"></div></div>
+    <div class="audio-container">
+        <audio id="bg-music" src="tema.mp3" controls loop></audio>
     </div>
-    <div class="barra-status">
-        <div class="label-container"><span>INTELIGÊNCIA (INT)</span><span id="val-int">0</span></div>
-        <div class="grid-energia"><div id="bar-int" class="preenchimento-energia"></div></div>
+    
+    <audio id="transform-sound" src="transformacao.mp3" preload="auto"></audio>
+    
+    <div class="cards-wrapper">
+        <!-- Card do Optimus Prime -->
+        <div class="card autobot" onclick="girarCard(this, 'optimus')">
+            <div class="card-inner estagio-1" data-estagio="1">
+                <div class="lado logo">
+                    <img src="logo_autobot.jpg" alt="Logo Autobot">
+                    <h3>Optimus Prime</h3>
+                </div>
+                <div class="lado lider">
+                    <img src="optimus.jpg" alt="Optimus Prime">
+                    <h3>Optimus Prime</h3>
+                </div>
+                <div class="lado dados">
+                    <p><strong>Facção</strong>Autobots</p>
+                    <p><strong>Função</strong>Líder Supremo</p>
+                    <p><strong>Altura</strong>6,5 metros</p>
+                    <p><strong>Planeta</strong>Cybertron</p>
+                    <p><strong>Modo</strong>Caminhão de carga</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card do Megatron -->
+        <div class="card decepticon" onclick="girarCard(this, 'megatron')">
+            <div class="card-inner estagio-1" data-estagio="1">
+                <div class="lado logo">
+                    <img src="logo_decepticon.jpg" alt="Logo Decepticon">
+                    <h3>Megatron</h3>
+                </div>
+                <div class="lado lider">
+                    <img src="megatron.jpg" alt="Megatron">
+                    <h3>Megatron</h3>
+                </div>
+                <div class="lado dados">
+                    <p><strong>Facção</strong>Decepticons</p>
+                    <p><strong>Função</strong>Líder</p>
+                    <p><strong>Altura</strong>6 metros</p>
+                    <p><strong>Planeta</strong>Cybertron</p>
+                    <p><strong>Modo</strong>Pistola de fusão</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="barra-status">
-        <div class="label-container"><span>VELOCIDADE (SPD)</span><span id="val-vel">0</span></div>
-        <div class="grid-energia"><div id="bar-vel" class="preenchimento-energia"></div></div>
-    </div>
-    <div class="barra-status">
-        <div class="label-container"><span>PODER DE FOGO (POW)</span><span id="val-pow">0</span></div>
-        <div class="grid-energia"><div id="bar-pow" class="preenchimento-energia"></div></div>
-    </div>
-</div>
 
-* {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
-body {
-    background-color:#000; 
-    color:#fff; 
-    padding:20px 10px; 
-    display:flex; 
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    transition: background-color 0.4s ease;
-    overflow-x: hidden;
-}
-h1 {width:100%; text-align:center; color:#ffd700; margin-bottom:10px; font-size:24px; text-shadow: 0 0 10px rgba(255,215,0,0.5);}
-.audio-container {width:100%; display:flex; justify-content:center; margin-bottom:20px;}
-audio {background-color: #222; border-radius: 30px; border: 2px solid #ffd700; max-width: 100%;}
-
-.cards-wrapper {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    width: 100%;
-    max-width: 500px;
-    margin-bottom: 25px;
-}
-
-.card {width:165px; height:250px; position:relative; perspective:1000px; cursor:pointer;}
-.card-inner {width:100%; height:100%; position:absolute; transform-style:preserve-3d; transition:transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
-
-.lado {position:absolute; width:100%; height:100%; border-radius:12px; backface-visibility:hidden; overflow:hidden; border:3px solid; display:flex; flex-direction:column; transition: box-shadow 0.3s ease, filter 0.3s ease;}
-.lado img {width:100%; height:180px; object-fit:contain; background:#fff; padding:8px;}
-.lado h3 {text-align:center; padding:8px 4px; font-size:13px; background:#111;}
-
-.autobot .lado {border-color:#e50000; background:#111;}
-.autobot h3 {color:#e50000;}
-.autobot.brilhar .lado {
-    box-shadow: 0 0 20px #e50000, inset 0 0 10px #e50000;
-    filter: drop-shadow(0 0 5px #e50000);
-}
-
-.decepticon .lado {border-color:#7b2cbf; background:#111;}
-.decepticon h3 {color:#7b2cbf;}
-.decepticon.brilhar .lado {
-    box-shadow: 0 0 20px #7b2cbf, inset 0 0 10px #7b2cbf;
-    filter: drop-shadow(0 0 5px #7b2cbf);
-}
-
-.logo {transform: rotateY(0deg) translateZ(48px); z-index: 3;}
-.logo img {background:#222;}
-
-.lider {transform: rotateY(120deg) translateZ(48px); z-index: 2;}
-
-.dados {transform: rotateY(240deg) translateZ(48px); z-index: 1; background:#111 !important; padding:12px 8px; justify-content:center;}
-.dados p {margin:5px 0; font-size:11px; line-height:1.3; border-bottom: 1px solid #222; padding-bottom: 2px;}
-.dados strong {color:#ffd700; display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px;}
-
-.estagio-1 {transform: rotateY(0deg);}
-.estagio-2 {transform: rotateY(-120deg);}
-.estagio-3 {transform: rotateY(-240deg);}
-
-/* Painel Oculto com Efeito Deslizante */
-.hud-container {
-    width: 100%;
-    max-width: 360px;
-    background: rgba(15, 15, 15, 0.95);
-    border: 2px solid #222;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 10px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
-}
-
-.hud-container.visivel {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.hud-titulo {
-    font-size: 11px;
-    color: #ffd700;
-    text-align: center;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    border-bottom: 1px dashed #333;
-    padding-bottom: 6px;
-    font-family: 'Courier New', monospace;
-}
-.hud-subtitulo {
-    text-align: center;
-    font-size: 13px;
-    font-weight: bold;
-    color: #aaa;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-    transition: color 0.3s;
-}
-.barra-status {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-.label-container {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    font-family: 'Courier New', monospace;
-    color: #ccc;
-}
-.grid-energia {
-    width: 100%;
-    height: 12px;
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 3px;
-    overflow: hidden;
-    position: relative;
-}
-.preenchimento-energia {
-    height: 100%;
-    width: 0%;
-    transition: width 0.6s cubic-bezier(0.1, 0.8, 0.3, 1), background-color 0.4s;
-    box-shadow: 0 0 8px currentColor;
-}
-
-const audio = document.getElementById('bg-music');
-const somTransformacao = document.getElementById('transform-sound');
-somTransformacao.volume = 0.2;
-
-const atributosG1 = {
-    optimus: { nome: "Optimus Prime", cor: "#e50000", str: 10, int: 10, vel: 8, pow: 10 },
-    megatron: { nome: "Megatron", cor: "#7b2cbf", str: 10, int: 9, vel: 9, pow: 10 }
-};
-
-window.addEventListener('DOMContentLoaded', () => {
-    audio.play().catch(() => {
-        const iniciarAudio = () => {
-            audio.play();
-            document.removeEventListener('click', iniciarAudio);
-        };
-        document.addEventListener('click', iniciarAudio);
-    });
-});
-
-function atualizarHUD(personagem, estagio) {
-    const hud = document.getElementById('hud-combate');
-    const txtNome = document.getElementById('hud-nome');
-    const bars = {
-        str: document.getElementById('bar-forca'),
-        int: document.getElementById('bar-int'),
-        vel: document.getElementById('bar-vel'),
-        pow: document.getElementById('bar-pow')
-    };
-    const vals = {
-        str: document.getElementById('val-forca'),
-        int: document.getElementById('val-int'),
-        vel: document.getElementById('val-vel'),
-        pow: document.getElementById('val-pow')
-    };
-
-    if (estagio > 1 && personagem) {
-        hud.classList.add('visivel');
-        const dados = atributosG1[personagem];
-        txtNome.textContent = dados.nome;
-        txtNome.style.color = dados.cor;
+    <!-- PAINEL DE DIAGNÓSTICO TÁTICO -->
+    <div id="hud-combate" class="hud-container">
+        <div class="hud-titulo">SISTEMA DE DIAGNÓSTICO TÁTICO</div>
+        <div id="hud-nome" class="hud-subtitulo">SELECIONE UM LÍDER</div>
         
-        Object.keys(bars).forEach(key => {
-            const porcentagem = dados[key] * 10;
-            bars[key].style.width = porcentagem + '%';
-            bars[key].style.backgroundColor = dados.cor;
-            vals[key].textContent = dados[key] + ' / 10';
+        <div class="barra-status">
+            <div class="label-container"><span>FORÇA (STR)</span><span id="val-forca">0</span></div>
+            <div class="grid-energia"><div id="bar-forca" class="preenchimento-energia"></div></div>
+        </div>
+        <div class="barra-status">
+            <div class="label-container"><span>INTELIGÊNCIA (INT)</span><span id="val-int">0</span></div>
+            <div class="grid-energia"><div id="bar-int" class="preenchimento-energia"></div></div>
+        </div>
+        <div class="barra-status">
+            <div class="label-container"><span>VELOCIDADE (SPD)</span><span id="val-vel">0</span></div>
+            <div class="grid-energia"><div id="bar-vel" class="preenchimento-energia"></div></div>
+        </div>
+        <div class="barra-status">
+            <div class="label-container"><span>PODER DE FOGO (POW)</span><span id="val-pow">0</span></div>
+            <div class="grid-energia"><div id="bar-pow" class="preenchimento-energia"></div></div>
+        </div>
+    </div>
+
+        <script>
+        const audio = document.getElementById('bg-music');
+        const somTransformacao = document.getElementById('transform-sound');
+        somTransformacao.volume = 0.2;
+
+        const atributosG1 = {
+            optimus: { nome: "Optimus Prime", cor: "#e50000", str: 10, int: 10, vel: 8, pow: 10 },
+            megatron: { nome: "Megatron", cor: "#7b2cbf", str: 10, int: 9, vel: 9, pow: 10 }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            audio.play().catch(() => {
+                const iniciarAudio = () => {
+                    audio.play();
+                    document.removeEventListener('click', iniciarAudio);
+                };
+                document.addEventListener('click', iniciarAudio);
+            });
         });
-    } else {
-        hud.classList.remove('visivel');
-        Object.keys(bars).forEach(key => {
-            bars[key].style.width = '0%';
-            vals[key].textContent = '0';
-        });
-    }
-}
 
-function girarCard(card, personagem) {
-    const inner = card.querySelector('.card-inner');
-    let estagioAtual = parseInt(inner.getAttribute('data-estagio'));
-    let proximoEstagio = 1;
+        function atualizarHUD(personagem, estagio) {
+            const hud = document.getElementById('hud-combate');
+            const txtNome = document.getElementById('hud-nome');
+            const bars = {
+                str: document.getElementById('bar-forca'),
+                int: document.getElementById('bar-int'),
+                vel: document.getElementById('bar-vel'),
+                pow: document.getElementById('bar-pow')
+            };
+            const vals = {
+                str: document.getElementById('val-forca'),
+                int: document.getElementById('val-int'),
+                vel: document.getElementById('val-vel'),
+                pow: document.getElementById('val-pow')
+            };
+
+            if (estagio > 1 && personagem) {
+                hud.classList.add('visivel');
+                const dados = atributosG1[personagem];
+                txtNome.textContent = dados.nome;
+                txtNome.style.color = dados.cor;
+                
+                Object.keys(bars).forEach(key => {
+                    const porcentagem = dados[key] * 10;
+                    bars[key].style.width = porcentagem + '%';
+                    bars[key].style.backgroundColor = dados.cor;
+                    vals[key].textContent = dados[key] + ' / 10';
+                });
+            } else {
+                hud.classList.remove('visivel');
+                Object.keys(bars).forEach(key => {
+                    bars[key].style.width = '0%';
+                    vals[key].textContent = '0';
+                });
+            }
+        }
+
+        function girarCard(card, personagem) {
+            const inner = card.querySelector('.card-inner');
+            let estagioAtual = parseInt(inner.getAttribute('data-estagio'));
+            let proximoEstagio = 1;
+            
+            try {
+                somTransformacao.currentTime = 0;
+                somTransformacao.play().catch(e => console.log("Áudio bloqueado."));
+            } catch(err) { }
+
+            card.classList.add('brilhar');
+            setTimeout(() => card.classList.remove('brilhar'), 800);
+
+            if (card.classList.contains('autobot')) {
+                document.body.style.backgroundColor = '#1a0000';
+            } else if (card.classList.contains('decepticon')) {
+                document.body.style.backgroundColor = '#0e001c';
+            }
+            setTimeout(() => document.body.style.backgroundColor = '#000000', 400);
+            
+            inner.classList.remove('estagio-1', 'estagio-2', 'estagio-3');
+            
+            if (estagioAtual === 1) {
+                proximoEstagio = 2;
+            } else if (estagioAtual === 2) {
+                proximoEstagio = 3;
+            } else {
+                proximoEstagio = 1;
+            }
+
+            inner.classList.add('estagio-' + proximoEstagio);
+            inner.setAttribute('data-estagio', proximoEstagio);
+
+            atualizarHUD(personagem, proximoEstagio);
+        }
+    </script>
+</body>
+</html>
+
+
     
-    try {
-        somTransformacao.currentTime = 0;
-        somTransformacao.play().catch(e => console.log("Áudio bloqueado."));
-    } catch(err) { }
-
-    card.classList.add('brilhar');
-    setTimeout(() => card.classList.remove('brilhar'), 800);
-
-    if (card.classList.contains('autobot')) {
-        document.body.style.backgroundColor = '#1a0000';
-    } else if (card.classList.contains('decepticon')) {
-        document.body.style.backgroundColor = '#0e001c';
-    }
-    setTimeout(() => document.body.style.backgroundColor = '#000000', 400);
-    
-    inner.classList.remove('estagio-1', 'estagio-2', 'estagio-3');
-    
-    if (estagioAtual === 1) {
-        proximoEstagio = 2;
-    } else if (estagioAtual === 2) {
-        proximoEstagio = 3;
-    } else {
-        proximoEstagio = 1;
-    }
-
-    inner.classList.add('estagio-' + proximoEstagio);
-    inner.setAttribute('data-estagio', proximoEstagio);
-
-    atualizarHUD(personagem, proximoEstagio);
-}
-
