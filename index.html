@@ -10,11 +10,23 @@
         .audio-container {width:100%; display:flex; justify-content:center; margin-bottom:25px;}
         audio {background-color: #222; border-radius: 30px; border: 2px solid #ffd700;}
         
+        /* Estrutura do Card de 3 Lados */<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Transformers G1</title>
+    <style>
+        * {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
+        body {background-color:#000; color:#fff; padding:20px; display:flex; flex-wrap:wrap; gap:25px; justify-content:center;}
+        h1 {width:100%; text-align:center; color:#ffd700; margin-bottom:10px; font-size:28px;}
+        .audio-container {width:100%; display:flex; justify-content:center; margin-bottom:25px;}
+        audio {background-color: #222; border-radius: 30px; border: 2px solid #ffd700;}
+        
         /* Estrutura do Card de 3 Lados */
         .card {width:230px; height:340px; position:relative; perspective:1000px; cursor:pointer;}
         .card-inner {width:100%; height:100%; position:absolute; transform-style:preserve-3d; transition:transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
         
-        /* Os Três Lados da Carta */
+        /* Os Três Lados da Carta com afastamento Z para formar o prisma */
         .lado {position:absolute; width:100%; height:100%; border-radius:12px; backface-visibility:hidden; overflow:hidden; border:3px solid; display:flex; flex-direction:column;}
         .lado img {width:100%; height:260px; object-fit:contain; background:#fff; padding:8px;}
         .lado h3 {text-align:center; padding:10px; font-size:17px; background:#111;}
@@ -25,19 +37,17 @@
         .decepticon .lado {border-color:#7b2cbf; background:#111;}
         .decepticon h3 {color:#7b2cbf;}
         
-        /* Estágio 1: Logotipo (Frente padrão a 0 graus) */
-        .logo {transform: rotateY(0deg); z-index: 3;}
-        .logo img {background:#222 !important;} /* Fundo escuro para destacar o logo */
+        /* Posicionamento 3D dos lados (Afastados 66px para criar profundidade) */
+        .logo {transform: rotateY(0deg) translateZ(66px); z-index: 3;}
+        .logo img {background:#222 !important;} 
         
-        /* Estágio 2: Líder (Rotacionado a 120 graus) */
-        .lider {transform: rotateY(120deg); z-index: 2;}
+        .lider {transform: rotateY(120deg) translateZ(66px); z-index: 2;}
         
-        /* Estágio 3: Estatísticas (Rotacionado a 240 graus) */
-        .dados {transform: rotateY(240deg); z-index: 1; background:#222 !important; padding:18px; justify-content:center;}
+        .dados {transform: rotateY(240deg) translateZ(66px); z-index: 1; background:#222 !important; padding:18px; justify-content:center;}
         .dados p {margin:8px 0; font-size:15px; line-height:1.4;}
         .dados strong {color:#ffd700;}
         
-        /* Rotações controladas por JavaScript (0, -120 e -240 graus) */
+        /* Rotações da estrutura interna */
         .estagio-1 {transform: rotateY(0deg);}
         .estagio-2 {transform: rotateY(-120deg);}
         .estagio-3 {transform: rotateY(-240deg);}
@@ -53,58 +63,50 @@
     <!-- Card do Optimus Prime -->
     <div class="card autobot" onclick="girarCard(this)">
         <div class="card-inner estagio-1" data-estagio="1">
-            <!-- LADO 1: LOGOTIPO -->
             <div class="lado logo">
-                <img src="https://wikimedia.org" alt="Logo Autobot">
+                <img src="logo_autobot.jpg" alt="Logo Autobot">
                 <h3>Optimus Prime</h3>
             </div>
-            <!-- LADO 2: FOTO DO LÍDER -->
             <div class="lado lider">
                 <img src="optimus.jpg" alt="Optimus Prime">
                 <h3>Optimus Prime</h3>
             </div>
-            <!-- LADO 3: ESTATÍSTICAS -->
             <div class="lado dados">
                 <p><strong>Facção:</strong> Autobots</p>
                 <p><strong>Função:</strong> Líder Supremo</p>
                 <p><strong>Altura:</strong> 6,5 metros</p>
                 <p><strong>Planeta:</strong> Cybertron</p>
-                <p><strong>Modo:</strong> Caminhão de carga</p>
+                <p><strong>Modo:</strong> Caminhão</p>
             </div>
         </div>
     </div>
 
-    <!-- Card do Megatron -->
+    <!-- Card do Megatron (Corrigido o evento onclick) -->
     <div class="card decepticon" onclick="girarCard(this)">
         <div class="card-inner estagio-1" data-estagio="1">
-            <!-- LADO 1: LOGOTIPO -->
             <div class="lado logo">
-                <img src="https://wikimedia.org" alt="Logo Decepticon">
+                <img src="logo_decepticon.jpg" alt="Logo Decepticon">
                 <h3>Megatron</h3>
             </div>
-            <!-- LADO 2: FOTO DO LÍDER -->
             <div class="lado lider">
                 <img src="megatron.jpg" alt="Megatron">
                 <h3>Megatron</h3>
             </div>
-            <!-- LADO 3: ESTATÍSTICAS -->
             <div class="lado dados">
                 <p><strong>Facção:</strong> Decepticons</p>
                 <p><strong>Função:</strong> Líder</p>
                 <p><strong>Altura:</strong> 6 metros</p>
                 <p><strong>Planeta:</strong> Cybertron</p>
-                <p><strong>Modo:</strong> Pistola de fusão</p>
+                <p><strong>Modo:</strong> Pistola</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Função inteligente que muda o estágio do giro a cada clique
         function girarCard(card) {
             const inner = card.querySelector('.card-inner');
             let estagioAtual = parseInt(inner.getAttribute('data-estagio'));
             
-            // Avança para o próximo estágio (1 -> 2 -> 3 -> 1)
             inner.classList.remove('estagio-1', 'estagio-2', 'estagio-3');
             
             if (estagioAtual === 1) {
