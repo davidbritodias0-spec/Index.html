@@ -61,7 +61,7 @@
         <audio id="bg-music" src="tema.mp3" controls loop></audio>
     </div>
     
-    <audio id="transform-sound" src="transformacao.mp3"></audio>
+    <audio id="transform-sound" src="transformacao.mp3" preload="auto"></audio>
     
     <div class="card autobot" onclick="girarCard(this)">
         <div class="card-inner estagio-1" data-estagio="1">
@@ -131,7 +131,6 @@
                 card.classList.remove('brilhar');
             }, 800);
 
-            // Pisca o fundo do site com a cor da facção clicada e volta para o preto
             if (card.classList.contains('autobot')) {
                 document.body.style.backgroundColor = '#2a0000';
             } else if (card.classList.contains('decepticon')) {
