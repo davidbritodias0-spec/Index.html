@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Transformers G1</title>
+    <style>
+        * {margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif;}
+        body {background-color:#000; color:#fff; padding:20px; display:flex; flex-wrap:wrap; gap:25px; justify-content:center;}
+        h1 {width:100%; text-align:center; color:#ffd700; margin-bottom:10px; font-size:28px;}
+        .audio-container {width:100%; display:flex; justify-content:center; margin-bottom:25px;}
+        audio {background-color: #222; border-radius: 30px; border: 2px solid #ffd700;}
+        .card {width:230px; height:340px; position:relative; perspective:1000px; cursor:pointer;}
+        .frente, .tras {position:absolute; width:100%; height:100%; border-radius:12px; backface-visibility:hidden; transition:transform 0.6s; overflow:hidden; border:3px solid;}
+        .autobot .frente {border-color:#e50000; background:#111;}
+        .decepticon .frente {border-color:#7b2cbf; background:#111;}
+        .frente img {width:100%; height:260px; object-fit:contain; background:#fff; padding:8px;}
+        .frente h3 {text-align:center; padding:10px; font-size:17px;}
+        .autobot h3 {color:#e50000;}
+        .decepticon h3 {color:#7b2cbf;}
+        .tras {background:#222; border-color:#444; transform:rotateY(180deg); padding:18px;}
+        .tras p {margin:8px 0; font-size:15px; line-height:1.4;}
+        .tras strong {color:#ffd700;}
+        .virada .frente {transform:rotateY(180deg);}
+        .virada .tras {transform:rotateY(0deg);}
+    </style>
+</head>
+<body>
+    <h1>TRANSFORMERS G1</h1>
+    
+    <div class="audio-container">
+        <!-- CONFIGURADO: Agora o código procura exatamente por tema.mp3 tudo em minúsculo -->
+        <audio src="tema.mp3" controls loop></audio>
+    </div>
+    
+    <!-- Optimus Prime -->
+    <div class="card autobot" onclick="this.classList.toggle('virada')">
+        <div class="frente">
+            <img src="optimus.jpg" alt="Optimus Prime">
+            <h3>Optimus Prime</h3>
+        </div>
+        <div class="tras">
+            <p><strong>Facção:</strong> Autobots</p>
+            <p><strong>Função:</strong> Líder Supremo</p>
+            <p><strong>Altura:</strong> 6,5 metros</p>
+            <p><strong>Planeta:</strong> Cybertron</p>
+            <p><strong>Modo:</strong> Caminhão de carga</p>
+        </div>
+    </div>
+
+    <!-- Megatron -->
+    <div class="card decepticon" onclick="this.classList.toggle('virada')">
+        <div class="frente">
+            <img src="megatron.jpg" alt="Megatron">
+            <h3>Megatron</h3>
+        </div>
+        <div class="tras">
+            <p><strong>Facção:</strong> Decepticons</p>
+            <p><strong>Função:</strong> Líder</p>
+            <p><strong>Altura:</strong> 6 metros</p>
+            <p><strong>Planeta:</strong> Cybertron</p>
+            <p><strong>Modo:</strong> Pistola de fusão</p>
+        </div>
+    </div>
+</body>
+</html>
