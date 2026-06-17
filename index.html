@@ -120,6 +120,20 @@
             <div class="label-container"><span>INTELIGÊNCIA (INT)</span><span id="val-int">0</span></div>
             <div class="grid-energia"><div id="bar-int" class="preenchimento-energia"></div></div>
         </div>
+
+            <!-- PAINEL DE DIAGNÓSTICO TÁTICO -->
+    <div id="hud-combate" class="hud-container">
+        <div class="hud-titulo">SISTEMA DE DIAGNÓSTICO TÁTICO</div>
+        <div id="hud-nome" class="hud-subtitulo">SELECIONE UM LÍDER</div>
+        
+        <div class="barra-status">
+            <div class="label-container"><span>FORÇA (STR)</span><span id="val-forca">0</span></div>
+            <div class="grid-energia"><div id="bar-forca" class="preenchimento-energia"></div></div>
+        </div>
+        <div class="barra-status">
+            <div class="label-container"><span>INTELIGÊNCIA (INT)</span><span id="val-int">0</span></div>
+            <div class="grid-energia"><div id="bar-int" class="preenchimento-energia"></div></div>
+        </div>
         <div class="barra-status">
             <div class="label-container"><span>VELOCIDADE (SPD)</span><span id="val-vel">0</span></div>
             <div class="grid-energia"><div id="bar-vel" class="preenchimento-energia"></div></div>
@@ -187,7 +201,7 @@
             }
         }
 
-        function girarCard(card, debugger_personagem) {
+        function girarCard(card, personagem) {
             const inner = card.querySelector('.card-inner');
             let estagioAtual = parseInt(inner.getAttribute('data-estagio'));
             let proximoEstagio = 1;
@@ -220,7 +234,7 @@
             inner.classList.add('estagio-' + proximoEstagio);
             inner.setAttribute('data-estagio', proximoEstagio);
 
-            atualizarHUD(debugger_personagem, proximoEstagio);
+            atualizarHUD(personagem, proximoEstagio);
         }
     </script>
 </body>
