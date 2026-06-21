@@ -65,6 +65,17 @@
     
     <!-- Player para o efeito sonoro de transformação -->
     <audio id="transform-sound" src="transformacao.mp3" preload="auto"></audio>
+
+        <!-- Áudios das falas do Optimus Prime -->
+    <audio id="optimus-frase-0" src="falas/optimus1.mp3" preload="auto"></audio>
+    <audio id="optimus-frase-1" src="falas/optimus2.mp3" preload="auto"></audio>
+    <audio id="optimus-frase-2" src="falas/optimus3.mp3" preload="auto"></audio>
+
+    <!-- Áudios das falas do Megatron -->
+    <audio id="megatron-frase-0" src="falas/megatron1.mp3" preload="auto"></audio>
+    <audio id="megatron-frase-1" src="falas/megatron2.mp3" preload="auto"></audio>
+    <audio id="megatron-frase-2" src="falas/megatron3.mp3" preload="auto"></audio>
+
     
     <div class="cards-wrapper">
         <!-- Card do Optimus Prime -->
@@ -138,6 +149,30 @@
         const somTransformacao = document.getElementById('transform-sound');
         somTransformacao.volume = 0.2;
 
+                // Controle de falas disponíveis para evitar repetições consecutivas
+        const falasDisponiveis = {
+            optimus: [0, 1, 2],
+            megatron: [0, 1, 2]
+        };
+
+        function tocarFalaPersonagem(personagem) {
+            if (falasDisponiveis[personagem].length === 0) {
+                falasDisponiveis[personagem] = [0, 1, 2];
+            }
+
+            const indiceSorteado = Math.floor(Math.random() * falasDisponiveis[personagem].length);
+            const numeroDaFrase = falasDisponiveis[personagem][indiceSorteado];
+
+            falasDisponiveis[personagem].splice(indiceSorteado, 1);
+
+            const audioFala = document.getElementById(`${personagem}-frase-${numeroDaFrase}`);
+            if (audioFala) {
+                audioFala.currentTime = 0;
+                audioFala.volume = 0.6;
+                audioFala.play().catch(e => console.log("Áudio de fala bloqueado pelo navegador."));
+            }
+        }
+        
         const atributosG1 = {
             optimus: { nome: "Optimus Prime", cor: "#e50000", str: 10, int: 10, vel: 8, pow: 10 },
             megatron: { nome: "Megatron", cor: "#7b2cbf", str: 10, int: 9, vel: 9, pow: 10 }
@@ -195,10 +230,16 @@
             let estagioAtual = parseInt(inner.getAttribute('data-estagio'));
             let proximoEstagio = 1;
             
-            try {
+                        try {
                 somTransformacao.currentTime = 0;
                 somTransformacao.play().catch(e => console.log("Áudio bloqueado."));
+                
+                // Dispara a fala do personagem estritamente após o término do som de transformação
+                somTransformacao.onended = function() {
+                    tocarFalaPersonagem(personagem);
+                };
             } catch(err) { }
+
 
             card.classList.add('brilhar');
             setTimeout(() => card.classList.remove('brilhar'), 800);
