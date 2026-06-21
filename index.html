@@ -146,9 +146,10 @@
     </div>
 
     <script>
-        const audio = document.getElementById('bg-music');
+                const audio = document.getElementById('bg-music');
         const somTransformacao = document.getElementById('transform-sound');
-        somTransformacao.volume = 0.2;
+        somTransformacao.volume = 0.2; // Volume da transformação (20%)
+        audio.volume = 0.15;            // Reduz a música de fundo para 15%
 
         // Lista com os números das falas (0, 1 e 2) iniciada corretamente
                 const falasDisponiveis = {
@@ -169,7 +170,7 @@
             const audioFala = document.getElementById(`${personagem}-frase-${numeroDaFrase}`);
             if (audioFala) {
                 audioFala.currentTime = 0;
-                audioFala.volume = 0.9;
+                audioFala.volume = 1.0;
                 audioFala.play().catch(e => console.log("Áudio de fala bloqueado pelo navegador."));
             }
         }
