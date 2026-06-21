@@ -151,14 +151,14 @@
         somTransformacao.volume = 0.2;
 
         // Lista com os números das falas (0, 1 e 2) iniciada corretamente
-        const falasDisponiveis = {
-            optimus:,
-            megatron: [0, 1, 2]
+                const falasDisponiveis = {
+            optimus: new Array(0, 1, 2),
+            megatron: new Array(0, 1, 2)
         };
 
         function tocarFalaPersonagem(personagem) {
             if (falasDisponiveis[personagem].length === 0) {
-                falasDisponiveis[personagem] =;
+                falasDisponiveis[personagem] = new Array(0, 1, 2);
             }
 
             const indiceSorteado = Math.floor(Math.random() * falasDisponiveis[personagem].length);
@@ -173,6 +173,7 @@
                 audioFala.play().catch(e => console.log("Áudio de fala bloqueado pelo navegador."));
             }
         }
+
 
         const atributosG1 = {
             optimus: { nome: "Optimus Prime", cor: "#e50000", str: 10, int: 10, vel: 8, pow: 10 },
