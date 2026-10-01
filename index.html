@@ -169,3 +169,50 @@
     <audio id="grimlock-frase-1" src="grimlock1.mp3" preload="auto"></audio>
     <audio id="grimlock-frase-2" src="grimlock2.mp3" preload="auto"></auto>
         
+<!-- PARTE 2 - SEÇÃO B: SONS DECEPTICONS, TELA DE ESCOLHA E BOTÃO VOLTAR -->
+    <!-- BANCO DE ÁUDIOS LOCAIS: 3 FALAS EXCLUSIVAS (0 A 2) PARA OS DECEPTICONS -->
+    <!-- Megatron -->
+    <audio id="megatron-frase-0" src="megatron1.mp3" preload="auto"></audio>
+    <audio id="megatron-frase-1" src="megatron2.mp3" preload="auto"></audio>
+    <audio id="megatron-frase-2" src="megatron3.mp3" preload="auto"></audio>
+
+    <!-- Starscream -->
+    <audio id="starscream-frase-0" src="starscream0.mp3" preload="auto"></audio>
+    <audio id="starscream-frase-1" src="starscream1.mp3" preload="auto"></audio>
+    <audio id="starscream-frase-2" src="starscream2.mp3" preload="auto"></audio>
+
+    <!-- Soundwave -->
+    <audio id="soundwave-frase-0" src="soundwave0.mp3" preload="auto"></audio>
+    <audio id="soundwave-frase-1" src="soundwave1.mp3" preload="auto"></audio>
+    <audio id="soundwave-frase-2" src="soundwave2.mp3" preload="auto"></audio>
+
+    <!-- Shockwave -->
+    <audio id="shockwave-frase-0" src="shockwave0.mp3" preload="auto"></audio>
+    <audio id="shockwave-frase-1" src="shockwave1.mp3" preload="auto"></audio>
+    <audio id="shockwave-frase-2" src="shockwave2.mp3" preload="auto"></audio>
+
+    <!-- Blitzwing -->
+    <audio id="blitzwing-frase-0" src="blitzwing0.mp3" preload="auto"></audio>
+    <audio id="blitzwing-frase-1" src="blitzwing1.mp3" preload="auto"></audio>
+    <audio id="blitzwing-frase-2" src="blitzwing2.mp3" preload="auto"></audio>
+
+
+    <!-- TELA 1: MENU DE SELEÇÃO DE FACÇÃO INICIAL -->
+    <div id="container-faccoes" class="tela-faccoes">
+        <!-- Card de Escolha Autobot -->
+        <div class="card-faccao escolha-autobot" onclick="selecionarFaccao('autobot')">
+            <img src="logo_autobot.jpg" alt="Símbolo Autobot">
+            <h2>Autobots</h2>
+        </div>
+        
+        <!-- Card de Escolha Decepticon -->
+        <div class="card-faccao escolha-decepticon" onclick="selecionarFaccao('decepticon')">
+            <img src="logo_decepticon.jpg" alt="Símbolo Decepticon">
+            <h2>Decepticons</h2>
+        </div>
+    </div>
+
+
+    <!-- BOTÃO DE RETORNO (Oculto no início, aparece na tela de seleção) -->
+    <button id="btn-voltar" class="btn-voltar" onclick="voltarParaFaccoes()">← Mudar de Facção</button>
+    
