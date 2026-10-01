@@ -433,3 +433,151 @@
         });
     });
     
+    /* ==========================================================================
+       LOGICA DE TRANSIÇÃO DE TELAS (FACÇÕES & GRIDS)
+       ========================================================================== */
+    
+    // Função chamada ao clicar em uma das duas Facções iniciais
+    function selecionarFaccao(faccao) {
+        // Esconde a tela de escolha inicial sumindo com o container
+        document.getElementById('container-faccoes').style.display = 'none';
+        
+        // Exibe o grid principal de personagens
+        const grid = document.getElementById('grid-personagens');
+        grid.style.display = 'flex';
+        
+        // Mostra o botão Voltar
+        document.getElementById('btn-voltar').style.display = 'inline-block';
+        
+        // Revela apenas os 5 cards pertencentes à facção selecionada
+        const cards = document.querySelectorAll(`.grupo-${faccao}`);
+        cards.forEach(card => card.classList.remove('escondido'));
+    }
+
+    // Função chamada ao clicar no botão "Mudar de Facção"
+    function voltarParaFaccoes() {
+        // Oculta o grid de personagens e o botão voltar
+        document.getElementById('grid-personagens').style.display = 'none';
+        document.getElementById('btn-voltar').style.display = 'none';
+        
+        // Fecha o painel de Diagnóstico HUD resetando seus dados
+        atualizarHUD(null, 1);
+        
+        // Esconde TODOS os cards do grid para limpar o estado
+        const todosCards = document.querySelectorAll('.card');
+        todosCards.forEach(card => {
+            card.classList.add('escondido');
+            // Reseta a rotação 3D do card de volta para o Estágio 1
+            const inner = card.querySelector('.card-inner');
+            inner.classList.remove('estagio-2', 'estagio-3');
+            inner.classList.add('estagio-1');
+            inner.setAttribute('data-estagio', '1');
+        });
+        
+        // Traz de volta os dois cards grandes de escolha inicial
+        document.getElementById('container-faccoes').style.display = 'flex';
+        // Reseta o fundo da página para preto absoluto
+        document.body.style.backgroundColor = '#000000';
+    }
+
+    /* ==========================================================================
+       ATUALIZAÇÃO DO PAINEL DE DIAGNÓSTICO TÁTICO HUD
+       ========================================================================== */
+    function atualizarHUD(personagem, estagio) {
+        const hud = document.getElementById('hud-combate');
+        const txtNome = document.getElementById('hud-nome');
+        
+        // Mapeamento dos elementos visuais das barras
+        const bars = {
+            str: document.getElementById('bar-forca'),
+            int: document.getElementById('bar-int'),
+            vel: document.getElementById('bar-vel'),
+            pow: document.getElementById('bar-pow')
+        };
+        
+        // Mapeamento dos elementos de texto dos valores numéricos
+        const vals = {
+            str: document.getElementById('val-forca'),
+            int: document.getElementById('val-int'),
+            vel: document.getElementById('val-vel'),
+            pow: document.getElementById('val-pow')
+        };
+
+        // O HUD só fica visível se o card estiver rotacionado (Estágio 2 ou 3)
+        if (estagio > 1 && personagem) {
+            hud.classList.add('visivel');
+            const dados = atributosG1[personagem];
+            
+            txtNome.textContent = dados.nome;
+            txtNome.style.color = dados.cor;
+            
+            // Loop dinâmico para preencher as barras de status (0 a 10 multiplicados por 10%)
+            Object.keys(bars).forEach(key => {
+                const porcentagem = dados[key] * 10;
+                bars[key].style.width = porcentagem + '%';
+                bars[key].style.backgroundColor = dados.cor;
+                vals[key].textContent = dados[key] + ' / 10';
+            });
+        } else {
+            // Oculta o HUD e zera todas as métricas
+            hud.classList.remove('visivel');
+            Object.keys(bars).forEach(key => {
+                bars[key].style.width = '0%';
+                vals[key].textContent = '0';
+            });
+        }
+    }
+
+    /* ==========================================================================
+       ROTAÇÃO MECÂNICA EM 3D DOS CARDS INDIVIDUAIS
+       ========================================================================== */
+    function girarCard(card, personagem) {
+        const inner = card.querySelector('.card-inner');
+        let estagioAtual = parseInt(inner.getAttribute('data-estagio'));
+        let proximoEstagio = 1;
+        
+        // Executa o som de transformação local de forma segura
+        try {
+            somTransformacao.currentTime = 0;
+            somTransformacao.play().catch(e => console.log("Áudio bloqueado."));
+            
+            // Ao terminar o som da engrenagem, o personagem dispara sua fala
+            somTransformacao.onended = function() {
+                tocarFalaPersonagem(personagem);
+            };
+        } catch(err) { }
+
+        // Efeito rápido de brilho nas bordas do card durante a rotação
+        card.classList.add('brilhar');
+        setTimeout(() => card.classList.remove('brilhar'), 800);
+
+        // Altera a cor de fundo da página de forma sutil conforme a facção ativa
+        if (card.classList.contains('autobot')) {
+            document.body.style.backgroundColor = '#1a0000'; // Vermelho Cybertron escuro
+        } else if (card.classList.contains('decepticon')) {
+            document.body.style.backgroundColor = '#0e001c'; // Roxo Decepticon escuro
+        }
+        // Retorna suavemente para o fundo preto após o flash da transição
+        setTimeout(() => document.body.style.backgroundColor = '#000000', 400);
+        
+        // Remove as classes antigas de rotação do CSS
+        inner.classList.remove('estagio-1', 'estagio-2', 'estagio-3');
+        
+        // Avança o carrossel de 3 faces
+        if (estagioAtual === 1) {
+            proximoEstagio = 2;
+        } else if (estagioAtual === 2) {
+            proximoEstagio = 3;
+        } else {
+            proximoEstagio = 1;
+        }
+
+        // Aplica o novo estágio tridimensional e atualiza o HUD tático
+        inner.classList.add('estagio-' + proximoEstagio);
+        inner.setAttribute('data-estagio', proximoEstagio);
+
+        atualizarHUD(personagem, proximoEstagio);
+    }
+</script>
+</body>
+</html>
