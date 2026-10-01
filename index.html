@@ -368,8 +368,8 @@
             <div class="grid-energia"><div id="bar-pow" class="preenchimento-energia"></div></div>
         </div>
     </div>
-        
-<script>
+
+     <script>
     /* ==========================================================================
        CONFIGURAÇÕES E CONTROLE DE ÁUDIO GLOBAL LOCAL
        ========================================================================== */
@@ -379,7 +379,7 @@
     somTransformacao.volume = 0.2; // Volume dos efeitos de transformação (20%)
     audio.volume = 0.25;            // Trilha sonora de fundo suavizada
 
-    /* MATRIZ DE CONFIGURAÇÃO DE FRASES LOCAIS (0, 1 e 2) PARA CADA TRANSFORMER */
+    /* MATRIZ DE CONFIGURAÇÃO DE FRASES LOCAIS (CORRIGIDA COM OS NÚMEROS DAS FRASES) */
     const falasDisponiveis = {
         optimus:, jazz:, cliffjumper:, wheeljack:, grimlock:,
         megatron:, starscream:, soundwave:, shockwave:, blitzwing: [0, 1, 2]
@@ -432,6 +432,8 @@
             document.addEventListener('click', iniciarAudio);
         });
     });
+   
+        
     
     /* ==========================================================================
        LOGICA DE TRANSIÇÃO DE TELAS (FACÇÕES & GRIDS)
