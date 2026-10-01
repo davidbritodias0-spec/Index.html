@@ -159,4 +159,18 @@
     <audio id="blitzwing-frase-1" src="blitzwing1.mp3" preload="auto"></audio>
     <audio id="blitzwing-frase-2" src="blitzwing2.mp3" preload="auto"></audio>
 
+     <!-- TELA INICIAL DE SELEÇÃO DE FACÇÃO -->
+    <div id="container-faccoes" class="tela-faccoes">
+        <div class="card-faccao escolha-autobot" onclick="selecionarFaccao('autobot')">
+            <img src="logo_autobot.jpg" alt="Símbolo Autobot">
+            <h2>Autobots</h2>
+        </div>
+        <div class="card-faccao escolha-decepticon" onclick="selecionarFaccao('decepticon')">
+            <img src="logo_decepticon.jpg" alt="Símbolo Decepticon">
+            <h2>Decepticons</h2>
+        </div>
+    </div>
+
+    <!-- BOTÃO DE RETORNO DO GRID PARA A TELA DE FACÇÕES -->
+    <button id="btn-voltar" class="btn-voltar" onclick="voltarParaFaccoes()">← Mudar de Facção</button>
     
