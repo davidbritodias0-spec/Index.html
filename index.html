@@ -428,28 +428,45 @@
             }
         }
 
-                /* ALTERNADOR DE TELAS COM ANIMAÇÃO DE EXPANSÃO/DIVISÃO */
+                        /* ALTERNADOR DE TELAS COM ANIMAÇÃO E VOZ DO TELETRAAN 1 */
         function selecionarFaccao(f) {
             const containerFaccoes = document.getElementById('container-faccoes');
             const grid = document.getElementById('grid-personagens');
             
-            // 1. Faz a carta inicial esvaecer e encolher
+            // 1. O Teletraan 1 analisa a facção e dispara uma linha de voz aleatória
+            const chaveTeletraan = 'teletraan_' + f;
+            if (!falasDisponiveis[chaveTeletraan] || falasDisponiveis[chaveTeletraan].length === 0) {
+                falasDisponiveis[chaveTeletraan] = ["0", "1", "2"];
+            }
+            const idxTeletraan = Math.floor(Math.random() * falasDisponiveis[chaveTeletraan].length);
+            const numTeletraan = falasDisponiveis[chaveTeletraan][idxTeletraan];
+            falasDisponiveis[chaveTeletraan].splice(idxTeletraan, 1);
+
+            const audioTeletraan = document.getElementById('teletraan-' + f + '-' + numTeletraan);
+            if (audioTeletraan) {
+                audioTeletraan.currentTime = 0;
+                audioTeletraan.volume = 1.0;
+                audioTeletraan.play().catch(e => console.log("Áudio do Teletraan bloqueado"));
+            }
+
+            // 2. Inicia o efeito visual cinematográfico esvaecendo o menu inicial
             containerFaccoes.classList.add('esvaecer');
             
-            // 2. Espera a animação de sumiço acabar (400ms) para renderizar os 5 robôs
+            // 3. Aguarda o fechamento do menu para injetar as 5 cartas em formato grid
             setTimeout(() => {
                 containerFaccoes.style.display = 'none';
                 grid.style.display = 'flex';
                 document.getElementById('btn-voltar').style.display = 'inline-block';
                 document.querySelectorAll('.grupo-' + f).forEach(c => c.classList.remove('escondido'));
                 
-                // 3. Ativa o efeito de explosão/divisão expandindo as 5 cartas na tela
+                // 4. Executa a expansão suave e progressiva dos robôs na tela
                 setTimeout(() => {
                     grid.classList.add('expandir');
-                }, 50); // Pequena folga para o navegador processar o display flex
+                }, 50);
                 
             }, 400);
         }
+
 
         /* BOTÃO VOLTAR COM ANIMAÇÃO DE RECOLHIMENTO */
         function voltarParaFaccoes() {
