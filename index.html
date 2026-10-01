@@ -322,4 +322,50 @@
             <div class="grid-energia"><div id="bar-pow" class="preenchimento-energia"></div></div>
         </div>
                                                                                                 </div>
-                                                                                                
+              <script>
+        /* CONFIGURAÇÕES DE ÁUDIO GLOBAL */
+        const audio = document.getElementById('bg-music');
+        const somTransformacao = document.getElementById('transform-sound');
+        
+        if (somTransformacao) somTransformacao.volume = 0.2;
+        if (audio) audio.volume = 0.25;
+
+        /* MATRIZ DE FRASES CONFIGURADA DE FORMA IMPENETRÁVEL CONTRA BUG DE CHAT */
+        const falasDisponiveis = {
+            optimus: ["0", "1", "2"],
+            jazz: ["0", "1", "2"],
+            cliffjumper: ["0", "1", "2"],
+            wheeljack: ["0", "1", "2"],
+            grimlock: ["0", "1", "2"],
+            megatron: ["0", "1", "2"],
+            starscream: ["0", "1", "2"],
+            soundwave: ["0", "1", "2"],
+            shockwave: ["0", "1", "2"],
+            blitzwing: ["0", "1", "2"]
+        };
+
+        /* BANCO DE DADOS TÁTICOS (ATRIBUTOS G1) */
+        const atributosG1 = {
+            optimus: { nome: "Optimus Prime", cor: "#e50000", str: 10, int: 10, vel: 8, pow: 10 },
+            jazz: { nome: "Jazz", cor: "#e50000", str: 7, int: 9, vel: 9, pow: 6 },
+            cliffjumper: { nome: "Cliffjumper", cor: "#e50000", str: 6, int: 5, vel: 7, pow: 7 },
+            wheeljack: { nome: "Wheeljack", cor: "#e50000", str: 7, int: 9, vel: 7, pow: 7 },
+            grimlock: { nome: "Grimlock", cor: "#e50000", str: 10, int: 4, vel: 3, pow: 8 },
+            
+            megatron: { nome: "Megatron", cor: "#7b2cbf", str: 10, int: 9, vel: 9, pow: 10 },
+            starscream: { nome: "Starscream", cor: "#7b2cbf", str: 7, int: 7, vel: 10, pow: 8 },
+            soundwave: { nome: "Soundwave", cor: "#7b2cbf", str: 8, int: 9, vel: 5, pow: 6 },
+            shockwave: { nome: "Shockwave", cor: "#7b2cbf", str: 9, int: 10, vel: 4, pow: 9 },
+            blitzwing: { nome: "Blitzwing", cor: "#7b2cbf", str: 8, int: 5, vel: 9, pow: 7 }
+        };
+
+        /* INICIALIZAÇÃO DA TRILHA DE FUNDO VIA CLIQUE SEGURO */
+        window.addEventListener('DOMContentLoaded', () => {
+            if (audio) {
+                audio.play().catch(() => {
+                    const start = () => { audio.play(); document.removeEventListener('click', start); };
+                    document.addEventListener('click', start);
+                });
+            }
+        });
+                  
