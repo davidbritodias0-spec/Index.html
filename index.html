@@ -419,28 +419,58 @@
             }
         }
 
-        /* ALTERNADOR DE TELAS (EXIBE A FACÇÃO) */
+                /* ALTERNADOR DE TELAS COM ANIMAÇÃO DE EXPANSÃO/DIVISÃO */
         function selecionarFaccao(f) {
-            document.getElementById('container-faccoes').style.display = 'none';
-            document.getElementById('grid-personagens').style.display = 'flex';
-            document.getElementById('btn-voltar').style.display = 'inline-block';
-            document.querySelectorAll('.grupo-' + f).forEach(c => c.classList.remove('escondido'));
+            const containerFaccoes = document.getElementById('container-faccoes');
+            const grid = document.getElementById('grid-personagens');
+            
+            // 1. Faz a carta inicial esvaecer e encolher
+            containerFaccoes.classList.add('esvaecer');
+            
+            // 2. Espera a animação de sumiço acabar (400ms) para renderizar os 5 robôs
+            setTimeout(() => {
+                containerFaccoes.style.display = 'none';
+                grid.style.display = 'flex';
+                document.getElementById('btn-voltar').style.display = 'inline-block';
+                document.querySelectorAll('.grupo-' + f).forEach(c => c.classList.remove('escondido'));
+                
+                // 3. Ativa o efeito de explosão/divisão expandindo as 5 cartas na tela
+                setTimeout(() => {
+                    grid.classList.add('expandir');
+                }, 50); // Pequena folga para o navegador processar o display flex
+                
+            }, 400);
         }
 
-        /* BOTÃO VOLTAR */
+        /* BOTÃO VOLTAR COM ANIMAÇÃO DE RECOLHIMENTO */
         function voltarParaFaccoes() {
-            document.getElementById('grid-personagens').style.display = 'none';
+            const containerFaccoes = document.getElementById('container-faccoes');
+            const grid = document.getElementById('grid-personagens');
+            
+            // 1. Faz as 5 cartas encolherem e sumirem suavemente
+            grid.classList.remove('expandir');
             document.getElementById('btn-voltar').style.display = 'none';
             atualizarHUD(null, 1);
             
-            document.querySelectorAll('.card').forEach(c => {
-                c.classList.add('escondido');
-                const inner = c.querySelector('.card-inner');
-                inner.className = 'card-inner estagio-1';
-                inner.setAttribute('data-estagio', '1');
-            });
-            document.getElementById('container-faccoes').style.display = 'flex';
-            document.body.style.backgroundColor = '#000000';
+            // 2. Espera as 5 cartas sumirem (500ms) para trazer as facções de volta
+            setTimeout(() => {
+                grid.style.display = 'none';
+                
+                document.querySelectorAll('.card').forEach(c => {
+                    c.classList.add('escondido');
+                    const inner = c.querySelector('.card-inner');
+                    inner.className = 'card-inner estagio-1';
+                    inner.setAttribute('data-estagio', '1');
+                });
+                
+                // 3. Traz a tela inicial de volta e faz ela reaparecer expandindo
+                containerFaccoes.style.display = 'flex';
+                setTimeout(() => {
+                    containerFaccoes.classList.remove('esvaecer');
+                }, 50);
+                
+                document.body.style.backgroundColor = '#000000';
+            }, 500);
         }
 
         /* ATUALIZAÇÃO DO HUD TÁTICO */
