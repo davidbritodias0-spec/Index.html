@@ -1,10 +1,9 @@
-<!-- PARTE 1: ESTRUTURA INICIAL E CSS ATUALIZADO -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transformers G1 - Seleção de Facção</title>
+    <title>Transformers G1</title>
     <style>
         /* RESET E CONFIGURAÇÕES GERAIS */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
@@ -22,81 +21,61 @@
         .audio-container { width: 100%; display: flex; justify-content: center; margin-bottom: 20px; }
         audio { background-color: #222; border-radius: 30px; border: 2px solid #ffd700; max-width: 100%; }
 
-        /* ==========================================================================
-           TELA 1: SELEÇÃO DE FACÇÃO (INICIAL)
-           ========================================================================== */
+        /* TELA 1: SELEÇÃO DE FACÇÃO INICIAL */
         .tela-faccoes {
-            display: flex; gap: 30px; justify-content: center; align-items: center;
-            width: 100%; max-width: 600px; margin-top: 40px; transition: all 0.5s ease;
+            display: flex; gap: 20px; justify-content: center; align-items: center;
+            width: 100%; max-width: 500px; margin-top: 30px; transition: all 0.5s ease;
         }
         
-        /* Card grande para escolher o lado */
         .card-faccao {
-            width: 220px; height: 300px; border: 4px solid #333; border-radius: 15px;
+            width: 165px; height: 250px; border: 3px solid #333; border-radius: 12px;
             cursor: pointer; display: flex; flex-direction: column; align-items: center;
             justify-content: center; background: #111; transition: transform 0.3s ease, box-shadow 0.3s ease;
-            padding: 20px; text-align: center;
+            padding: 15px; text-align: center;
         }
         
-        .card-faccao img { width: 100%; height: 180px; object-fit: contain; margin-bottom: 15px; }
-        .card-faccao h2 { font-size: 18px; text-transform: uppercase; letter-spacing: 1px; }
+        .card-faccao img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 15px; }
+        .card-faccao h2 { font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* Efeitos de Hover para a escolha inicial */
-        .card-faccao.escolha-autobot:hover { border-color: #e50000; box-shadow: 0 0 25px #e50000; transform: scale(1.05); }
+        .card-faccao.escolha-autobot:hover { border-color: #e50000; box-shadow: 0 0 20px #e50000; transform: scale(1.05); }
         .card-faccao.escolha-autobot h2 { color: #e50000; }
         
-        .card-faccao.escolha-decepticon:hover { border-color: #7b2cbf; box-shadow: 0 0 25px #7b2cbf; transform: scale(1.05); }
+        .card-faccao.escolha-decepticon:hover { border-color: #7b2cbf; box-shadow: 0 0 20px #7b2cbf; transform: scale(1.05); }
         .card-faccao.escolha-decepticon h2 { color: #7b2cbf; }
 
-        /* ==========================================================================
-           TELA 2: GRID DE PERSONAGENS (ESCONDIDO POR PADRÃO)
-           ========================================================================== */
+        /* TELA 2: GRID DE PERSONAGENS */
         .tela-personagens {
-            display: none; /* Ativado via JS adicionando display: flex */
-            flex-wrap: wrap; gap: 15px; justify-content: center; 
-            width: 100%; max-width: 1000px; margin-bottom: 25px; animation: fadeIn 0.6s ease;
+            display: none; flex-wrap: wrap; gap: 15px; justify-content: center; 
+            width: 100%; max-width: 900px; margin-bottom: 25px;
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Classes utilitárias para esconder elementos visualmente */
         .escondido { display: none !important; }
 
-        /* ==========================================================================
-           BOTÃO VOLTAR RETRÔ
-           ========================================================================== */
+        /* BOTÃO VOLTAR */
         .btn-voltar {
-            display: none; padding: 10px 24px; font-size: 12px; font-weight: bold;
+            display: none; padding: 10px 20px; font-size: 11px; font-weight: bold;
             color: #fff; background: #111; border: 2px solid #ffd700; border-radius: 6px;
             cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
-            margin-bottom: 25px; transition: all 0.3s ease; box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+            margin-bottom: 25px; transition: all 0.3s ease;
         }
-        .btn-voltar:hover { background: #ffd700; color: #000; box-shadow: 0 0 15px #ffd700; transform: translateY(-2px); }
+        .btn-voltar:hover { background: #ffd700; color: #000; box-shadow: 0 0 15px #ffd700; }
 
-        /* ==========================================================================
-           ESTILOS DOS CARDS INTERATIVOS 3D (MECÂNICA ORIGINAL)
-           ========================================================================== */
+        /* CARDS INTERATIVOS 3D */
         .card { width: 165px; height: 250px; position: relative; perspective: 1000px; cursor: pointer; }
         .card-inner { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
-        .lado { position: absolute; width: 100%; height: 100%; border-radius: 12px; backface-visibility: hidden; overflow: hidden; border: 3px solid; display: flex; flex-direction: column; transition: box-shadow 0.3s ease, filter 0.3s ease; }
-        .lado img { width: 100%; height: 180px; object-fit: contain; background: #fff; padding: 8px; }
+        .lado { position: absolute; width: 100%; height: 100%; border-radius: 12px; backface-visibility: hidden; overflow: hidden; border: 3px solid; display: flex; flex-direction: column; }
+        .lado img { width: 100%; height: 175px; object-fit: contain; background: #fff; padding: 8px; }
         .lado h3 { text-align: center; padding: 8px 4px; font-size: 13px; background: #111; }
         
-        /* Customização dos Autobots */
         .autobot .lado { border-color: #e50000; background: #111; }
         .autobot h3 { color: #e50000; }
-        .autobot.brilhar .lado { box-shadow: 0 0 20px #e50000, inset 0 0 10px #e50000; filter: drop-shadow(0 0 5px #e50000); }
+        .autobot.brilhar .lado { box-shadow: 0 0 20px #e50000, inset 0 0 10px #e50000; }
         
-        /* Customização dos Decepticons */
         .decepticon .lado { border-color: #7b2cbf; background: #111; }
         .decepticon h3 { color: #7b2cbf; }
-        .decepticon.brilhar .lado { box-shadow: 0 0 20px #7b2cbf, inset 0 0 10px #7b2cbf; filter: drop-shadow(0 0 5px #7b2cbf); }
+        .decepticon.brilhar .lado { box-shadow: 0 0 20px #7b2cbf, inset 0 0 10px #7b2cbf; }
         
-        /* Configuração das Faces do Cubo/Card Rotativo */
         .logo { transform: rotateY(0deg) translateZ(48px); z-index: 3; }
         .logo img { background: #222; }
         .lider { transform: rotateY(120deg) translateZ(48px); z-index: 2; }
@@ -105,14 +84,11 @@
         .dados p { margin: 5px 0; font-size: 11px; line-height: 1.3; border-bottom: 1px solid #222; padding-bottom: 2px; }
         .dados strong { color: #ffd700; display: block; font-size: 10px; text-transform: uppercase; }
         
-        /* Estágios de Rotação controlados via JS */
         .estagio-1 { transform: rotateY(0deg); }
         .estagio-2 { transform: rotateY(-120deg); }
         .estagio-3 { transform: rotateY(-240deg); }
         
-        /* ==========================================================================
-           PAINEL DE DIAGNÓSTICO HUD
-           ========================================================================== */
+        /* HUD CONTAINER */
         .hud-container {
             width: 100%; max-width: 360px; background: rgba(15, 15, 15, 0.95); border: 2px solid #222;
             border-radius: 12px; padding: 15px; box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
@@ -131,387 +107,5 @@
     </style>
 </head>
 <body>
+
     
-<!-- PARTE 2 - SEÇÃO A: TÍTULO, CONTROLES DE ÁUDIO E SONS AUTOBOTS -->
-    <h1>TRANSFORMERS G1</h1>
-    
-    <!-- CONTROLE DE TRILHA SONORA LOCAL -->
-    <div class="audio-container">
-        <audio id="bg-music" src="tema.mp3" controls loop></audio>
-    </div>
-    
-    <!-- EFEITO SONORO GLOBAL DE TRANSFORMAÇÃO -->
-    <audio id="transform-sound" src="transformacao.mp3" preload="auto"></audio>
-
-    <!-- BANCO DE ÁUDIOS LOCAIS: 3 FALAS EXCLUSIVAS (0 A 2) PARA OS AUTOBOTS -->
-    <!-- Optimus Prime -->
-    <audio id="optimus-frase-0" src="optimus1.mp3" preload="auto"></audio>
-    <audio id="optimus-frase-1" src="optimus2.mp3" preload="auto"></audio>
-    <audio id="optimus-frase-2" src="optimus3.mp3" preload="auto"></audio>
-
-    <!-- Jazz -->
-    <audio id="jazz-frase-0" src="jazz0.mp3" preload="auto"></audio>
-    <audio id="jazz-frase-1" src="jazz1.mp3" preload="auto"></audio>
-    <audio id="jazz-frase-2" src="jazz2.mp3" preload="auto"></audio>
-
-    <!-- Cliffjumper -->
-    <audio id="cliffjumper-frase-0" src="cliffjumper0.mp3" preload="auto"></audio>
-    <audio id="cliffjumper-frase-1" src="cliffjumper1.mp3" preload="auto"></audio>
-    <audio id="cliffjumper-frase-2" src="cliffjumper2.mp3" preload="auto"></audio>
-
-    <!-- Wheeljack -->
-    <audio id="wheeljack-frase-0" src="wheeljack0.mp3" preload="auto"></audio>
-    <audio id="wheeljack-frase-1" src="wheeljack1.mp3" preload="auto"></audio>
-    <audio id="wheeljack-frase-2" src="wheeljack2.mp3" preload="auto"></audio>
-
-    <!-- Grimlock -->
-    <audio id="grimlock-frase-0" src="grimlock0.mp3" preload="auto"></audio>
-    <audio id="grimlock-frase-1" src="grimlock1.mp3" preload="auto"></audio>
-    <audio id="grimlock-frase-2" src="grimlock2.mp3" preload="auto"></auto>
-        
-<!-- PARTE 2 - SEÇÃO B: SONS DECEPTICONS, TELA DE ESCOLHA E BOTÃO VOLTAR -->
-    <!-- BANCO DE ÁUDIOS LOCAIS: 3 FALAS EXCLUSIVAS (0 A 2) PARA OS DECEPTICONS -->
-    <!-- Megatron -->
-    <audio id="megatron-frase-0" src="megatron1.mp3" preload="auto"></audio>
-    <audio id="megatron-frase-1" src="megatron2.mp3" preload="auto"></audio>
-    <audio id="megatron-frase-2" src="megatron3.mp3" preload="auto"></audio>
-
-    <!-- Starscream -->
-    <audio id="starscream-frase-0" src="starscream0.mp3" preload="auto"></audio>
-    <audio id="starscream-frase-1" src="starscream1.mp3" preload="auto"></audio>
-    <audio id="starscream-frase-2" src="starscream2.mp3" preload="auto"></audio>
-
-    <!-- Soundwave -->
-    <audio id="soundwave-frase-0" src="soundwave0.mp3" preload="auto"></audio>
-    <audio id="soundwave-frase-1" src="soundwave1.mp3" preload="auto"></audio>
-    <audio id="soundwave-frase-2" src="soundwave2.mp3" preload="auto"></audio>
-
-    <!-- Shockwave -->
-    <audio id="shockwave-frase-0" src="shockwave0.mp3" preload="auto"></audio>
-    <audio id="shockwave-frase-1" src="shockwave1.mp3" preload="auto"></audio>
-    <audio id="shockwave-frase-2" src="shockwave2.mp3" preload="auto"></audio>
-
-    <!-- Blitzwing -->
-    <audio id="blitzwing-frase-0" src="blitzwing0.mp3" preload="auto"></audio>
-    <audio id="blitzwing-frase-1" src="blitzwing1.mp3" preload="auto"></audio>
-    <audio id="blitzwing-frase-2" src="blitzwing2.mp3" preload="auto"></audio>
-
-
-    <!-- TELA 1: MENU DE SELEÇÃO DE FACÇÃO INICIAL -->
-    <div id="container-faccoes" class="tela-faccoes">
-        <!-- Card de Escolha Autobot -->
-        <div class="card-faccao escolha-autobot" onclick="selecionarFaccao('autobot')">
-            <img src="logo_autobot.jpg" alt="Símbolo Autobot">
-            <h2>Autobots</h2>
-        </div>
-        
-        <!-- Card de Escolha Decepticon -->
-        <div class="card-faccao escolha-decepticon" onclick="selecionarFaccao('decepticon')">
-            <img src="logo_decepticon.jpg" alt="Símbolo Decepticon">
-            <h2>Decepticons</h2>
-        </div>
-    </div>
-
-
-    <!-- BOTÃO DE RETORNO (Oculto no início, aparece na tela de seleção) -->
-    <button id="btn-voltar" class="btn-voltar" onclick="voltarParaFaccoes()">← Mudar de Facção</button>
-    
-<!-- PARTE 2 - SEÇÃO C: GRID DE PERSONAGENS (APENAS AUTOBOTS) -->
-    <!-- CONTAINER DO GRID QUE IRÁ EXIBIR A FACÇÃO ESCOLHIDA -->
-    <div id="grid-personagens" class="tela-personagens">
-        
-        <!-- ==================== ELENCO AUTOBOT ==================== -->
-        <!-- Optimus Prime -->
-        <div class="card autobot grupo-autobot escondido" onclick="girarCard(this, 'optimus')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_autobot.jpg" alt="Logo Autobot"><h3>Optimus Prime</h3></div>
-                <div class="lado lider"><img src="optimus.jpg" alt="Optimus Prime"><h3>Optimus Prime</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Autobots</p><p><strong>Função</strong>Líder Supremo</p>
-                    <p><strong>Altura</strong>6,5 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Caminhão</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Jazz -->
-        <div class="card autobot grupo-autobot escondido" onclick="girarCard(this, 'jazz')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_autobot.jpg" alt="Logo Autobot"><h3>Jazz</h3></div>
-                <div class="lado lider"><img src="jazz.jpg" alt="Jazz"><h3>Jazz</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Autobots</p><p><strong>Função</strong>Agente de Operações</p>
-                    <p><strong>Altura</strong>5,0 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Porsche 935 Turbo</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cliffjumper -->
-        <div class="card autobot grupo-autobot escondido" onclick="girarCard(this, 'cliffjumper')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_autobot.jpg" alt="Logo Autobot"><h3>Cliffjumper</h3></div>
-                <div class="lado lider"><img src="cliffjumper.jpg" alt="Cliffjumper"><h3>Cliffjumper</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Autobots</p><p><strong>Função</strong>Guerreiro</p>
-                    <p><strong>Altura</strong>4,5 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Porsche 924 Turbo</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Wheeljack -->
-        <div class="card autobot grupo-autobot escondido" onclick="girarCard(this, 'wheeljack')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_autobot.jpg" alt="Logo Autobot"><h3>Wheeljack</h3></div>
-                <div class="lado lider"><img src="wheeljack.jpg" alt="Wheeljack"><h3>Wheeljack</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Autobots</p><p><strong>Função</strong>Cientista / Engenheiro</p>
-                    <p><strong>Altura</strong>5,5 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Lancia Stratos Turbo</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Grimlock -->
-        <div class="card autobot grupo-autobot escondido" onclick="girarCard(this, 'grimlock')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_autobot.jpg" alt="Logo Autobot"><h3>Grimlock</h3></div>
-                <div class="lado lider"><img src="grimlock.jpg" alt="Grimlock"><h3>Grimlock</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Autobots</p><p><strong>Função</strong>Líder Dinobot</p>
-                    <p><strong>Altura</strong>7,0 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Tiranossauro Rex</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- PARTE 2 - SEÇÃO D: GRID DE PERSONAGENS (DECEPTICONS) E PAINEL HUD -->
-        
-        <!-- ==================== ELENCO DECEPTICON ==================== -->
-        <!-- Megatron -->
-        <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'megatron')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Megatron</h3></div>
-                <div class="lado lider"><img src="megatron.jpg" alt="Megatron"><h3>Megatron</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Líder Supremo</p>
-                    <p><strong>Altura</strong>6,0 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Pistola de Fusão</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Starscream -->
-        <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'starscream')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Starscream</h3></div>
-                <div class="lado lider"><img src="starscream.jpg" alt="Starscream"><h3>Starscream</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Comandante Aeroespacial</p>
-                    <p><strong>Altura</strong>5,5 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Caça F-15 Eagle</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Soundwave -->
-        <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'soundwave')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Soundwave</h3></div>
-                <div class="lado lider"><img src="soundwave.jpg" alt="Soundwave"><h3>Soundwave</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Oficial de Comunicação</p>
-                    <p><strong>Altura</strong>5,2 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Gravador de Fita</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Shockwave -->
-        <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'shockwave')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Shockwave</h3></div>
-                <div class="lado lider"><img src="shockwave.jpg" alt="Shockwave"><h3>Shockwave</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Cientista / Guardião</p>
-                    <p><strong>Altura</strong>6,5 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Canhão de Laser</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Blitzwing -->
-        <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'blitzwing')">
-            <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Blitzwing</h3></div>
-                <div class="lado lider"><img src="blitzwing.jpg" alt="Blitzwing"><h3>Blitzwing</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Guerreiro Triplo-Changer</p>
-                    <p><strong>Altura</
-
-                        <script>
-    /* CONFIGURAÇÕES DE ÁUDIO GLOBAL */
-    const audio = document.getElementById('bg-music');
-    const somTransformacao = document.getElementById('transform-sound');
-    
-    if (somTransformacao) somTransformacao.volume = 0.2;
-    if (audio) audio.volume = 0.25;
-
-    /* RESTRUTURAÇÃO DO BANCO DE FALAS EVITANDO ERROS DE CHAT */
-    const falasDisponiveis = {
-        optimus:, jazz:, cliffjumper:, wheeljack:, grimlock:,
-        megatron:, starscream:, soundwave:, shockwave:, blitzwing: [0, 1, 2]
-    };
-
-    /* SISTEMA DE SORTEIO DE FALAS SEM REPETIÇÃO */
-    function tocarFalaPersonagem(personagem) {
-        if (!falasDisponiveis[personagem] || falasDisponiveis[personagem].length === 0) {
-            falasDisponiveis[personagem] =;
-        }
-
-        const indiceSorteado = Math.floor(Math.random() * falasDisponiveis[personagem].length);
-        const numeroDaFrase = falasDisponiveis[personagem][indiceSorteado];
-
-        falasDisponiveis[personagem].splice(indiceSorteado, 1);
-
-        const audioFala = document.getElementById(personagem + '-frase-' + numeroDaFrase);
-        if (audioFala) {
-            audioFala.currentTime = 0;
-            audioFala.volume = 1.0;
-            audioFala.play().catch(e => console.log("Áudio bloqueado."));
-        }
-    }
-
-    /* BANCO DE DADOS TÁTICOS (ATRIBUTOS G1) */
-    const atributosG1 = {
-        optimus: { nome: "Optimus Prime", cor: "#e50000", str: 10, int: 10, vel: 8, pow: 10 },
-        jazz: { nome: "Jazz", cor: "#e50000", str: 7, int: 9, vel: 9, pow: 6 },
-        cliffjumper: { nome: "Cliffjumper", cor: "#e50000", str: 6, int: 5, vel: 7, pow: 7 },
-        wheeljack: { nome: "Wheeljack", cor: "#e50000", str: 7, int: 9, vel: 7, pow: 7 },
-        grimlock: { nome: "Grimlock", cor: "#e50000", str: 10, int: 4, vel: 3, pow: 8 },
-        
-        megatron: { nome: "Megatron", cor: "#7b2cbf", str: 10, int: 9, vel: 9, pow: 10 },
-        starscream: { nome: "Starscream", cor: "#7b2cbf", str: 7, int: 7, vel: 10, pow: 8 },
-        soundwave: { nome: "Soundwave", cor: "#7b2cbf", str: 8, int: 9, vel: 5, pow: 6 },
-        shockwave: { nome: "Shockwave", cor: "#7b2cbf", str: 9, int: 10, vel: 4, pow: 9 },
-        blitzwing: { nome: "Blitzwing", cor: "#7b2cbf", str: 8, int: 5, vel: 9, pow: 7 }
-    };
-
-    /* INICIALIZAÇÃO DA TRILHA DE FUNDO */
-    window.addEventListener('DOMContentLoaded', () => {
-        if (audio) {
-            audio.play().catch(() => {
-                const iniciarAudio = () => { audio.play(); document.removeEventListener('click', iniciarAudio); };
-                document.addEventListener('click', iniciarAudio);
-            });
-        }
-    });
-
-    /* ALTERNADOR DE TELAS */
-    function selecionarFaccao(faccao) {
-        document.getElementById('container-faccoes').style.display = 'none';
-        
-        const grid = document.getElementById('grid-personagens');
-        grid.style.display = 'flex';
-        
-        document.getElementById('btn-voltar').style.display = 'inline-block';
-        
-        const cards = document.querySelectorAll('.grupo-' + faccao);
-        cards.forEach(card => card.classList.remove('escondido'));
-    }
-
-    /* BOTÃO VOLTAR */
-    function voltarParaFaccoes() {
-        document.getElementById('grid-personagens').style.display = 'none';
-        document.getElementById('btn-voltar').style.display = 'none';
-        
-        atualizarHUD(null, 1);
-        
-        const todosCards = document.querySelectorAll('.card');
-        todosCards.forEach(card => {
-            card.classList.add('escondido');
-            const inner = card.querySelector('.card-inner');
-            inner.classList.remove('estagio-2', 'estagio-3');
-            inner.classList.add('estagio-1');
-            inner.setAttribute('data-estagio', '1');
-        });
-        
-        document.getElementById('container-faccoes').style.display = 'flex';
-        document.body.style.backgroundColor = '#000000';
-    }
-
-    /* ATUALIZAÇÃO DO HUD TÁTICO */
-    function atualizarHUD(personagem, estagio) {
-        const hud = document.getElementById('hud-combate');
-        const txtNome = document.getElementById('hud-nome');
-        
-        const bars = {
-            str: document.getElementById('bar-forca'),
-            int: document.getElementById('bar-int'),
-            vel: document.getElementById('bar-vel'),
-            pow: document.getElementById('bar-pow')
-        };
-        
-        const vals = {
-            str: document.getElementById('val-forca'),
-            int: document.getElementById('val-int'),
-            vel: document.getElementById('val-vel'),
-            pow: document.getElementById('val-pow')
-        };
-
-        if (estagio > 1 && personagem) {
-            hud.classList.add('visivel');
-            const dados = atributosG1[personagem];
-            
-            txtNome.textContent = dados.nome;
-            txtNome.style.color = dados.cor;
-            
-            Object.keys(bars).forEach(key => {
-                const porcentagem = dados[key] * 10;
-                bars[key].style.width = porcentagem + '%';
-                bars[key].style.backgroundColor = dados.cor;
-                vals[key].textContent = dados[key] + ' / 10';
-            });
-        } else {
-            hud.classList.remove('visivel');
-            Object.keys(bars).forEach(key => {
-                bars[key].style.width = '0%';
-                vals[key].textContent = '0';
-            });
-        }
-    }
-
-    /* GIRA OS CARDS EM 3D */
-    function girarCard(card, personagem) {
-        const inner = card.querySelector('.card-inner');
-        let estagioAtual = parseInt(inner.getAttribute('data-estagio'));
-        let proximoEstagio = 1;
-        
-        try {
-            somTransformacao.currentTime = 0;
-            somTransformacao.play().catch(e => console.log("Áudio bloqueado."));
-            
-            somTransformacao.onended = function() {
-                tocarFalaPersonagem(personagem);
-            };
-        } catch(err) { }
-
-        card.classList.add('brilhar');
-        setTimeout(() => card.classList.remove('brilhar'), 800);
-
-        if (card.classList.contains('autobot')) {
-            document.body.style.backgroundColor = '#1a0000';
-        } else if (card.classList.contains('decepticon')) {
-            document.body.style.backgroundColor = '#0e001c';
-        }
-        setTimeout(() => document.body.style.backgroundColor = '#000000', 400);
-        
-        inner.classList.remove('estagio-1', 'estagio-2', 'estagio-3');
-        
-        if (estagioAtual === 1) {
-            proximoEstagio = 2;
-        } else if (estagioAtual === 2) {
-            proximoEstagio = 3;
-        } else {
-            proximoEstagio = 1;
-        }
-
-        inner.classList.add('estagio-' + proximoEstagio);
-        inner.setAttribute('data-estagio', proximoEstagio);
-
-        atualizarHUD(personagem, proximoEstagio);
-    }
-                        </script>
-                        
