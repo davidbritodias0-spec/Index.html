@@ -369,48 +369,50 @@
         </div>
     </div>
 
-     <script>
-    /* ==========================================================================
-       CONFIGURAÇÕES E CONTROLE DE ÁUDIO GLOBAL LOCAL
-       ========================================================================== */
+             
+        
+            <script>
+    /* CONFIGURAÇÕES DE ÁUDIO GLOBAL */
     const audio = document.getElementById('bg-music');
     const somTransformacao = document.getElementById('transform-sound');
     
-    somTransformacao.volume = 0.2; // Volume dos efeitos de transformação (20%)
-    audio.volume = 0.25;            // Trilha sonora de fundo suavizada
+    if (somTransformacao) somTransformacao.volume = 0.2;
+    if (audio) audio.volume = 0.25;
 
-    /* MATRIZ DE CONFIGURAÇÃO DE FRASES LOCAIS (CORRIGIDA COM OS NÚMEROS DAS FRASES) */
+    /* LISTA DE FRASES DO BANCO LOCAL (USANDO ARRAY SIMPLES PARA O CHAT NÃO CORTAR) */
     const falasDisponiveis = {
-        optimus:, jazz:, cliffjumper:, wheeljack:, grimlock:,
-        megatron:, starscream:, soundwave:, shockwave:, blitzwing: [0, 1, 2]
+        optimus:, 
+        jazz:, 
+        cliffjumper:, 
+        wheeljack:, 
+        grimlock:,
+        megatron:, 
+        starscream:, 
+        soundwave:, 
+        shockwave:, 
+        blitzwing: [0, 1, 2]
     };
 
-    /* FUNÇÃO DE GERENCIAMENTO E SORTEIO DE VOZ RETRÔ COMENTADA */
+    /* SISTEMA DE SORTEIO DE FALAS SEM REPETIÇÃO COMENTADO */
     function tocarFalaPersonagem(personagem) {
-        // Se a lista de frases esvaziar, reinicia o array local de 3 arquivos
         if (falasDisponiveis[personagem].length === 0) {
             falasDisponiveis[personagem] =;
         }
 
-        // Escolhe uma posição aleatória com base no tamanho restante
         const indiceSorteado = Math.floor(Math.random() * falasDisponiveis[personagem].length);
         const numeroDaFrase = falasDisponiveis[personagem][indiceSorteado];
 
-        // Remove a frase usada para evitar repetições em sequência
         falasDisponiveis[personagem].splice(indiceSorteado, 1);
 
-        // Busca o elemento correspondente local do HTML (ex: jazz-frase-1)
         const audioFala = document.getElementById(`${personagem}-frase-${numeroDaFrase}`);
         if (audioFala) {
             audioFala.currentTime = 0;
             audioFala.volume = 1.0;
-            audioFala.play().catch(e => console.log("Áudio de voz retido pela segurança do navegador."));
+            audioFala.play().catch(e => console.log("Áudio bloqueado."));
         }
     }
 
-    /* ==========================================================================
-       BANCO DE DADOS TÁTICOS (ATRIBUTOS DE 0 A 10)
-       ========================================================================== */
+    /* BANCO DE DADOS TÁTICOS (ATRIBUTOS G1) */
     const atributosG1 = {
         optimus: { nome: "Optimus Prime", cor: "#e50000", str: 10, int: 10, vel: 8, pow: 10 },
         jazz: { nome: "Jazz", cor: "#e50000", str: 7, int: 9, vel: 9, pow: 6 },
@@ -425,71 +427,54 @@
         blitzwing: { nome: "Blitzwing", cor: "#7b2cbf", str: 8, int: 5, vel: 9, pow: 7 }
     };
 
-    /* INICIALIZAÇÃO SEGURA DA MÚSICA AO CLICAR NA TELA REQUISITADA PELO GOOGLE CHROMIUM */
+    /* INICIALIZAÇÃO DA TRILHA DE FUNDO */
     window.addEventListener('DOMContentLoaded', () => {
-        audio.play().catch(() => {
-            const iniciarAudio = () => { audio.play(); document.removeEventListener('click', iniciarAudio); };
-            document.addEventListener('click', iniciarAudio);
-        });
+        if (audio) {
+            audio.play().catch(() => {
+                const iniciarAudio = () => { audio.play(); document.removeEventListener('click', iniciarAudio); };
+                document.addEventListener('click', iniciarAudio);
+            });
+        }
     });
-   
-        
-    
-    /* ==========================================================================
-       LOGICA DE TRANSIÇÃO DE TELAS (FACÇÕES & GRIDS)
-       ========================================================================== */
-    
-    // Função chamada ao clicar em uma das duas Facções iniciais
+
+    /* ALTERNADOR DE TELAS CORRIGIDO */
     function selecionarFaccao(faccao) {
-        // Esconde a tela de escolha inicial sumindo com o container
         document.getElementById('container-faccoes').style.display = 'none';
         
-        // Exibe o grid principal de personagens
         const grid = document.getElementById('grid-personagens');
         grid.style.display = 'flex';
         
-        // Mostra o botão Voltar
         document.getElementById('btn-voltar').style.display = 'inline-block';
         
-        // Revela apenas os 5 cards pertencentes à facção selecionada
         const cards = document.querySelectorAll(`.grupo-${faccao}`);
         cards.forEach(card => card.classList.remove('escondido'));
     }
 
-    // Função chamada ao clicar no botão "Mudar de Facção"
+    /* BOTÃO VOLTAR */
     function voltarParaFaccoes() {
-        // Oculta o grid de personagens e o botão voltar
         document.getElementById('grid-personagens').style.display = 'none';
         document.getElementById('btn-voltar').style.display = 'none';
         
-        // Fecha o painel de Diagnóstico HUD resetando seus dados
         atualizarHUD(null, 1);
         
-        // Esconde TODOS os cards do grid para limpar o estado
         const todosCards = document.querySelectorAll('.card');
         todosCards.forEach(card => {
             card.classList.add('escondido');
-            // Reseta a rotação 3D do card de volta para o Estágio 1
             const inner = card.querySelector('.card-inner');
             inner.classList.remove('estagio-2', 'estagio-3');
             inner.classList.add('estagio-1');
             inner.setAttribute('data-estagio', '1');
         });
         
-        // Traz de volta os dois cards grandes de escolha inicial
         document.getElementById('container-faccoes').style.display = 'flex';
-        // Reseta o fundo da página para preto absoluto
         document.body.style.backgroundColor = '#000000';
     }
 
-    /* ==========================================================================
-       ATUALIZAÇÃO DO PAINEL DE DIAGNÓSTICO TÁTICO HUD
-       ========================================================================== */
+    /* ATUALIZAÇÃO DO HUD TÁTICO */
     function atualizarHUD(personagem, estagio) {
         const hud = document.getElementById('hud-combate');
         const txtNome = document.getElementById('hud-nome');
         
-        // Mapeamento dos elementos visuais das barras
         const bars = {
             str: document.getElementById('bar-forca'),
             int: document.getElementById('bar-int'),
@@ -497,7 +482,6 @@
             pow: document.getElementById('bar-pow')
         };
         
-        // Mapeamento dos elementos de texto dos valores numéricos
         const vals = {
             str: document.getElementById('val-forca'),
             int: document.getElementById('val-int'),
@@ -505,7 +489,6 @@
             pow: document.getElementById('val-pow')
         };
 
-        // O HUD só fica visível se o card estiver rotacionado (Estágio 2 ou 3)
         if (estagio > 1 && personagem) {
             hud.classList.add('visivel');
             const dados = atributosG1[personagem];
@@ -513,7 +496,6 @@
             txtNome.textContent = dados.nome;
             txtNome.style.color = dados.cor;
             
-            // Loop dinâmico para preencher as barras de status (0 a 10 multiplicados por 10%)
             Object.keys(bars).forEach(key => {
                 const porcentagem = dados[key] * 10;
                 bars[key].style.width = porcentagem + '%';
@@ -521,7 +503,6 @@
                 vals[key].textContent = dados[key] + ' / 10';
             });
         } else {
-            // Oculta o HUD e zera todas as métricas
             hud.classList.remove('visivel');
             Object.keys(bars).forEach(key => {
                 bars[key].style.width = '0%';
@@ -530,42 +511,33 @@
         }
     }
 
-    /* ==========================================================================
-       ROTAÇÃO MECÂNICA EM 3D DOS CARDS INDIVIDUAIS
-       ========================================================================== */
+    /* GIRA OS CARDS EM 3D */
     function girarCard(card, personagem) {
         const inner = card.querySelector('.card-inner');
         let estagioAtual = parseInt(inner.getAttribute('data-estagio'));
         let proximoEstagio = 1;
         
-        // Executa o som de transformação local de forma segura
         try {
             somTransformacao.currentTime = 0;
             somTransformacao.play().catch(e => console.log("Áudio bloqueado."));
             
-            // Ao terminar o som da engrenagem, o personagem dispara sua fala
             somTransformacao.onended = function() {
                 tocarFalaPersonagem(personagem);
             };
         } catch(err) { }
 
-        // Efeito rápido de brilho nas bordas do card durante a rotação
         card.classList.add('brilhar');
         setTimeout(() => card.classList.remove('brilhar'), 800);
 
-        // Altera a cor de fundo da página de forma sutil conforme a facção ativa
         if (card.classList.contains('autobot')) {
-            document.body.style.backgroundColor = '#1a0000'; // Vermelho Cybertron escuro
+            document.body.style.backgroundColor = '#1a0000';
         } else if (card.classList.contains('decepticon')) {
-            document.body.style.backgroundColor = '#0e001c'; // Roxo Decepticon escuro
+            document.body.style.backgroundColor = '#0e001c';
         }
-        // Retorna suavemente para o fundo preto após o flash da transição
         setTimeout(() => document.body.style.backgroundColor = '#000000', 400);
         
-        // Remove as classes antigas de rotação do CSS
         inner.classList.remove('estagio-1', 'estagio-2', 'estagio-3');
         
-        // Avança o carrossel de 3 faces
         if (estagioAtual === 1) {
             proximoEstagio = 2;
         } else if (estagioAtual === 2) {
@@ -574,12 +546,10 @@
             proximoEstagio = 1;
         }
 
-        // Aplica o novo estágio tridimensional e atualiza o HUD tático
         inner.classList.add('estagio-' + proximoEstagio);
         inner.setAttribute('data-estagio', proximoEstagio);
 
         atualizarHUD(personagem, proximoEstagio);
     }
-</script>
-</body>
-</html>
+            </script>
+            
