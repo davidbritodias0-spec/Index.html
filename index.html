@@ -8,7 +8,7 @@
         /* RESET E CONFIGURAÇÕES GERAIS */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         
-        /* CONFIGURAÇÃO DO BODY COM A GRADE DE BRINQUEDOS G1 */
+        /* CONFIGURAÇÃO DO BODY COM A GRADE DE BRINQUEDOS G1 (SEM IMAGENS) */
         body {
             color: #fff; padding: 20px 10px; display: flex; flex-direction: column; align-items: center;
             min-height: 100vh; overflow-x: hidden; width: 100%;
@@ -29,44 +29,19 @@
         }
 
         body.faccao-ativa { animation: none; }
+        
         /* CONFIGURAÇÃO DOS TITULOS EM IMAGEM QUE ALTERNAM SUAVEMENTE */
         .container-titulo {
-            position: relative;
-            width: 100%;
-            max-width: 320px;
-            height: 80px;
-            margin-bottom: 10px;
-            transition: opacity 0.4s ease;
+            position: relative; width: 100%; max-width: 320px; height: 80px; margin-bottom: 10px; transition: opacity 0.4s ease;
         }
-
         .img-titulo {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transition: opacity 0.6s ease-in-out;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.6s ease-in-out;
         }
+        #img-titulo-autobot { animation: pulsarTituloAutobot 8s infinite alternate ease-in-out; }
+        #img-titulo-decepticon { animation: pulsarTituloDecepticon 8s infinite alternate ease-in-out; }
 
-        /* IDs das imagens para controlar a pulsação idêntica ao fundo (8 segundos) */
-        #img-titulo-autobot {
-            animation: pulsarTituloAutobot 8s infinite alternate ease-in-out;
-        }
-
-        #img-titulo-decepticon {
-            animation: pulsarTituloDecepticon 8s infinite alternate ease-in-out;
-        }
-
-        @keyframes pulsarTituloAutobot {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        @keyframes pulsarTituloDecepticon {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+        @keyframes pulsarTituloAutobot { 0% { opacity: 1; } 100% { opacity: 0; } }
+        @keyframes pulsarTituloDecepticon { 0% { opacity: 0; } 100% { opacity: 1; } }
 
         .audio-container { width: 100%; display: flex; justify-content: center; margin-bottom: 20px; }
         audio { background-color: #222; border-radius: 30px; border: 2px solid #ffd700; max-width: 100%; }
@@ -149,12 +124,11 @@
 </head>
 <body>
 
-            <!-- CONTÊINER DAS IMAGENS DOS LOGOS CLÁSSICOS (SUBSTITUINDO O H1) -->
+        <!-- CONTÊINER DAS IMAGENS DOS LOGOS CLÁSSICOS (SUBSTITUINDO O H1) -->
     <div id="titulo-jogo" class="container-titulo">
         <img id="img-titulo-autobot" class="img-titulo" src="titulo_autobot.jpg" alt="Transformers Autobots Logo">
         <img id="img-titulo-decepticon" class="img-titulo" src="titulo_decepticon.jpg" alt="Transformers Decepticons Logo">
     </div>
-    
     
     <div class="audio-container">
         <audio id="bg-music" src="tema.mp3" controls loop></audio>
@@ -172,7 +146,7 @@
     <audio id="teletraan-decepticon-1" src="teletraan_decepticon2.mp3" preload="auto"></audio>
     <audio id="teletraan-decepticon-2" src="teletraan_decepticon3.mp3" preload="auto"></audio>
 
-    <!-- Alerta do Teletraan para o Nemesis Prime -->
+    <!-- Alerta do Teletraan para o Nemesis Prime (Alinhado) -->
     <audio id="teletraan-alert" src="teletraan_alert.mp3" preload="auto"></audio>
 
     <!-- Autobots -->
@@ -289,7 +263,7 @@
         </div>
 
         <!-- Grimlock -->
-        <div class="card autobot grupo-autobot escondido" onclick="girarCard(this, 'grimlock')">
+        <div class="card autobot grupo-autobot escondido" onclick="grimlock.jpg' : girarCard(this, 'grimlock')">
             <div class="card-inner estagio-1" data-estagio="1">
                 <div class="lado logo"><img src="logo_autobot.jpg" alt="Logo Autobot"><h3>Grimlock</h3></div>
                 <div class="lado lider"><img src="grimlock.jpg" alt="Grimlock"><h3>Grimlock</h3></div>
@@ -298,58 +272,93 @@
                     <p><strong>Altura</strong>7,0 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>T-Rex</p>
                 </div>
             </div>
-                                                          </div>
-                     <!-- ==================== ELENCO DECEPTICON ==================== -->
+        </div>
+
+        <!-- ==================== ELENCO DECEPTICON ==================== -->
+        <!-- Megatron -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'megatron')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Megatron</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Megatron</h3></div>
                 <div class="lado lider"><img src="megatron.jpg" alt="Megatron"><h3>Megatron</h3></div>
-                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Líder</p><p><strong>Altura</strong>6,0m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Pistola</p></div>
+                <div class="lado dados">
+                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Líder Supremo</p>
+                    <p><strong>Altura</strong>6,0 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Pistola</p>
+                </div>
             </div>
         </div>
 
+        <!-- Starscream -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'starscream')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Starscream</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Starscream</h3></div>
                 <div class="lado lider"><img src="starscream.jpg" alt="Starscream"><h3>Starscream</h3></div>
-                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Comandante</p><p><strong>Altura</strong>5,5m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Caça F-15</p></div>
+                <div class="lado dados">
+                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Comandante Aero</p>
+                    <p><strong>Altura</strong>5,5 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Caça F-15</p>
+                </div>
             </div>
         </div>
 
+        <!-- Soundwave -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'soundwave')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Soundwave</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Soundwave</h3></div>
                 <div class="lado lider"><img src="soundwave.jpg" alt="Soundwave"><h3>Soundwave</h3></div>
-                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Comunicações</p><p><strong>Altura</strong>5,2m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Gravador</p></div>
+                <div class="lado dados">
+                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Comunicações</p>
+                    <p><strong>Altura</strong>5,2 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Gravador</p>
+                </div>
             </div>
         </div>
 
+        <!-- Shockwave -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'shockwave')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Shockwave</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Shockwave</h3></div>
                 <div class="lado lider"><img src="shockwave.jpg" alt="Shockwave"><h3>Shockwave</h3></div>
-                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Cientista</p><p><strong>Altura</strong>6,5m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Canhão Laser</p></div>
+                <div class="lado dados">
+                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Cientista</p>
+                    <p><strong>Altura</strong>6,5 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Canhão Laser</p>
+                </div>
             </div>
         </div>
 
+        <!-- Blitzwing -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'blitzwing')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Blitzwing</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Blitzwing</h3></div>
                 <div class="lado lider"><img src="blitzwing.jpg" alt="Blitzwing"><h3>Blitzwing</h3></div>
-                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Guerreiro</p><p><strong>Altura</strong>5,8m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Tanque/Caça</p></div>
+                <div class="lado dados">
+                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Guerreiro</p>
+                    <p><strong>Altura</strong>5,8 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Tanque/Caça</p>
+                </div>
             </div>
         </div>
-    </div>
+    </div> <!-- FIM DO GRID DE PERSONAGENS -->
 
     <!-- PAINEL DE DIAGNÓSTICO TÁTICO HUD -->
     <div id="hud-combate" class="hud-container">
         <div class="hud-titulo">SISTEMA DE DIAGNÓSTICO TÁTICO</div>
         <div id="hud-nome" class="hud-subtitulo">SELECIONE UM LÍDER</div>
-        <div class="barra-status"><div class="label-container"><span>FORÇA (STR)</span><span id="val-forca">0</span></div><div class="grid-energia"><div id="bar-forca" class="preenchimento-energia"></div></div></div>
-        <div class="barra-status"><div class="label-container"><span>INTELIGÊNCIA (INT)</span><span id="val-int">0</span></div><div class="grid-energia"><div id="bar-int" class="preenchimento-energia"></div></div></div>
-        <div class="barra-status"><div class="label-container"><span>VELOCIDADE (SPD)</span><span id="val-vel">0</span></div><div class="grid-energia"><div id="bar-vel" class="preenchimento-energia"></div></div></div>
-        <div class="barra-status"><div class="label-container"><span>PODER DE FOGO (POW)</span><span id="val-pow">0</span></div><div class="grid-energia"><div id="bar-pow" class="preenchimento-energia"></div></div></div>
-                                           </div>
+        
+        <div class="barra-status">
+            <div class="label-container"><span>FORÇA (STR)</span><span id="val-forca">0</span></div>
+            <div class="grid-energia"><div id="bar-forca" class="preenchimento-energia"></div></div>
+        </div>
+        <div class="barra-status">
+            <div class="label-container"><span>INTELIGÊNCIA (INT)</span><span id="val-int">0</span></div>
+            <div class="grid-energia"><div id="bar-int" class="preenchimento-energia"></div></div>
+        </div>
+        <div class="barra-status">
+            <div class="label-container"><span>VELOCIDADE (SPD)</span><span id="val-vel">0</span></div>
+            <div class="grid-energia"><div id="bar-vel" class="preenchimento-energia"></div></div>
+        </div>
+        <div class="barra-status">
+            <div class="label-container"><span>PODER DE FOGO (POW)</span><span id="val-pow">0</span></div>
+            <div class="grid-energia"><div id="bar-pow" class="preenchimento-energia"></div></div>
+        </div>
+                    </div>
+
         <script>
         /* CONFIGURAÇÕES DE ÁUDIO GLOBAL LOCAL */
         const audio = document.getElementById('bg-music');
@@ -358,7 +367,7 @@
         if (somTransformacao) somTransformacao.volume = 0.2;
         if (audio) audio.volume = 0.25;
 
-        /* MATRIZ DE FRASES SEGUIDA COM PADRÃO Array.from CONTRA BUG DE CHAT DO GITHUB */
+        /* MATRIZ DE FRASES SEGUIDA COM PADRÃO Array.from CONTRA BUG DO GITHUB */
         const falasDisponiveis = {
             optimus: Array.from(["0", "1", "2"]),
             jazz: Array.from(["0", "1", "2"]),
@@ -400,7 +409,8 @@
                 });
             }
         });
-            /* SISTEMA DE SORTEIO DE FALAS SEM REPETIÇÃO */
+
+                    /* SISTEMA DE SORTEIO DE FALAS SEM REPETIÇÃO */
         function tocarFalaPersonagem(p) {
             if (!falasDisponiveis[p] || falasDisponiveis[p].length === 0) {
                 falasDisponiveis[p] = Array.from(["0", "1", "2"]);
@@ -447,6 +457,7 @@
             }
 
             containerFaccoes.classList.add('esvaecer');
+            document.getElementById('titulo-jogo').style.opacity = '0';
             
             setTimeout(() => {
                 containerFaccoes.style.display = 'none';
@@ -482,7 +493,10 @@
                 document.body.style.setProperty('--cor-luz', '#ffd700');
                 
                 containerFaccoes.style.display = 'flex';
-                setTimeout(() => { containerFaccoes.classList.remove('esvaecer'); }, 50);
+                setTimeout(() => { 
+                    containerFaccoes.classList.remove('esvaecer'); 
+                    document.getElementById('titulo-jogo').style.opacity = '1';
+                }, 50);
             }, 500);
         }
 
@@ -513,7 +527,7 @@
         let tempoUltimoClique = 0;
         let nemesisDesbloqueado = false;
 
-        /* GIRA OS CARDS EM 3D COM DETECÇÃO DE CORRUPÇÃO SECRETA */
+        /* GIRA OS CARDS EM 3D WITH DETECÇÃO DE CORRUPÇÃO SECRETA */
         function girarCard(c, p) {
             const inner = c.querySelector('.card-inner');
             let est = parseInt(inner.getAttribute('data-estagio'));
@@ -556,10 +570,9 @@
                             <p><strong>Modo</strong>Caminhão Negro</p>
                         `;
                     }
-                                      // Troca dinamicamente o logo e a imagem do robô para os arquivos do Nemesis
+
                     c.querySelector('.logo img').src = 'logo_nemesis.jpg';
                     c.querySelector('.lider img').src = 'nemesis.jpg';
-
                     prox = 2;
                 }
             }
