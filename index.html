@@ -8,24 +8,38 @@
         /* RESET E CONFIGURAÇÕES GERAIS */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         
+        /* CONFIGURAÇÃO DO BODY COM A GRADE DE BRINQUEDOS G1 */
         body {
-            background-color: #000; color: #fff; padding: 20px 10px; 
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; transition: background-color 0.4s ease; overflow-x: hidden;
-            width: 100%;
+            color: #fff; padding: 20px 10px; display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; overflow-x: hidden; width: 100%;
+            --cor-fundo: #000000; --cor-luz: #ffd700;
+            background-image: 
+                radial-gradient(circle at center, var(--cor-luz) 0%, transparent 60%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--cor-fundo), #000000);
+            background-size: 100% 100%, 25px 25px, 25px 25px, 100% 100%; background-attachment: fixed;
+            transition: background-color 0.6s ease, --cor-fundo 0.6s ease, --cor-luz 0.6s ease;
+            animation: pulsarFundoInicial 8s infinite alternate ease-in-out;
         }
         
+        @keyframes pulsarFundoInicial {
+            0% { background-color: #1a0000; --cor-fundo: #1a0000; }
+            100% { background-color: #0e001c; --cor-fundo: #0e001c; }
+        }
+
+        body.faccao-ativa { animation: none; }
         h1 { width: 100%; text-align: center; color: #ffd700; margin-bottom: 10px; font-size: 24px; }
-        
-        /* CONTAINER DE ÁUDIO */
         .audio-container { width: 100%; display: flex; justify-content: center; margin-bottom: 20px; }
         audio { background-color: #222; border-radius: 30px; border: 2px solid #ffd700; max-width: 100%; }
 
         /* TELA 1: SELEÇÃO DE FACÇÃO INICIAL */
         .tela-faccoes {
             display: flex; gap: 20px; justify-content: center; align-items: center;
-            width: 100%; max-width: 500px; margin-top: 30px; transition: all 0.5s ease;
+            width: 100%; max-width: 500px; margin-top: 30px; transition: opacity 0.4s ease, transform 0.4s ease;
+            opacity: 1; transform: scale(1);
         }
+        .tela-faccoes.esvaecer { opacity: 0; transform: scale(0.8); pointer-events: none; }
         
         .card-faccao {
             width: 165px; height: 250px; border: 3px solid #333; border-radius: 12px;
@@ -33,37 +47,31 @@
             justify-content: center; background: #111; transition: transform 0.3s ease, box-shadow 0.3s ease;
             padding: 15px; text-align: center;
         }
-        
         .card-faccao img { width: 100%; height: 150px; object-fit: contain; margin-bottom: 15px; }
         .card-faccao h2 { font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
-        
         .card-faccao.escolha-autobot:hover { border-color: #e50000; box-shadow: 0 0 20px #e50000; transform: scale(1.05); }
         .card-faccao.escolha-autobot h2 { color: #e50000; }
-        
         .card-faccao.escolha-decepticon:hover { border-color: #7b2cbf; box-shadow: 0 0 20px #7b2cbf; transform: scale(1.05); }
         .card-faccao.escolha-decepticon h2 { color: #7b2cbf; }
 
         /* TELA 2: GRID DE PERSONAGENS */
         .tela-personagens {
-            display: none; flex-wrap: wrap; gap: 15px; justify-content: center; 
-            width: 100%; max-width: 900px; margin-bottom: 25px;
+            display: none; flex-wrap: wrap; gap: 15px; justify-content: center; width: 100%; max-width: 900px; margin-bottom: 25px;
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.25); opacity: 0; transform: scale(0.7);
         }
-        
+        .tela-personagens.expandir { opacity: 1; transform: scale(1); }
         .escondido { display: none !important; }
 
         /* BOTÃO VOLTAR */
         .btn-voltar {
-            display: none; padding: 10px 20px; font-size: 11px; font-weight: bold;
-            color: #fff; background: #111; border: 2px solid #ffd700; border-radius: 6px;
-            cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
-            margin-bottom: 25px; transition: all 0.3s ease;
+            display: none; padding: 10px 20px; font-size: 11px; font-weight: bold; color: #fff; background: #111;
+            border: 2px solid #ffd700; border-radius: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; transition: all 0.3s ease;
         }
         .btn-voltar:hover { background: #ffd700; color: #000; box-shadow: 0 0 15px #ffd700; }
 
         /* CARDS INTERATIVOS 3D */
         .card { width: 165px; height: 250px; position: relative; perspective: 1000px; cursor: pointer; }
         .card-inner { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        
         .lado { position: absolute; width: 100%; height: 100%; border-radius: 12px; backface-visibility: hidden; overflow: hidden; border: 3px solid; display: flex; flex-direction: column; }
         .lado img { width: 100%; height: 175px; object-fit: contain; background: #fff; padding: 8px; }
         .lado h3 { text-align: center; padding: 8px 4px; font-size: 13px; background: #111; }
@@ -71,7 +79,6 @@
         .autobot .lado { border-color: #e50000; background: #111; }
         .autobot h3 { color: #e50000; }
         .autobot.brilhar .lado { box-shadow: 0 0 20px #e50000, inset 0 0 10px #e50000; }
-        
         .decepticon .lado { border-color: #7b2cbf; background: #111; }
         .decepticon h3 { color: #7b2cbf; }
         .decepticon.brilhar .lado { box-shadow: 0 0 20px #7b2cbf, inset 0 0 10px #7b2cbf; }
@@ -80,7 +87,6 @@
         .logo img { background: #222; }
         .lider { transform: rotateY(120deg) translateZ(48px); z-index: 2; }
         .dados { transform: rotateY(240deg) translateZ(48px); z-index: 1; background: #111 !important; padding: 12px 8px; justify-content: center; }
-        
         .dados p { margin: 5px 0; font-size: 11px; line-height: 1.3; border-bottom: 1px solid #222; padding-bottom: 2px; }
         .dados strong { color: #ffd700; display: block; font-size: 10px; text-transform: uppercase; }
         
@@ -90,108 +96,22 @@
         
         /* HUD CONTAINER */
         .hud-container {
-            width: 100%; max-width: 360px; background: rgba(15, 15, 15, 0.95); border: 2px solid #222;
-            border-radius: 12px; padding: 15px; box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column; gap: 12px; margin-top: 20px;
-            opacity: 0; visibility: hidden; transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+            width: 100%; max-width: 360px; background: rgba(15, 15, 15, 0.95); border: 2px solid #222; border-radius: 12px; padding: 15px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 12px; margin-top: 20px;
+            opacity: 0; visibility: hidden; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
         }
         .hud-container.visivel { opacity: 1; visibility: visible; transform: translateY(0); }
         .hud-titulo { font-size: 11px; color: #ffd700; text-align: center; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px dashed #333; padding-bottom: 6px; }
         .hud-subtitulo { text-align: center; font-size: 13px; font-weight: bold; color: #aaa; margin-bottom: 5px; text-transform: uppercase; }
-        
         .barra-status { display: flex; flex-direction: column; gap: 4px; }
         .label-container { display: flex; justify-content: space-between; font-size: 11px; color: #ccc; }
         .grid-energia { width: 100%; height: 12px; background: #111; border: 1px solid #333; border-radius: 3px; overflow: hidden; }
         .preenchimento-energia { height: 100%; width: 0%; transition: width 0.6s ease, background-color 0.4s; box-shadow: 0 0 8px currentColor; }
-        /* ==========================================================================
-           NOVAS ANIMAÇÕES DE TRANSIÇÃO E DIVISÃO (CINEMATOGRÁFICAS)
-           ========================================================================== */
-        
-        /* Configuração de transição suave para a tela de escolha inicial */
-        .tela-faccoes {
-            display: flex; gap: 20px; justify-content: center; align-items: center;
-            width: 100%; max-width: 500px; margin-top: 30px;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            opacity: 1; transform: scale(1);
-        }
-        
-        /* Estado de sumiço/recolhimento da tela inicial */
-        .tela-faccoes.esvaecer {
-            opacity: 0;
-            transform: scale(0.8);
-            pointer-events: none; /* Impede cliques fantasmas enquanto some */
-        }
-
-        /* Configuração de transição suave para o Grid de 5 Personagens */
-        .tela-personagens {
-            display: none; /* JS controla se é none ou flex */
-            flex-wrap: wrap; gap: 15px; justify-content: center; 
-            width: 100%; max-width: 900px; margin-bottom: 25px;
-            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.25);
-            opacity: 0; transform: scale(0.7); /* Começa menor e invisível para dar efeito de expansão/divisão */
-        }
-        
-        /* Estado ativo onde as 5 cartas se expandem e aparecem */
-        .tela-personagens.expandir {
-            opacity: 1;
-            transform: scale(1);
-        }
-        /* CONFIGURAÇÃO DO BODY COM A GRADE DE BRINQUEDOS G1 (SEM IMAGENS) */
-        body {
-            color: #fff; 
-            padding: 20px 10px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
-            min-height: 100vh; 
-            overflow-x: hidden;
-            width: 100%;
-            
-            /* Variáveis CSS para controlar as cores dinamicamente via JavaScript */
-            --cor-fundo: #000000;
-            --cor-luz: #ffd700; /* Luz amarela clássica no centro */
-            
-            /* Criação da Malha de Grade usando Linhas CSS sobrepostas */
-            background-image: 
-                radial-gradient(circle at center, var(--cor-luz) 0%, transparent 60%),
-                linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--cor-fundo), #000000);
-            
-            /* Define o tamanho dos quadradinhos da grade (25px por 25px) */
-            background-size: 100% 100%, 25px 25px, 25px 25px, 100% 100%;
-            background-attachment: fixed;
-            
-            /* Transição super suave ao mudar de cor */
-            transition: background-color 0.6s ease, --cor-fundo 0.6s ease, --cor-luz 0.6s ease;
-            
-            /* Ativa a animação de pulsação inicial */
-            animation: pulsarFundoInicial 8s infinite alternate ease-in-out;
-        }
-        
-        /* ANIMAÇÃO RETRÔ DA TELA INICIAL: PULSA ENTRE VERMELHO E ROXO */
-        @keyframes pulsarFundoInicial {
-            0% {
-                background-color: #1a0000; /* Vermelho Autobot bem escuro */
-                --cor-fundo: #1a0000;
-            }
-            100% {
-                background-color: #0e001c; /* Roxo Decepticon bem escuro */
-                --cor-fundo: #0e001c;
-            }
-        }
-
-        /* CLASSE AUXILIAR PARA TRAVAR A ANIMAÇÃO QUANDO UMA FACÇÃO FOR ESCOLHIDA */
-        body.faccao-ativa {
-            animation: none;
-        }
-
     </style>
 </head>
 <body>
 
-     <h1>TRANSFORMERS G1</h1>
+        <h1>TRANSFORMERS G1</h1>
     
     <div class="audio-container">
         <audio id="bg-music" src="tema.mp3" controls loop></audio>
@@ -200,6 +120,18 @@
     <audio id="transform-sound" src="transformacao.mp3" preload="auto"></audio>
 
     <!-- BANCO DE AUDIOS -->
+    <!-- Teletraan 1 -->
+    <audio id="teletraan-autobot-0" src="teletraan_autobot0.mp3" preload="auto"></audio>
+    <audio id="teletraan-autobot-1" src="teletraan_autobot1.mp3" preload="auto"></audio>
+    <audio id="teletraan-autobot-2" src="teletraan_autobot2.mp3" preload="auto"></audio>
+
+    <audio id="teletraan-decepticon-0" src="teletraan_decepticon0.mp3" preload="auto"></audio>
+    <audio id="teletraan-decepticon-1" src="teletraan_decepticon2.mp3" preload="auto"></audio>
+    <audio id="teletraan-decepticon-2" src="teletraan_decepticon3.mp3" preload="auto"></audio>
+
+    <!-- Alerta do Teletraan para o Nemesis Prime -->
+    <audio id="teletraan-alert" src="teletraan_alert.mp3" preload="auto"></audio>
+
     <!-- Autobots -->
     <audio id="optimus-frase-0" src="optimus1.mp3" preload="auto"></audio>
     <audio id="optimus-frase-1" src="optimus2.mp3" preload="auto"></audio>
@@ -220,6 +152,11 @@
     <audio id="grimlock-frase-0" src="grimlock0.mp3" preload="auto"></audio>
     <audio id="grimlock-frase-1" src="grimlock1.mp3" preload="auto"></audio>
     <audio id="grimlock-frase-2" src="grimlock2.mp3" preload="auto"></audio>
+
+    <!-- Nemesis Prime -->
+    <audio id="nemesis-frase-0" src="nemesis0.mp3" preload="auto"></audio>
+    <audio id="nemesis-frase-1" src="nemesis1.mp3" preload="auto"></audio>
+    <audio id="nemesis-frase-2" src="nemesis2.mp3" preload="auto"></audio>
 
     <!-- Decepticons -->
     <audio id="megatron-frase-0" src="megatron1.mp3" preload="auto"></audio>
@@ -242,21 +179,7 @@
     <audio id="blitzwing-frase-1" src="blitzwing1.mp3" preload="auto"></audio>
     <audio id="blitzwing-frase-2" src="blitzwing2.mp3" preload="auto"></audio>
 
-        <!-- ÁUDIOS DE DIAGNÓSTICO DO TELETRAAN 1 -->
-    <audio id="teletraan-autobot-0" src="teletraan_autobot0.mp3" preload="auto"></audio>
-    <audio id="teletraan-autobot-1" src="teletraan_autobot1.mp3" preload="auto"></audio>
-    <audio id="teletraan-autobot-2" src="teletraan_autobot2.mp3" preload="auto"></audio>
-
-    <audio id="teletraan-decepticon-0" src="teletraan_decepticon0.mp3" preload="auto"></audio>
-    <audio id="teletraan-decepticon-1" src="teletraan_decepticon1.mp3" preload="auto"></audio>
-    <audio id="teletraan-decepticon-2" src="teletraan_decepticon2.mp3" preload="auto"></audio>
-      <!-- ÁUDIOS DE CORRUPÇÃO E FALAS DO NEMESIS PRIME -->
-    <audio id="teletraan-alert" src="teletraan_alert.mp3" preload="auto"></audio>
-    <audio id="nemesis-frase-0" src="nemesis0.mp3" preload="auto"></audio>
-    <audio id="nemesis-frase-1" src="nemesis1.mp3" preload="auto"></audio>
-    <audio id="nemesis-frase-2" src="nemesis2.mp3" preload="auto"></audio>
-  
-     <!-- TELA INICIAL DE SELEÇÃO DE FACÇÃO -->
+        <!-- TELA INICIAL DE SELEÇÃO DE FACÇÃO -->
     <div id="container-faccoes" class="tela-faccoes">
         <div class="card-faccao escolha-autobot" onclick="selecionarFaccao('autobot')">
             <img src="logo_autobot.jpg" alt="Símbolo Autobot">
@@ -268,9 +191,8 @@
         </div>
     </div>
 
-    <!-- BOTÃO DE RETORNO DO GRID PARA A TELA DE FACÇÕES -->
     <button id="btn-voltar" class="btn-voltar" onclick="voltarParaFaccoes()">← Mudar de Facção</button>
-    
+
     <!-- GRID DE SELEÇÃO DE PERSONAGENS -->
     <div id="grid-personagens" class="tela-personagens">
         
@@ -333,103 +255,68 @@
                     <p><strong>Altura</strong>7,0 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>T-Rex</p>
                 </div>
             </div>
-        </div>
-        
-        <!-- ==================== ELENCO DECEPTICON ==================== -->
-        <!-- Megatron -->
+                                                          </div>
+                     <!-- ==================== ELENCO DECEPTICON ==================== -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'megatron')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Megatron</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Megatron</h3></div>
                 <div class="lado lider"><img src="megatron.jpg" alt="Megatron"><h3>Megatron</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Líder Supremo</p>
-                    <p><strong>Altura</strong>6,0 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Pistola</p>
-                </div>
+                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Líder</p><p><strong>Altura</strong>6,0m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Pistola</p></div>
             </div>
         </div>
 
-        <!-- Starscream -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'starscream')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Starscream</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Starscream</h3></div>
                 <div class="lado lider"><img src="starscream.jpg" alt="Starscream"><h3>Starscream</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Comandante Aero</p>
-                    <p><strong>Altura</strong>5,5 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Caça F-15</p>
-                </div>
+                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Comandante</p><p><strong>Altura</strong>5,5m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Caça F-15</p></div>
             </div>
         </div>
 
-        <!-- Soundwave -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'soundwave')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Soundwave</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Soundwave</h3></div>
                 <div class="lado lider"><img src="soundwave.jpg" alt="Soundwave"><h3>Soundwave</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Comunicações</p>
-                    <p><strong>Altura</strong>5,2 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Gravador</p>
-                </div>
+                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Comunicações</p><p><strong>Altura</strong>5,2m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Gravador</p></div>
             </div>
         </div>
 
-        <!-- Shockwave -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'shockwave')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Shockwave</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Shockwave</h3></div>
                 <div class="lado lider"><img src="shockwave.jpg" alt="Shockwave"><h3>Shockwave</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Cientista</p>
-                    <p><strong>Altura</strong>6,5 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Canhão Laser</p>
-                </div>
+                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Cientista</p><p><strong>Altura</strong>6,5m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Canhão Laser</p></div>
             </div>
         </div>
 
-        <!-- Blitzwing -->
         <div class="card decepticon grupo-decepticon escondido" onclick="girarCard(this, 'blitzwing')">
             <div class="card-inner estagio-1" data-estagio="1">
-                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo Decepticon"><h3>Blitzwing</h3></div>
+                <div class="lado logo"><img src="logo_decepticon.jpg" alt="Logo"><h3>Blitzwing</h3></div>
                 <div class="lado lider"><img src="blitzwing.jpg" alt="Blitzwing"><h3>Blitzwing</h3></div>
-                <div class="lado dados">
-                    <p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Guerreiro</p>
-                    <p><strong>Altura</strong>5,8 metros</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Tanque/Caça</p>
-                </div>
+                <div class="lado dados"><p><strong>Facção</strong>Decepticons</p><p><strong>Função</strong>Guerreiro</p><p><strong>Altura</strong>5,8m</p><p><strong>Planeta</strong>Cybertron</p><p><strong>Modo</strong>Tanque/Caça</p></div>
             </div>
         </div>
-    </div> <!-- FIM DO GRID DE PERSONAGENS -->
+    </div>
 
     <!-- PAINEL DE DIAGNÓSTICO TÁTICO HUD -->
     <div id="hud-combate" class="hud-container">
         <div class="hud-titulo">SISTEMA DE DIAGNÓSTICO TÁTICO</div>
         <div id="hud-nome" class="hud-subtitulo">SELECIONE UM LÍDER</div>
-        
-        <div class="barra-status">
-            <div class="label-container"><span>FORÇA (STR)</span><span id="val-forca">0</span></div>
-            <div class="grid-energia"><div id="bar-forca" class="preenchimento-energia"></div></div>
-        </div>
-        <div class="barra-status">
-            <div class="label-container"><span>INTELIGÊNCIA (INT)</span><span id="val-int">0</span></div>
-            <div class="grid-energia"><div id="bar-int" class="preenchimento-energia"></div></div>
-        </div>
-        <div class="barra-status">
-            <div class="label-container"><span>VELOCIDADE (SPD)</span><span id="val-vel">0</span></div>
-            <div class="grid-energia"><div id="bar-vel" class="preenchimento-energia"></div></div>
-        </div>
-        <div class="barra-status">
-            <div class="label-container"><span>PODER DE FOGO (POW)</span><span id="val-pow">0</span></div>
-            <div class="grid-energia"><div id="bar-pow" class="preenchimento-energia"></div></div>
-        </div>
-                                                                                                </div>
-              <script>
-        /* CONFIGURAÇÕES DE ÁUDIO GLOBAL */
+        <div class="barra-status"><div class="label-container"><span>FORÇA (STR)</span><span id="val-forca">0</span></div><div class="grid-energia"><div id="bar-forca" class="preenchimento-energia"></div></div></div>
+        <div class="barra-status"><div class="label-container"><span>INTELIGÊNCIA (INT)</span><span id="val-int">0</span></div><div class="grid-energia"><div id="bar-int" class="preenchimento-energia"></div></div></div>
+        <div class="barra-status"><div class="label-container"><span>VELOCIDADE (SPD)</span><span id="val-vel">0</span></div><div class="grid-energia"><div id="bar-vel" class="preenchimento-energia"></div></div></div>
+        <div class="barra-status"><div class="label-container"><span>PODER DE FOGO (POW)</span><span id="val-pow">0</span></div><div class="grid-energia"><div id="bar-pow" class="preenchimento-energia"></div></div></div>
+                                           </div>
+        <script>
+        /* CONFIGURAÇÕES DE ÁUDIO GLOBAL LOCAL */
         const audio = document.getElementById('bg-music');
         const somTransformacao = document.getElementById('transform-sound');
         
         if (somTransformacao) somTransformacao.volume = 0.2;
         if (audio) audio.volume = 0.25;
 
-        /* MATRIZ DE FRASES CONFIGURADA DE FORMA IMPENETRÁVEL CONTRA BUG DE CHAT */
-                
-                            const falasDisponiveis = {
+        /* MATRIZ DE FRASES SEGUIDA COM PADRÃO Array.from CONTRA BUG DE CHAT DO GITHUB */
+        const falasDisponiveis = {
             optimus: Array.from(["0", "1", "2"]),
             jazz: Array.from(["0", "1", "2"]),
             cliffjumper: Array.from(["0", "1", "2"]),
@@ -446,18 +333,14 @@
             nemesis: Array.from(["0", "1", "2"])
         };
 
-
-
-
-        /* BANCO DE DADOS TÁTICOS (ATRIBUTOS G1) */
+        /* BANCO DE DADOS TÁTICOS (ATRIBUTOS REAIS G1) */
         const atributosG1 = {
-            nemesis: { nome: "Nemesis Prime", cor: "#00f5d4", str: 10, int: 10, vel: 9, pow: 10 }
             optimus: { nome: "Optimus Prime", cor: "#e50000", str: 10, int: 10, vel: 8, pow: 10 },
+            nemesis: { nome: "Nemesis Prime", cor: "#00f5d4", str: 10, int: 10, vel: 9, pow: 10 },
             jazz: { nome: "Jazz", cor: "#e50000", str: 7, int: 9, vel: 9, pow: 6 },
             cliffjumper: { nome: "Cliffjumper", cor: "#e50000", str: 6, int: 5, vel: 7, pow: 7 },
             wheeljack: { nome: "Wheeljack", cor: "#e50000", str: 7, int: 9, vel: 7, pow: 7 },
             grimlock: { nome: "Grimlock", cor: "#e50000", str: 10, int: 4, vel: 3, pow: 8 },
-            
             megatron: { nome: "Megatron", cor: "#7b2cbf", str: 10, int: 9, vel: 9, pow: 10 },
             starscream: { nome: "Starscream", cor: "#7b2cbf", str: 7, int: 7, vel: 10, pow: 8 },
             soundwave: { nome: "Soundwave", cor: "#7b2cbf", str: 8, int: 9, vel: 5, pow: 6 },
@@ -465,7 +348,7 @@
             blitzwing: { nome: "Blitzwing", cor: "#7b2cbf", str: 8, int: 5, vel: 9, pow: 7 }
         };
 
-        /* INICIALIZAÇÃO DA TRILHA DE FUNDO VIA CLIQUE SEGURO */
+        /* INICIALIZAÇÃO SEGURA DA TRILHA DE FUNDO REQUISITADA PELO NAVEGADOR */
         window.addEventListener('DOMContentLoaded', () => {
             if (audio) {
                 audio.play().catch(() => {
@@ -474,11 +357,10 @@
                 });
             }
         });
-                  
-        /* SISTEMA DE SORTEIO DE FALAS SEM REPETIÇÃO */
+            /* SISTEMA DE SORTEIO DE FALAS SEM REPETIÇÃO */
         function tocarFalaPersonagem(p) {
             if (!falasDisponiveis[p] || falasDisponiveis[p].length === 0) {
-                falasDisponiveis[p] = ["0", "1", "2"];
+                falasDisponiveis[p] = Array.from(["0", "1", "2"]);
             }
             const idx = Math.floor(Math.random() * falasDisponiveis[p].length);
             const num = falasDisponiveis[p][idx];
@@ -491,27 +373,25 @@
             }
         }
 
-                /* ALTERNADOR DE TELAS COM ANIMAÇÃO, VOZ E MUDANÇA DE COR DO FUNDO */
+        /* ALTERNADOR DE TELAS COM ANIMAÇÃO, VOZ E MUDANÇA DE COR DO FUNDO */
         function selecionarFaccao(f) {
             const containerFaccoes = document.getElementById('container-faccoes');
             const grid = document.getElementById('grid-personagens');
             
-            // 1. Pausa a pulsação inicial e injeta a cor fixa da facção escolhida
             document.body.classList.add('faccao-ativa');
             if (f === 'autobot') {
                 document.body.style.backgroundColor = '#1a0000';
                 document.body.style.setProperty('--cor-fundo', '#1a0000');
-                document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.4)'); /* Luz vermelha */
+                document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.4)');
             } else {
                 document.body.style.backgroundColor = '#0e001c';
                 document.body.style.setProperty('--cor-fundo', '#0e001c');
-                document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.4)'); /* Luz roxa */
+                document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.4)');
             }
 
-            // 2. O Teletraan 1 analisa a facção e dispara uma linha de voz aleatória
             const chaveTeletraan = 'teletraan_' + f;
             if (!falasDisponiveis[chaveTeletraan] || falasDisponiveis[chaveTeletraan].length === 0) {
-                falasDisponiveis[chaveTeletraan] = ["0", "1", "2"];
+                falasDisponiveis[chaveTeletraan] = Array.from(["0", "1", "2"]);
             }
             const idxTeletraan = Math.floor(Math.random() * falasDisponiveis[chaveTeletraan].length);
             const numTeletraan = falasDisponiveis[chaveTeletraan][idxTeletraan];
@@ -519,26 +399,19 @@
 
             const audioTeletraan = document.getElementById('teletraan-' + f + '-' + numTeletraan);
             if (audioTeletraan) {
-                audioTeletraan.currentTime = 0;
-                audioTeletraan.volume = 1.0;
-                audioTeletraan.play().catch(e => console.log("Áudio do Teletraan bloqueado"));
+                audioTeletraan.currentTime = 0; audioTeletraan.volume = 1.0;
+                audioTeletraan.play().catch(e => console.log("Áudio bloqueado"));
             }
 
-            // 3. Inicia o efeito visual cinematográfico esvaecendo o menu inicial
             containerFaccoes.classList.add('esvaecer');
             
-            // 4. Aguarda o fechamento do menu para injetar as 5 cartas em formato grid
             setTimeout(() => {
                 containerFaccoes.style.display = 'none';
                 grid.style.display = 'flex';
                 document.getElementById('btn-voltar').style.display = 'inline-block';
                 document.querySelectorAll('.grupo-' + f).forEach(c => c.classList.remove('escondido'));
                 
-                // 5. Executa a expansão suave e progressiva dos robôs na tela
-                setTimeout(() => {
-                    grid.classList.add('expandir');
-                }, 50);
-                
+                setTimeout(() => { grid.classList.add('expandir'); }, 50);
             }, 400);
         }
 
@@ -547,15 +420,12 @@
             const containerFaccoes = document.getElementById('container-faccoes');
             const grid = document.getElementById('grid-personagens');
             
-            // 1. Faz as 5 cartas encolherem e sumirem suavemente
             grid.classList.remove('expandir');
             document.getElementById('btn-voltar').style.display = 'none';
             atualizarHUD(null, 1);
             
-            // 2. Espera as 5 cartas sumirem (500ms) para trazer as facções de volta
             setTimeout(() => {
                 grid.style.display = 'none';
-                
                 document.querySelectorAll('.card').forEach(c => {
                     c.classList.add('escondido');
                     const inner = c.querySelector('.card-inner');
@@ -563,17 +433,13 @@
                     inner.setAttribute('data-estagio', '1');
                 });
                 
-                // 3. Reseta os estilos inline do fundo para reativar a pulsação e a luz amarela
                 document.body.classList.remove('faccao-ativa');
                 document.body.style.backgroundColor = '';
                 document.body.style.removeProperty('--cor-fundo');
                 document.body.style.setProperty('--cor-luz', '#ffd700');
                 
                 containerFaccoes.style.display = 'flex';
-                setTimeout(() => {
-                    containerFaccoes.classList.remove('esvaecer');
-                }, 50);
-                
+                setTimeout(() => { containerFaccoes.classList.remove('esvaecer'); }, 50);
             }, 500);
         }
 
@@ -598,7 +464,8 @@
                 Object.keys(bars).forEach(k => { bars[k].style.width = '0%'; vals[k].textContent = '0'; });
             }
         }
-           /* VARIÁVEIS DE CONTROLE DO EASTER EGG DO NEMESIS PRIME */
+
+        /* VARIÁVEIS DE CONTROLE DO EASTER EGG DO NEMESIS PRIME */
         let cliquesOptimus = 0;
         let tempoUltimoClique = 0;
         let nemesisDesbloqueado = false;
@@ -609,7 +476,7 @@
             let est = parseInt(inner.getAttribute('data-estagio'));
             let prox = est === 1 ? 2 : (est === 2 ? 3 : 1);
             
-            let personajeAtivo = p;
+            let personagemAtivo = p;
             
             if (p === 'optimus') {
                 const agora = Date.now();
@@ -624,11 +491,9 @@
                     nemesisDesbloqueado = true;
                     personagemAtivo = 'nemesis';
                     
-                    // Busca o ID idêntico à linha 254 do seu HTML
                     const somErro = document.getElementById('teletraan-alert');
                     if (somErro) {
-                        somErro.currentTime = 0;
-                        somErro.volume = 1.0;
+                        somErro.currentTime = 0; somErro.volume = 1.0;
                         somErro.play().catch(e => console.log("Alarme bloqueado"));
                     }
 
@@ -648,7 +513,6 @@
                             <p><strong>Modo</strong>Caminhão Negro</p>
                         `;
                     }
-
                     prox = 2;
                 }
             }
@@ -684,7 +548,6 @@
             inner.setAttribute('data-estagio', prox);
             atualizarHUD(personagemAtivo, prox);
         }
-
     </script>
 </body>
 </html>
