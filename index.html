@@ -599,7 +599,7 @@
                 Object.keys(bars).forEach(k => { bars[k].style.width = '0%'; vals[k].textContent = '0'; });
             }
         }
-        /* VARIÁVEIS DE CONTROLE DO EASTER EGG DO NEMESIS PRIME */
+           /* VARIÁVEIS DE CONTROLE DO EASTER EGG DO NEMESIS PRIME */
         let cliquesOptimus = 0;
         let tempoUltimoClique = 0;
         let nemesisDesbloqueado = false;
@@ -610,7 +610,7 @@
             let est = parseInt(inner.getAttribute('data-estagio'));
             let prox = est === 1 ? 2 : (est === 2 ? 3 : 1);
             
-            let personagemAtivo = p;
+            let personajeAtivo = p;
             
             if (p === 'optimus') {
                 const agora = Date.now();
@@ -625,7 +625,8 @@
                     nemesisDesbloqueado = true;
                     personagemAtivo = 'nemesis';
                     
-                    const somErro = document.getElementById('teletraan-corrompido');
+                    // Busca o ID idêntico à linha 254 do seu HTML
+                    const somErro = document.getElementById('teletraan-alert');
                     if (somErro) {
                         somErro.currentTime = 0;
                         somErro.volume = 1.0;
@@ -660,7 +661,6 @@
             try {
                 somTransformacao.currentTime = 0; somTransformacao.play().catch(e => {});
                 somTransformacao.onended = () => { 
-                    // Se as falas esvaziarem, reinicia usando Array.from de forma protegida contra o GitHub
                     if (!falasDisponiveis[personagemAtivo] || falasDisponiveis[personagemAtivo].length === 0) {
                         falasDisponiveis[personagemAtivo] = Array.from(["0", "1", "2"]);
                     }
@@ -684,8 +684,8 @@
             inner.className = 'card-inner estagio-' + prox;
             inner.setAttribute('data-estagio', prox);
             atualizarHUD(personagemAtivo, prox);
-                    }
-                        
+        }
+
     </script>
 </body>
 </html>
