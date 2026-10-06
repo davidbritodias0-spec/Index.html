@@ -137,6 +137,55 @@
             opacity: 1;
             transform: scale(1);
         }
+        /* CONFIGURAÇÃO DO BODY COM A GRADE DE BRINQUEDOS G1 (SEM IMAGENS) */
+        body {
+            color: #fff; 
+            padding: 20px 10px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            min-height: 100vh; 
+            overflow-x: hidden;
+            width: 100%;
+            
+            /* Variáveis CSS para controlar as cores dinamicamente via JavaScript */
+            --cor-fundo: #000000;
+            --cor-luz: #ffd700; /* Luz amarela clássica no centro */
+            
+            /* Criação da Malha de Grade usando Linhas CSS sobrepostas */
+            background-image: 
+                radial-gradient(circle at center, var(--cor-luz) 0%, transparent 60%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--cor-fundo), #000000);
+            
+            /* Define o tamanho dos quadradinhos da grade (25px por 25px) */
+            background-size: 100% 100%, 25px 25px, 25px 25px, 100% 100%;
+            background-attachment: fixed;
+            
+            /* Transição super suave ao mudar de cor */
+            transition: background-color 0.6s ease, --cor-fundo 0.6s ease, --cor-luz 0.6s ease;
+            
+            /* Ativa a animação de pulsação inicial */
+            animation: pulsarFundoInicial 8s infinite alternate ease-in-out;
+        }
+        
+        /* ANIMAÇÃO RETRÔ DA TELA INICIAL: PULSA ENTRE VERMELHO E ROXO */
+        @keyframes pulsarFundoInicial {
+            0% {
+                background-color: #1a0000; /* Vermelho Autobot bem escuro */
+                --cor-fundo: #1a0000;
+            }
+            100% {
+                background-color: #0e001c; /* Roxo Decepticon bem escuro */
+                --cor-fundo: #0e001c;
+            }
+        }
+
+        /* CLASSE AUXILIAR PARA TRAVAR A ANIMAÇÃO QUANDO UMA FACÇÃO FOR ESCOLHIDA */
+        body.faccao-ativa {
+            animation: none;
+        }
 
     </style>
 </head>
