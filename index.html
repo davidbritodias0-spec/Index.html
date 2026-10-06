@@ -428,7 +428,8 @@
         if (audio) audio.volume = 0.25;
 
         /* MATRIZ DE FRASES CONFIGURADA DE FORMA IMPENETRÁVEL CONTRA BUG DE CHAT */
-                const falasDisponiveis = {
+                
+                    const falasDisponiveis = {
             optimus: Array.from(["0", "1", "2"]),
             jazz: Array.from(["0", "1", "2"]),
             cliffjumper: Array.from(["0", "1", "2"]),
@@ -441,9 +442,10 @@
             blitzwing: Array.from(["0", "1", "2"]),
             teletraan_autobot: Array.from(["0", "1", "2"]),
             teletraan_decepticon: Array.from(["0", "1", "2"]),
-            teletraan_corrompido: Array.from(["0"]),
-            nemesis: Array.from(["0", "1", "2"]) // Adicione exatamente assim na linha 444
-                  
+            teletraan_alert: Array.from(["0"]), // Sua nova fala protegida
+            nemesis: Array.from(["0", "1", "2"]) // Nemesis protegido
+        };
+
         };
 
 
@@ -597,8 +599,7 @@
                 Object.keys(bars).forEach(k => { bars[k].style.width = '0%'; vals[k].textContent = '0'; });
             }
         }
-
-                /* VARIÁVEIS DE CONTROLE DO EASTER EGG DO NEMESIS PRIME */
+        /* VARIÁVEIS DE CONTROLE DO EASTER EGG DO NEMESIS PRIME */
         let cliquesOptimus = 0;
         let tempoUltimoClique = 0;
         let nemesisDesbloqueado = false;
@@ -609,27 +610,21 @@
             let est = parseInt(inner.getAttribute('data-estagio'));
             let prox = est === 1 ? 2 : (est === 2 ? 3 : 1);
             
-            // --- SISTEMA DE SELEÇÃO DINÂMICA DO PERSONAGEM (OPTIMUS VS NEMESIS) ---
             let personagemAtivo = p;
             
-            // Se o usuário clicar no card do Optimus Prime, verifica o gatilho secreto
             if (p === 'optimus') {
                 const agora = Date.now();
-                
-                // Se o tempo entre os cliques for menor que 800ms, conta como clique rápido
                 if (agora - tempoUltimoClique < 800) {
                     cliquesOptimus++;
                 } else {
-                    cliquesOptimus = 1; // Reseta se demorar muito para clicar de novo
+                    cliquesOptimus = 1;
                 }
                 tempoUltimoClique = agora;
 
-                // ATIVAÇÃO DO GATILHO: Ao atingir 5 cliques rápidos consecutivos
                 if (cliquesOptimus === 5 && !nemesisDesbloqueado) {
                     nemesisDesbloqueado = true;
                     personagemAtivo = 'nemesis';
                     
-                    // 1. Toca o alarme de erro ou a fala do Teletraan alertando a corrupção
                     const somErro = document.getElementById('teletraan-corrompido');
                     if (somErro) {
                         somErro.currentTime = 0;
@@ -637,14 +632,12 @@
                         somErro.play().catch(e => console.log("Alarme bloqueado"));
                     }
 
-                    // 2. Transforma visualmente o card do Optimus mudando os textos
                     const titulosCard = c.querySelectorAll('h3');
                     titulosCard.forEach(t => {
                         t.textContent = 'Nemesis Prime';
-                        t.style.color = '#00f5d4'; // Muda o texto para Verde-Azulado Neon
+                        t.style.color = '#00f5d4';
                     });
 
-                    // 3. Altera os dados da ficha técnica (Estágio 3) para os parâmetros do Nemesis
                     const blocoDados = c.querySelector('.dados');
                     if (blocoDados) {
                         blocoDados.innerHTML = `
@@ -656,30 +649,28 @@
                         `;
                     }
 
-                    // 4. Força o card a ir direto para o Estágio 2 para revelar a nova identidade
                     prox = 2;
                 }
             }
 
-            // Se o Optimus já foi corrompido, o card passa a responder permanentemente como Nemesis
             if (p === 'optimus' && nemesisDesbloqueado) {
                 personagemAtivo = 'nemesis';
             }
-            // ----------------------------------------------------------------------
 
-            // Executa o som mecânico de rotação das engrenagens
             try {
                 somTransformacao.currentTime = 0; somTransformacao.play().catch(e => {});
                 somTransformacao.onended = () => { 
+                    // Se as falas esvaziarem, reinicia usando Array.from de forma protegida contra o GitHub
+                    if (!falasDisponiveis[personagemAtivo] || falasDisponiveis[personagemAtivo].length === 0) {
+                        falasDisponiveis[personagemAtivo] = Array.from(["0", "1", "2"]);
+                    }
                     tocarFalaPersonagem(personagemAtivo); 
                 };
             } catch(err) {}
 
             c.classList.add('brilhar'); setTimeout(() => c.classList.remove('brilhar'), 800);
             
-            // --- CONTROLE DE ILUMINAÇÃO RADIAL DO FUNDO ---
             if (personagemAtivo === 'nemesis') {
-                // Injeta a cor Teal Neon na luz central do fundo do site
                 document.body.style.setProperty('--cor-luz', 'rgba(0, 245, 212, 0.7)');
                 setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(0, 245, 212, 0.4)'), 400);
             } else if (c.classList.contains('autobot')) {
@@ -690,13 +681,11 @@
                 setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.4)'), 400);
             }
             
-            // Executa fisicamente a rotação 3D do card e chama o HUD tático
             inner.className = 'card-inner estagio-' + prox;
             inner.setAttribute('data-estagio', prox);
             atualizarHUD(personagemAtivo, prox);
-        }
-
-
+                    }
+                        
     </script>
 </body>
 </html>
