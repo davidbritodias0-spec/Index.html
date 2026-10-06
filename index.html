@@ -481,12 +481,24 @@
             }
         }
 
-                        /* ALTERNADOR DE TELAS COM ANIMAÇÃO E VOZ DO TELETRAAN 1 */
+                /* ALTERNADOR DE TELAS COM ANIMAÇÃO, VOZ E MUDANÇA DE COR DO FUNDO */
         function selecionarFaccao(f) {
             const containerFaccoes = document.getElementById('container-faccoes');
             const grid = document.getElementById('grid-personagens');
             
-            // 1. O Teletraan 1 analisa a facção e dispara uma linha de voz aleatória
+            // 1. Pausa a pulsação inicial e injeta a cor fixa da facção escolhida
+            document.body.classList.add('faccao-ativa');
+            if (f === 'autobot') {
+                document.body.style.backgroundColor = '#1a0000';
+                document.body.style.setProperty('--cor-fundo', '#1a0000');
+                document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.4)'); /* Luz vermelha */
+            } else {
+                document.body.style.backgroundColor = '#0e001c';
+                document.body.style.setProperty('--cor-fundo', '#0e001c');
+                document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.4)'); /* Luz roxa */
+            }
+
+            // 2. O Teletraan 1 analisa a facção e dispara uma linha de voz aleatória
             const chaveTeletraan = 'teletraan_' + f;
             if (!falasDisponiveis[chaveTeletraan] || falasDisponiveis[chaveTeletraan].length === 0) {
                 falasDisponiveis[chaveTeletraan] = ["0", "1", "2"];
@@ -502,17 +514,17 @@
                 audioTeletraan.play().catch(e => console.log("Áudio do Teletraan bloqueado"));
             }
 
-            // 2. Inicia o efeito visual cinematográfico esvaecendo o menu inicial
+            // 3. Inicia o efeito visual cinematográfico esvaecendo o menu inicial
             containerFaccoes.classList.add('esvaecer');
             
-            // 3. Aguarda o fechamento do menu para injetar as 5 cartas em formato grid
+            // 4. Aguarda o fechamento do menu para injetar as 5 cartas em formato grid
             setTimeout(() => {
                 containerFaccoes.style.display = 'none';
                 grid.style.display = 'flex';
                 document.getElementById('btn-voltar').style.display = 'inline-block';
                 document.querySelectorAll('.grupo-' + f).forEach(c => c.classList.remove('escondido'));
                 
-                // 4. Executa a expansão suave e progressiva dos robôs na tela
+                // 5. Executa a expansão suave e progressiva dos robôs na tela
                 setTimeout(() => {
                     grid.classList.add('expandir');
                 }, 50);
@@ -520,8 +532,7 @@
             }, 400);
         }
 
-
-        /* BOTÃO VOLTAR COM ANIMAÇÃO DE RECOLHIMENTO */
+        /* BOTÃO VOLTAR: RECOLHE OS CARDS E REATIVA A PULSAÇÃO DO FUNDO */
         function voltarParaFaccoes() {
             const containerFaccoes = document.getElementById('container-faccoes');
             const grid = document.getElementById('grid-personagens');
@@ -542,13 +553,17 @@
                     inner.setAttribute('data-estagio', '1');
                 });
                 
-                // 3. Traz a tela inicial de volta e faz ela reaparecer expandindo
+                // 3. Reseta os estilos inline do fundo para reativar a pulsação e a luz amarela
+                document.body.classList.remove('faccao-ativa');
+                document.body.style.backgroundColor = '';
+                document.body.style.removeProperty('--cor-fundo');
+                document.body.style.setProperty('--cor-luz', '#ffd700');
+                
                 containerFaccoes.style.display = 'flex';
                 setTimeout(() => {
                     containerFaccoes.classList.remove('esvaecer');
                 }, 50);
                 
-                document.body.style.backgroundColor = '#000000';
             }, 500);
         }
 
@@ -574,7 +589,7 @@
             }
         }
 
-        /* GIRA OS CARDS EM 3D */
+        /* GIRA OS CARDS EM 3D COM PULSAÇÃO RÁPIDA DE LUZ CENTRAL */
         function girarCard(c, p) {
             const inner = c.querySelector('.card-inner');
             let est = parseInt(inner.getAttribute('data-estagio'));
@@ -583,16 +598,26 @@
             try {
                 somTransformacao.currentTime = 0; somTransformacao.play().catch(e => {});
                 somTransformacao.onended = () => { tocarFalaPersonagem(p); };
-            } catch(e) {}
+            } catch(err) {}
 
             c.classList.add('brilhar'); setTimeout(() => c.classList.remove('brilhar'), 800);
-            document.body.style.backgroundColor = c.classList.contains('autobot') ? '#1a0000' : '#0e001c';
-            setTimeout(() => document.body.style.backgroundColor = '#000000', 400);
+            
+            // Dá um pico de luz central na cor do robô selecionado na hora do giro
+            if (c.classList.contains('autobot')) {
+                document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.7)');
+                setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.4)'), 400);
+            } else {
+                document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.7)');
+                setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.4)'), 400);
+            }
             
             inner.className = 'card-inner estagio-' + prox;
             inner.setAttribute('data-estagio', prox);
             atualizarHUD(p, prox);
         }
+                
+            
+
     </script>
 </body>
 </html>
