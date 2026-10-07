@@ -412,4 +412,170 @@
             } 
         });
 
+                /* SISTEMA DE SORTEIO DE FALAS SEM REPETIÇÃO */ 
+        function tocarFalaPersonagem(p) { 
+            if (!falasDisponiveis[p] || falasDisponiveis[p].length === 0) { 
+                falasDisponiveis[p] = Array.from(["0", "1", "2"]); 
+            } 
+            const idx = Math.floor(Math.random() * falasDisponiveis[p].length); 
+            const num = falasDisponiveis[p][idx];
+            falasDisponiveis[p].splice(idx, 1); 
+            const el = document.getElementById(p + '-frase-' + num); 
+            if (el) { el.currentTime = 0; el.volume = 1.0; el.play().catch(e => {}); } 
+        }
+
+        /* ALTERNADOR DE TELAS COM ANIMAÇÃO, VOZ E MUDANÇA DE COR DO FUNDO */ 
+        function selecionarFaccao(f) { 
+            const containerFaccoes = document.getElementById('container-faccoes'); 
+            const grid = document.getElementById('grid-personagens');
+            document.body.classList.add('faccao-ativa'); 
+            if (f === 'autobot') { 
+                document.body.style.backgroundColor = '#1a0000'; 
+                document.body.style.setProperty('--cor-fundo', '#1a0000'); 
+                document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.4)'); 
+            } else { 
+                document.body.style.backgroundColor = '#0e001c'; 
+                document.body.style.setProperty('--cor-fundo', '#0e001c'); 
+                document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.4)'); 
+            } 
+            const chaveTeletraan = 'teletraan_' + f; 
+            if (!falasDisponiveis[chaveTeletraan] || falasDisponiveis[chaveTeletraan].length === 0) { 
+                falasDisponiveis[chaveTeletraan] = Array.from(["0", "1", "2"]);
+            } 
+            const idxTeletraan = Math.floor(Math.random() * falasDisponiveis[chaveTeletraan].length); 
+            const numTeletraan = falasDisponiveis[chaveTeletraan][idxTeletraan]; 
+            falasDisponiveis[chaveTeletraan].splice(idxTeletraan, 1); 
+            const audioTeletraan = document.getElementById('teletraan-' + f + '-' + numTeletraan); 
+            if (audioTeletraan) { audioTeletraan.currentTime = 0; audioTeletraan.volume = 1.0; audioTeletraan.play().catch(e => {}); } 
+            containerFaccoes.classList.add('esvaecer'); 
+            document.getElementById('titulo-jogo').style.opacity = '0'; 
+            setTimeout(() => { 
+                containerFaccoes.style.display = 'none'; 
+                if (grid) grid.style.display = 'flex'; 
+                document.getElementById('btn-voltar').style.display = 'inline-block'; 
+                document.querySelectorAll('.grupo-' + f).forEach(c => c.classList.remove('escondido')); 
+                setTimeout(() => { if (grid) grid.classList.add('expandir'); }, 50); 
+            }, 400); 
+        }
+
+        /* BOTÃO VOLTAR: RECOLHE OS CARDS AND REATIVA A PULSAÇÃO DO FUNDO */ 
+        function voltarParaFaccoes() { 
+            const containerFaccoes = document.getElementById('container-faccoes'); 
+            const grid = document.getElementById('grid-personagens');  
+            if (grid) grid.classList.remove('expandir'); 
+            document.getElementById('btn-voltar').style.display = 'none'; 
+            atualizarHUD(null, 1); 
+            setTimeout(() => { 
+                if (grid) grid.style.display = 'none'; 
+                document.querySelectorAll('.card').forEach(c => { 
+                    c.classList.add('escondido'); 
+                    const inner = c.querySelector('.card-inner'); 
+                    if (inner) { inner.className = 'card-inner estagio-1'; inner.setAttribute('data-estagio', '1'); }
+                }); 
+                document.body.classList.remove('faccao-ativa'); 
+                document.body.style.backgroundColor = ''; 
+                document.body.style.removeProperty('--cor-fundo'); 
+                document.body.style.setProperty('--cor-luz', '#ffd700'); 
+                containerFaccoes.style.display = 'flex'; 
+                setTimeout(() => { containerFaccoes.classList.remove('esvaecer'); document.getElementById('titulo-jogo').style.opacity = '1'; }, 50); 
+            }, 500); 
+        }
+
+        /* ATUALIZAÇÃO DO HUD TÁTICO */ 
+        function atualizarHUD(p, est) { 
+            const hud = document.getElementById('hud-combate'); 
+            const txt = document.getElementById('hud-nome'); 
+            const bars = { str: document.getElementById('bar-forca'), int: document.getElementById('bar-int'), vel: document.getElementById('bar-vel'), pow: document.getElementById('bar-pow') }; 
+            const vals = { str: document.getElementById('val-forca'), int: document.getElementById('val-int'), vel: document.getElementById('val-vel'), pow: document.getElementById('val-pow') };
+            if (est > 1 && p && atributosG1[p]) { 
+                if (hud) hud.classList.add('visivel'); 
+                const d = atributosG1[p]; 
+                if (txt) { txt.textContent = d.nome; txt.style.color = d.cor; }
+                Object.keys(bars).forEach(k => { 
+                    if (bars[k]) { bars[k].style.width = (d[k] * 10) + '%'; bars[k].style.backgroundColor = d.cor; }
+                    if (vals[k]) vals[k].textContent = d[k] + ' / 10'; 
+                }); 
+            } else { 
+                if (hud) hud.classList.remove('visivel'); 
+                Object.keys(bars).forEach(k => { if (bars[k]) bars[k].style.width = '0%'; if (vals[k]) vals[k].textContent = '0'; }); 
+            } 
+        }
         
+        /* VARIÁVEIS DE CONTROLE DO EASTER EGG DO NEMESIS PRIME */ 
+        let cliquesOptimus = 0; 
+        let tempoUltimoClique = 0; 
+        let nemesisDesbloqueado = false; 
+
+        /* GIRA OS CARDS EM 3D WITH DETECÇÃO DE CORRUPÇÃO SECRETA */ 
+        function girarCard(c, p) { 
+            const inner = c.querySelector('.card-inner'); 
+            let est = parseInt(inner.getAttribute('data-estagio')) || 1; 
+            let prox = est === 1 ? 2 : (est === 2 ? 3 : 1); 
+            let personagemAtivo = p; 
+
+            if (p === 'optimus') { 
+                const agora = Date.now(); 
+                if (agora - tempoUltimoClique < 800) { cliquesOptimus++; } 
+                else { cliquesOptimus = 1; } 
+                tempoUltimoClique = agora; 
+
+                if (cliquesOptimus === 5 && !nemesisDesbloqueado) { 
+                    nemesisDesbloqueado = true; 
+                    personagemAtivo = 'nemesis'; 
+                    
+                    const somErro = document.getElementById('teletraan-alert'); 
+                    if (somErro) { somErro.currentTime = 0; somErro.volume = 1.0; somErro.play().catch(e => {}); } 
+                    
+                    c.querySelectorAll('h3').forEach(t => { t.textContent = 'Nemesis Prime'; t.style.color = '#00f5d4'; }); 
+                    const blocoDados = c.querySelector('.dados'); 
+                    if (blocoDados) { 
+                        blocoDados.innerHTML = `
+                            <p><strong>Facção</strong>Decepticon Clone</p> 
+                            <p><strong>Função</strong>Guerreiro Sombrio</p> 
+                            <p><strong>Altura</strong>6,5 metros</p> 
+                            <p><strong>Planeta</strong>Cybertron</p> 
+                            <p><strong>Modo</strong>Caminhão Negro</p>
+                        `; 
+                    }
+                    const imgLogo = c.querySelector('.logo img');
+                    const imgLider = c.querySelector('.lider img');
+                    if (imgLogo) imgLogo.src = 'logo_nemesis.jpg'; 
+                    if (imgLider) imgLider.src = 'nemesis.jpg'; 
+                    prox = 2; 
+                } 
+            }
+
+            try { 
+                if (somTransformacao) {
+                    somTransformacao.currentTime = 0; 
+                    somTransformacao.play().catch(e => {}); 
+                    somTransformacao.onended = () => { 
+                        if (!falasDisponiveis[personagemAtivo] || falasDisponiveis[personagemAtivo].length === 0) {
+                            falasDisponiveis[personagemAtivo] = Array.from(["0", "1", "2"]); 
+                        } 
+                        tocarFalaPersonagem(personagemAtivo); 
+                    }; 
+                }
+            } catch(err) {} 
+
+            c.classList.add('brilhar'); 
+            setTimeout(() => c.classList.remove('brilhar'), 800); 
+
+            if (personagemAtivo === 'nemesis') { 
+                document.body.style.setProperty('--cor-luz', 'rgba(0, 245, 212, 0.7)'); 
+                setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(0, 245, 212, 0.4)'), 400); 
+            } else if (c.classList.contains('autobot')) { 
+                document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.7)'); 
+                setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.4)'), 400); 
+            } else { 
+                document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.7)'); 
+                setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.4)'), 400); 
+            } 
+            
+            inner.className = 'card-inner estagio-' + prox; 
+            inner.setAttribute('data-estagio', prox); 
+            atualizarHUD(personagemAtivo, prox); 
+        } 
+    </script>
+</body>
+</html>
