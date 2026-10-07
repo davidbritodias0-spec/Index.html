@@ -508,59 +508,68 @@
 
         /* GIRA OS CARDS EM 3D WITH DETECÇÃO DE CORRUPÇÃO SECRETA */ 
         function girarCard(c, p) { 
-            const inner = c.querySelector('.card-inner'); 
-            let est = parseInt(inner.getAttribute('data-estagio')) || 1; 
-            let prox = est === 1 ? 2 : (est === 2 ? 3 : 1); 
-            let personagemAtivo = p; 
+    const inner = c.querySelector('.card-inner'); 
+    let est = parseInt(inner.getAttribute('data-estagio')) || 1; 
+    let prox = est === 1 ? 2 : (est === 2 ? 3 : 1); 
+    
+    // CORREÇÃO 1: Se o Nemesis já foi liberado neste card, o personagem ativo DEVE ser o nemesis, impedindo que volte a falar como Optimus
+    let personagemAtivo = (p === 'optimus' && nemesisDesbloqueado) ? 'nemesis' : p; 
 
-            if (p === 'optimus') { 
-                const agora = Date.now(); 
-                if (agora - tempoUltimoClique < 800) { cliquesOptimus++; } 
-                else { cliquesOptimus = 1; } 
-                tempoUltimoClique = agora; 
+    if (p === 'optimus') { 
+        const agora = Date.now(); 
+        if (agora - tempoUltimoClique < 800) { 
+            cliquesOptimus++; 
+        } else { 
+            cliquesOptimus = 1; 
+        } 
+        tempoUltimoClique = agora; 
 
-                if (cliquesOptimus === 5 && !nemesisDesbloqueado) { 
-                    nemesisDesbloqueado = true; 
-                    personagemAtivo = 'nemesis'; 
-                    
-                    const somErro = document.getElementById('teletraan-alert'); 
-                    if (somErro) { 
-                        somErro.currentTime = 0; 
-                        somErro.volume = 1.0; 
-                        somErro.play().catch(e => {}); 
-                        
-                        // NOVO GATILHO: Quando o alarme terminar, o Teletraan avisa sobre a ameaça!
-                        somErro.onended = () => {
-                            const idxTel = Math.floor(Math.random() * 3);
-                            const vozTeletraan = document.getElementById(`teletraan-decepticon-${idxTel}`);
-                            if (vozTeletraan) {
-                                vozTeletraan.currentTime = 0;
-                                vozTeletraan.volume = 1.0;
-                                vozTeletraan.play().catch(e => {});
-                            }
-                        };
-                    } 
-                    
-                    c.querySelectorAll('h3').forEach(t => { t.textContent = 'Nemesis Prime'; t.style.color = '#00f5d4'; }); 
-                    const blocoDados = c.querySelector('.dados'); 
-                    if (blocoDados) { 
-                        blocoDados.innerHTML = `
-                            <p><strong>Facção</strong>Decepticon Clone</p> 
-                            <p><strong>Função</strong>Guerreiro Sombrio</p> 
-                            <p><strong>Altura</strong>6,5 metros</p> 
-                            <p><strong>Planeta</strong>Cybertron</p> 
-                            <p><strong>Modo</strong>Caminhão Negro</p>
-                        `; 
+        if (cliquesOptimus === 5 && !nemesisDesbloqueado) { 
+            nemesisDesbloqueado = true; 
+            personagemAtivo = 'nemesis'; 
+            
+            const somErro = document.getElementById('teletraan-alert'); 
+            if (somErro) { 
+                somErro.currentTime = 0; 
+                somErro.volume = 1.0; 
+                somErro.play().catch(e => {}); 
+                
+                // CORREÇÃO 2: Evento isolado de forma limpa. Toca UMA fala do Teletraan após o fim do alarme
+                somErro.onended = () => {
+                    const idxTel = Math.floor(Math.random() * 3);
+                    // Certifique-se de que os IDs batam com: teletraan-decepticon-0, teletraan-decepticon-1, etc.
+                    const vozTeletraan = document.getElementById(`teletraan-decepticon-${idxTel}`);
+                    if (vozTeletraan) {
+                        vozTeletraan.currentTime = 0;
+                        vozTeletraan.volume = 1.0;
+                        vozTeletraan.play().catch(e => {});
                     }
-                    const imgLogo = c.querySelector('.logo img');
-                    const imgLider = c.querySelector('.lider img');
-                    if (imgLogo) imgLogo.src = 'logo_nemesis.jpg'; 
-                    if (imgLider) imgLider.src = 'nemesis.jpg'; 
-                    prox = 2; 
-                }
-
+                };
+            } 
+            
+            c.querySelectorAll('h3').forEach(t => { 
+                t.textContent = 'Nemesis Prime'; 
+                t.style.color = '#00f5d4'; 
+            }); 
+            
+            const blocoDados = c.querySelector('.dados'); 
+            if (blocoDados) { 
+                blocoDados.innerHTML = `
+                    <p><strong>Facção</strong>Decepticon Clone</p> 
+                    <p><strong>Função</strong>Guerreiro Sombrio</p> 
+                    <p><strong>Altura</strong>6,5 metros</p> 
+                    <p><strong>Planeta</strong>Cybertron</p> 
+                    <p><strong>Modo</strong>Caminhão Negro</p>
+                `; 
             }
-
+            
+            const imgLogo = c.querySelector('.logo img');
+            const imgLider = c.querySelector('.lider img');
+            if (imgLogo) imgLogo.src = 'logo_nemesis.jpg'; 
+            if (imgLider) imgLider.src = 'nemesis.jpg'; 
+            prox = 2; 
+        } 
+    }
             try { 
                 if (somTransformacao) {
                     somTransformacao.currentTime = 0; 
