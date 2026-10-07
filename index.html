@@ -524,7 +524,22 @@
                     personagemAtivo = 'nemesis'; 
                     
                     const somErro = document.getElementById('teletraan-alert'); 
-                    if (somErro) { somErro.currentTime = 0; somErro.volume = 1.0; somErro.play().catch(e => {}); } 
+                    if (somErro) { 
+                        somErro.currentTime = 0; 
+                        somErro.volume = 1.0; 
+                        somErro.play().catch(e => {}); 
+                        
+                        // NOVO GATILHO: Quando o alarme terminar, o Teletraan avisa sobre a ameaça!
+                        somErro.onended = () => {
+                            const idxTel = Math.floor(Math.random() * 3);
+                            const vozTeletraan = document.getElementById(`teletraan-decepticon-${idxTel}`);
+                            if (vozTeletraan) {
+                                vozTeletraan.currentTime = 0;
+                                vozTeletraan.volume = 1.0;
+                                vozTeletraan.play().catch(e => {});
+                            }
+                        };
+                    } 
                     
                     c.querySelectorAll('h3').forEach(t => { t.textContent = 'Nemesis Prime'; t.style.color = '#00f5d4'; }); 
                     const blocoDados = c.querySelector('.dados'); 
@@ -542,7 +557,8 @@
                     if (imgLogo) imgLogo.src = 'logo_nemesis.jpg'; 
                     if (imgLider) imgLider.src = 'nemesis.jpg'; 
                     prox = 2; 
-                } 
+                }
+
             }
 
             try { 
