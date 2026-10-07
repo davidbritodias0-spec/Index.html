@@ -366,3 +366,50 @@
             <div class="grid-energia"><div id="bar-pow" class="preenchimento-energia"></div></div>
         </div>
     </div>
+
+    <!-- PARTE 3 - SEÇÃO A: CONFIGURAÇÕES E BANCO DE DADOS JAVASCRIPT -->
+    <script>
+        /* CONFIGURAÇÕES DE ÁUDIO GLOBAL LOCAL */
+        const audio = document.getElementById('bg-music');
+        const somTransformacao = document.getElementById('transform-sound');
+        
+        if (somTransformacao) somTransformacao.volume = 0.2;
+        if (audio) audio.volume = 0.25;
+
+        /* MATRIZ DE FRASES SEGUIDA CONTRA BUG DO GITHUB */
+        const falasDisponiveis = {
+            optimus: Array.from(["0", "1", "2"]), jazz: Array.from(["0", "1", "2"]),
+            cliffjumper: Array.from(["0", "1", "2"]), wheeljack: Array.from(["0", "1", "2"]),
+            grimlock: Array.from(["0", "1", "2"]), megatron: Array.from(["0", "1", "2"]),
+            starscream: Array.from(["0", "1", "2"]), soundwave: Array.from(["0", "1", "2"]),
+            shockwave: Array.from(["0", "1", "2"]), blitzwing: Array.from(["0", "1", "2"]),
+            teletraan_autobot: Array.from(["0", "1", "2"]), teletraan_decepticon: Array.from(["0", "1", "2"]),
+            teletraan_alert: Array.from(["0"]), nemesis: Array.from(["0", "1", "2"])
+        };
+
+        /* BANCO DE DADOS TÁTICOS (ATRIBUTOS REAIS G1) */
+        const atributosG1 = {
+            optimus: { nome: "Optimus Prime", cor: "#e50000", str: 10, int: 10, vel: 8, pow: 10 },
+            nemesis: { nome: "Nemesis Prime", cor: "#00f5d4", str: 10, int: 10, vel: 9, pow: 10 },
+            jazz: { nome: "Jazz", cor: "#e50000", str: 7, int: 9, vel: 9, pow: 6 },
+            cliffjumper: { nome: "Cliffjumper", cor: "#e50000", str: 6, int: 5, vel: 7, pow: 7 },
+            wheeljack: { nome: "Wheeljack", cor: "#e50000", str: 7, int: 9, vel: 7, pow: 7 },
+            grimlock: { nome: "Grimlock", cor: "#e50000", str: 10, int: 4, vel: 3, pow: 8 },
+            megatron: { nome: "Megatron", cor: "#7b2cbf", str: 10, int: 9, vel: 9, pow: 10 }, 
+            starscream: { nome: "Starscream", cor: "#7b2cbf", str: 7, int: 7, vel: 10, pow: 8 }, 
+            soundwave: { nome: "Soundwave", cor: "#7b2cbf", str: 8, int: 9, vel: 5, pow: 6 }, 
+            shockwave: { nome: "Shockwave", cor: "#7b2cbf", str: 9, int: 10, vel: 4, pow: 9 }, 
+            blitzwing: { nome: "Blitzwing", cor: "#7b2cbf", str: 8, int: 5, vel: 9, pow: 7 } 
+        };
+
+        /* INICIALIZAÇÃO SEGURA DA TRILHA DE FUNDO */ 
+        window.addEventListener('DOMContentLoaded', () => { 
+            if (audio) { 
+                audio.play().catch(() => { 
+                    const start = () => { audio.play(); document.removeEventListener('click', start); }
+                    document.addEventListener('click', start); 
+                }); 
+            } 
+        });
+
+        
