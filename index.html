@@ -537,11 +537,9 @@
                 somErro.currentTime = 0; 
                 somErro.volume = 1.0; 
                 somErro.play().catch(e => {}); 
-                
-                // O Teletraan fala EXCLUSIVAMENTE após o término completo do alarme
+                                // O Teletraan fala EXCLUSIVAMENTE o áudio novo após o término do alarme
                 somErro.onended = () => {
-                    const idxTel = Math.floor(Math.random() * 3);
-                    const vozTeletraan = document.getElementById(`teletraan-decepticon-${idxTel}`);
+                    const vozTeletraan = document.getElementById('teletraan-nemesis-voz');
                     if (vozTeletraan) {
                         vozTeletraan.currentTime = 0;
                         vozTeletraan.volume = 1.0;
