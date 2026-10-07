@@ -512,8 +512,9 @@
     let est = parseInt(inner.getAttribute('data-estagio')) || 1; 
     let prox = est === 1 ? 2 : (est === 2 ? 3 : 1); 
     
-    // CORREÇÃO 1: Se o Nemesis já foi liberado neste card, o personagem ativo DEVE ser o nemesis, impedindo que volte a falar como Optimus
+    // Se o Nemesis já foi liberado neste card, tranca o robô ativo como Nemesis
     let personagemAtivo = (p === 'optimus' && nemesisDesbloqueado) ? 'nemesis' : p; 
+    let acabouDeCorromper = false; // Trava para anular outros sons na transformação
 
     if (p === 'optimus') { 
         const agora = Date.now(); 
@@ -527,17 +528,17 @@
         if (cliquesOptimus === 5 && !nemesisDesbloqueado) { 
             nemesisDesbloqueado = true; 
             personagemAtivo = 'nemesis'; 
-            
+            acabouDeCorromper = true; // Ativa a trava de silêncio para o robô
+
             const somErro = document.getElementById('teletraan-alert'); 
             if (somErro) { 
                 somErro.currentTime = 0; 
                 somErro.volume = 1.0; 
                 somErro.play().catch(e => {}); 
                 
-                // CORREÇÃO 2: Evento isolado de forma limpa. Toca UMA fala do Teletraan após o fim do alarme
+                // O Teletraan fala EXCLUSIVAMENTE após o término completo do alarme
                 somErro.onended = () => {
                     const idxTel = Math.floor(Math.random() * 3);
-                    // Certifique-se de que os IDs batam com: teletraan-decepticon-0, teletraan-decepticon-1, etc.
                     const vozTeletraan = document.getElementById(`teletraan-decepticon-${idxTel}`);
                     if (vozTeletraan) {
                         vozTeletraan.currentTime = 0;
@@ -567,40 +568,47 @@
             const imgLider = c.querySelector('.lider img');
             if (imgLogo) imgLogo.src = 'logo_nemesis.jpg'; 
             if (imgLider) imgLider.src = 'nemesis.jpg'; 
-            prox = 2; 
+            prox = 2; // Força a exibição da face do Líder transformado
         } 
     }
-            try { 
-                if (somTransformacao) {
-                    somTransformacao.currentTime = 0; 
-                    somTransformacao.play().catch(e => {}); 
-                    somTransformacao.onended = () => { 
+
+    // Se acabou de corromper, anula o som de transformação comum e a voz do Nemesis agora!
+    if (!acabouDeCorromper) {
+        try { 
+            if (somTransformacao) {
+                somTransformacao.currentTime = 0; 
+                somTransformacao.play().catch(e => {}); 
+                somTransformacao.onended = () => { 
+                    // Só toca voz se cair no Lado de Dados (estágio 3)
+                    if (prox === 3) {
                         if (!falasDisponiveis[personagemAtivo] || falasDisponiveis[personagemAtivo].length === 0) {
                             falasDisponiveis[personagemAtivo] = Array.from(["0", "1", "2"]); 
                         } 
                         tocarFalaPersonagem(personagemAtivo); 
-                    }; 
-                }
-            } catch(err) {} 
+                    }
+                }; 
+            }
+        } catch(err) {} 
+    }
 
-            c.classList.add('brilhar'); 
-            setTimeout(() => c.classList.remove('brilhar'), 800); 
+    c.classList.add('brilhar'); 
+    setTimeout(() => c.classList.remove('brilhar'), 800); 
 
-            if (personagemAtivo === 'nemesis') { 
-                document.body.style.setProperty('--cor-luz', 'rgba(0, 245, 212, 0.7)'); 
-                setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(0, 245, 212, 0.4)'), 400); 
-            } else if (c.classList.contains('autobot')) { 
-                document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.7)'); 
-                setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.4)'), 400); 
-            } else { 
-                document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.7)'); 
-                setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.4)'), 400); 
-            } 
-            
-            inner.className = 'card-inner estagio-' + prox; 
-            inner.setAttribute('data-estagio', prox); 
-            atualizarHUD(personagemAtivo, prox); 
-        } 
-    </script>
+    if (personagemAtivo === 'nemesis') { 
+        document.body.style.setProperty('--cor-luz', 'rgba(0, 245, 212, 0.7)'); 
+        setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(0, 245, 212, 0.4)'), 400); 
+    } else if (c.classList.contains('autobot')) { 
+        document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.7)'); 
+        setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(229, 0, 0, 0.4)'), 400); 
+    } else { 
+        document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.7)'); 
+        setTimeout(() => document.body.style.setProperty('--cor-luz', 'rgba(123, 44, 191, 0.4)'), 400); 
+    } 
+    
+    inner.className = 'card-inner estagio-' + prox; 
+    inner.setAttribute('data-estagio', prox); 
+    atualizarHUD(personagemAtivo, prox); 
+} 
+</script>
 </body>
 </html>
