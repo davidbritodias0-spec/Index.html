@@ -572,20 +572,19 @@
         } 
     }
 
-    // Se acabou de corromper, anula o som de transformação comum e a voz do Nemesis agora!
+    // Se NÃO acabou de corromper, o som de transformação funciona em TODOS os giros!
     if (!acabouDeCorromper) {
         try { 
             if (somTransformacao) {
                 somTransformacao.currentTime = 0; 
                 somTransformacao.play().catch(e => {}); 
+                
                 somTransformacao.onended = () => { 
-                    // Só toca voz se cair no Lado de Dados (estágio 3)
-                    if (prox === 3) {
-                        if (!falasDisponiveis[personagemAtivo] || falasDisponiveis[personagemAtivo].length === 0) {
-                            falasDisponiveis[personagemAtivo] = Array.from(["0", "1", "2"]); 
-                        } 
-                        tocarFalaPersonagem(personagemAtivo); 
-                    }
+                    // Toca a fala do personagem ativo em todos os giros normais
+                    if (!falasDisponiveis[personagemAtivo] || falasDisponiveis[personagemAtivo].length === 0) {
+                        falasDisponiveis[personagemAtivo] = Array.from(["0", "1", "2"]); 
+                    } 
+                    tocarFalaPersonagem(personagemAtivo); 
                 }; 
             }
         } catch(err) {} 
