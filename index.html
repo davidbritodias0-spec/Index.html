@@ -1,847 +1,400 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transformers G1</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformers G1</title>
 
-    <style>
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-        /* =========================================================
-           RESET E CONFIGURAÇÕES GERAIS
-           ========================================================= */
+    :root {
+        --cor-fundo: #050505;
+        --cor-luz: #00f5d4;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+    body {
+        margin: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        background: var(--cor-fundo);
+        transition: background 0.5s ease;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+            linear-gradient(
+                90deg,
+                transparent 49.5%,
+                rgba(0, 245, 212, 0.08) 50%,
+                transparent 50.5%
+            ),
+            linear-gradient(
+                0deg,
+                transparent 49.5%,
+                rgba(0, 245, 212, 0.08) 50%,
+                transparent 50.5%
+            );
+        background-size: 60px 60px;
+        opacity: 0.35;
+    }
+
+    body.pulsar {
+        animation: pulsarFundoInicial 2s infinite alternate;
+    }
+
+    @keyframes pulsarFundoInicial {
+        from {
+            box-shadow: inset 0 0 30px rgba(0, 245, 212, 0.04);
         }
 
-
-        /* =========================================================
-           FUNDO
-           ========================================================= */
-
-        body {
-            color: #fff;
-            padding: 20px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            width: 100%;
-
-            --cor-fundo: #000000;
-            --cor-luz: #ffd700;
-
-            background-image:
-                radial-gradient(
-                    circle at center,
-                    var(--cor-luz) 0%,
-                    transparent 60%
-                ),
-                linear-gradient(
-                    to right,
-                    rgba(255, 255, 255, 0.15) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    to bottom,
-                    rgba(255, 255, 255, 0.15) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    to bottom,
-                    var(--cor-fundo),
-                    #000000
-                );
-
-            background-size:
-                100% 100%,
-                25px 25px,
-                25px 25px,
-                100% 100%;
-
-            background-attachment: fixed;
-
-            transition:
-                background-color 0.6s ease,
-                --cor-fundo 0.6s ease,
-                --cor-luz 0.6s ease;
-
-            animation:
-                pulsarFundoInicial
-                8s infinite alternate ease-in-out;
+        to {
+            box-shadow: inset 0 0 120px rgba(0, 245, 212, 0.18);
         }
+    }
 
+    .container-principal {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        min-height: 100vh;
+        padding: 20px 15px 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-        @keyframes pulsarFundoInicial {
+    .container-titulo {
+        position: relative;
+        width: 100%;
+        max-width: 520px;
+        height: 130px;
+        margin-bottom: 10px;
+        transition: opacity 0.4s ease;
+    }
 
-            0% {
-                background-color: #1a0000;
-                --cor-fundo: #1a0000;
-            }
+    .img-titulo {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        object-fit: contain;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    }
 
-            100% {
-                background-color: #0e001c;
-                --cor-fundo: #0e001c;
-            }
-        }
+    #img-titulo-decepticon {
+        opacity: 0;
+    }
 
+    #bg-music {
+        width: min(420px, 90%);
+        margin: 0 auto 25px;
+    }
 
-        body.faccao-ativa {
-            animation: none;
-        }
+    .tela-faccoes {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 25px;
+        flex-wrap: wrap;
+        transition:
+            opacity 0.5s ease,
+            transform 0.5s ease;
+    }
 
+    .card-faccao {
+        width: 220px;
+        height: 280px;
+        border: 2px solid currentColor;
+        border-radius: 15px;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+    }
 
-        /* =========================================================
-           TÍTULO / LOGO DO JOGO
-           CORREÇÃO: TAMANHO MAIOR NO TOPO
-           ========================================================= */
+    .card-faccao:hover {
+        transform: translateY(-10px) scale(1.04);
+    }
 
+    .escolha-autobot {
+        color: #e50000;
+        box-shadow: 0 0 20px rgba(229, 0, 0, 0.25);
+    }
+
+    .escolha-autobot:hover {
+        box-shadow: 0 0 40px rgba(229, 0, 0, 0.7);
+    }
+
+    .escolha-decepticon {
+        color: #7b2cbf;
+        box-shadow: 0 0 20px rgba(123, 44, 191, 0.25);
+    }
+
+    .escolha-decepticon:hover {
+        box-shadow: 0 0 40px rgba(123, 44, 191, 0.7);
+    }
+
+    .card-faccao img {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+    }
+
+    .card-faccao h2 {
+        margin: 15px 0 0;
+    }
+
+    .tela-personagens {
+        width: 100%;
+        max-width: 1250px;
+        display: none;
+        grid-template-columns: repeat(
+            auto-fit,
+            minmax(230px, 1fr)
+        );
+        gap: 30px;
+        justify-items: center;
+    }
+
+    .btn-voltar {
+        grid-column: 1 / -1;
+        padding: 12px 22px;
+        border: 2px solid var(--cor-luz);
+        border-radius: 8px;
+        color: white;
+        background: rgba(0, 0, 0, 0.65);
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-voltar:hover {
+        background: var(--cor-luz);
+        color: #000;
+    }
+
+    .card {
+        width: 220px;
+        height: 310px;
+        perspective: 1000px;
+        cursor: pointer;
+        transition: filter 0.3s ease;
+    }
+
+    .card:hover {
+        filter: drop-shadow(0 0 12px var(--cor-luz));
+    }
+
+    .card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition:
+            transform 0.8s
+            cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .lado {
+        position: absolute;
+        inset: 0;
+        backface-visibility: hidden;
+        border: 2px solid var(--cor-luz);
+        border-radius: 15px;
+        background: rgba(5, 5, 5, 0.94);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+    }
+
+    .logo {
+        transform:
+            rotateY(0deg)
+            translateZ(48px);
+        z-index: 3;
+    }
+
+    .lider {
+        transform:
+            rotateY(120deg)
+            translateZ(48px);
+        z-index: 2;
+    }
+
+    .dados {
+        transform:
+            rotateY(240deg)
+            translateZ(48px);
+        z-index: 1;
+    }
+
+    .estagio-1 {
+        transform: rotateY(0deg);
+    }
+
+    .estagio-2 {
+        transform: rotateY(-120deg);
+    }
+
+    .estagio-3 {
+        transform: rotateY(-240deg);
+    }
+
+    .lado img {
+        width: 150px;
+        height: 150px;
+        object-fit: contain;
+    }
+
+    .lado h3 {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .dados {
+        justify-content: flex-start;
+        padding-top: 25px;
+    }
+
+    .dados p {
+        width: 100%;
+        margin: 7px 0;
+        font-size: 14px;
+    }
+
+    .escondido {
+        display: none !important;
+    }
+
+    #hud-combate {
+        width: min(500px, 95%);
+        margin-top: 30px;
+        padding: 15px 20px;
+        border: 1px solid var(--cor-luz);
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.75);
+        display: none;
+    }
+
+    #hud-nome {
+        margin: 0 0 15px;
+        text-align: center;
+    }
+
+    .barra {
+        margin: 8px 0;
+    }
+
+    .barra-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+    }
+
+    .barra-fundo {
+        height: 8px;
+        margin-top: 3px;
+        background: #222;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .barra-preenchimento {
+        height: 100%;
+        width: 0;
+        transition: width 0.5s ease;
+        background: currentColor;
+    }
+
+    #bar-forca {
+        color: #e50000;
+    }
+
+    #bar-int {
+        color: #00aaff;
+    }
+
+    #bar-vel {
+        color: #00f5d4;
+    }
+
+    #bar-pow {
+        color: #ffcc00;
+    }
+
+    .valor {
+        font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
         .container-titulo {
-            position: relative;
-
-            width: 100%;
-            max-width: 520px;
-
-            height: 130px;
-
-            margin-bottom: 10px;
-
-            transition: opacity 0.4s ease;
+            max-width: 430px;
+            height: 105px;
         }
-
-
-        .img-titulo {
-            position: absolute;
-
-            top: 0;
-            left: 0;
-
-            width: 100%;
-            height: 100%;
-
-            object-fit: contain;
-
-            transition:
-                opacity 0.6s ease-in-out;
-        }
-
-
-        #img-titulo-autobot {
-            animation:
-                pulsarTituloAutobot
-                8s infinite alternate ease-in-out;
-        }
-
-
-        #img-titulo-decepticon {
-            animation:
-                pulsarTituloDecepticon
-                8s infinite alternate ease-in-out;
-        }
-
-
-        @keyframes pulsarTituloAutobot {
-
-            0% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0;
-            }
-        }
-
-
-        @keyframes pulsarTituloDecepticon {
-
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-
-        /* =========================================================
-           PLAYER
-           ========================================================= */
-
-        .audio-container {
-            width: 100%;
-
-            display: flex;
-            justify-content: center;
-
-            margin-bottom: 20px;
-        }
-
-
-        audio {
-            background-color: #222;
-
-            border-radius: 30px;
-
-            border: 2px solid #ffd700;
-
-            max-width: 100%;
-        }
-
-
-        /* =========================================================
-           TELA 1 — SELEÇÃO DE FACÇÃO
-           ========================================================= */
-
-        .tela-faccoes {
-
-            display: flex;
-
-            gap: 20px;
-
-            justify-content: center;
-            align-items: center;
-
-            width: 100%;
-            max-width: 500px;
-
-            margin-top: 30px;
-
-            transition:
-                opacity 0.4s ease,
-                transform 0.4s ease;
-
-            opacity: 1;
-
-            transform: scale(1);
-        }
-
-
-        .tela-faccoes.esvaecer {
-
-            opacity: 0;
-
-            transform: scale(0.8);
-
-            pointer-events: none;
-        }
-
-
-        /* =========================================================
-           CARDS DE FACÇÃO
-           ========================================================= */
 
         .card-faccao {
-
-            width: 165px;
+            width: 190px;
             height: 250px;
-
-            border: 3px solid #333;
-
-            border-radius: 12px;
-
-            cursor: pointer;
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-            justify-content: center;
-
-            background: #111;
-
-            transition:
-                transform 0.3s ease,
-                box-shadow 0.3s ease;
-
-            padding: 15px;
-
-            text-align: center;
         }
-
-
-        .card-faccao img {
-
-            width: 100%;
-            height: 150px;
-
-            object-fit: contain;
-
-            margin-bottom: 15px;
-        }
-
-
-        .card-faccao h2 {
-
-            font-size: 16px;
-
-            text-transform: uppercase;
-
-            letter-spacing: 1px;
-        }
-
-
-        .card-faccao.escolha-autobot:hover {
-
-            border-color: #e50000;
-
-            box-shadow:
-                0 0 20px #e50000;
-
-            transform: scale(1.05);
-        }
-
-
-        .card-faccao.escolha-autobot h2 {
-
-            color: #e50000;
-        }
-
-
-        .card-faccao.escolha-decepticon:hover {
-
-            border-color: #7b2cbf;
-
-            box-shadow:
-                0 0 20px #7b2cbf;
-
-            transform: scale(1.05);
-        }
-
-
-        .card-faccao.escolha-decepticon h2 {
-
-            color: #7b2cbf;
-        }
-
-
-        /* =========================================================
-           TELA 2 — GRID DE PERSONAGENS
-           ========================================================= */
 
         .tela-personagens {
-
-            display: none;
-
-            flex-wrap: wrap;
-
-            gap: 15px;
-
-            justify-content: center;
-
-            width: 100%;
-
-            max-width: 900px;
-
-            margin-bottom: 25px;
-
-            transition:
-                opacity 0.5s ease,
-                transform 0.5s cubic-bezier(
-                    0.175,
-                    0.885,
-                    0.32,
-                    1.25
-                );
-
-            opacity: 0;
-
-            transform: scale(0.7);
+            grid-template-columns: 1fr;
         }
-
-
-        .tela-personagens.expandir {
-
-            opacity: 1;
-
-            transform: scale(1);
-        }
-
-
-        .escondido {
-
-            display: none !important;
-        }
-
-
-        /* =========================================================
-           BOTÃO VOLTAR
-           ========================================================= */
-
-        .btn-voltar {
-
-            display: none;
-
-            padding: 10px 20px;
-
-            font-size: 11px;
-
-            font-weight: bold;
-
-            color: #fff;
-
-            background: #111;
-
-            border: 2px solid #ffd700;
-
-            border-radius: 6px;
-
-            cursor: pointer;
-
-            text-transform: uppercase;
-
-            letter-spacing: 2px;
-
-            margin-bottom: 25px;
-
-            transition: all 0.3s ease;
-        }
-
-
-        .btn-voltar:hover {
-
-            background: #ffd700;
-
-            color: #000;
-
-            box-shadow:
-                0 0 15px #ffd700;
-        }
-
-
-        /* =========================================================
-           CARDS INTERATIVOS 3D
-           ========================================================= */
-
-        .card {
-
-            width: 165px;
-
-            height: 250px;
-
-            position: relative;
-
-            perspective: 1000px;
-
-            cursor: pointer;
-        }
-
-
-        .card-inner {
-
-            width: 100%;
-            height: 100%;
-
-            position: absolute;
-
-            transform-style: preserve-3d;
-
-            transition:
-                transform 0.8s cubic-bezier(
-                    0.175,
-                    0.885,
-                    0.32,
-                    1.275
-                );
-        }
-
-
-        .lado {
-
-            position: absolute;
-
-            width: 100%;
-            height: 100%;
-
-            border-radius: 12px;
-
-            backface-visibility: hidden;
-
-            overflow: hidden;
-
-            border: 3px solid;
-
-            display: flex;
-
-            flex-direction: column;
-        }
-
-
-        .lado img {
-
-            width: 100%;
-
-            height: 175px;
-
-            object-fit: contain;
-
-            background: #fff;
-
-            padding: 8px;
-        }
-
-
-        .lado h3 {
-
-            text-align: center;
-
-            padding: 8px 4px;
-
-            font-size: 13px;
-
-            background: #111;
-        }
-
-
-        /* =========================================================
-           AUTOBOTS
-           ========================================================= */
-
-        .autobot .lado {
-
-            border-color: #e50000;
-
-            background: #111;
-        }
-
-
-        .autobot h3 {
-
-            color: #e50000;
-        }
-
-
-        .autobot.brilhar .lado {
-
-            box-shadow:
-                0 0 20px #e50000,
-                inset 0 0 10px #e50000;
-        }
-
-
-        /* =========================================================
-           DECEPTICONS
-           ========================================================= */
-
-        .decepticon .lado {
-
-            border-color: #7b2cbf;
-
-            background: #111;
-        }
-
-
-        .decepticon h3 {
-
-            color: #7b2cbf;
-        }
-
-
-        .decepticon.brilhar .lado {
-
-            box-shadow:
-                0 0 20px #7b2cbf,
-                inset 0 0 10px #7b2cbf;
-        }
-
-
-        /* =========================================================
-           LADOS DOS CARDS
-           ========================================================= */
-
-        .logo {
-
-            transform:
-                rotateY(0deg)
-                translateZ(48px);
-
-            z-index: 3;
-        }
-
-
-        .logo img {
-
-            background: #222;
-        }
-
-
-        .lider {
-
-            transform:
-                rotateY(120deg)
-                translateZ(48px);
-
-            z-index: 2;
-        }
-
-
-        .dados {
-
-            transform:
-                rotateY(240deg)
-                translateZ(48px);
-
-            z-index: 1;
-
-            background: #111 !important;
-
-            padding: 12px 8px;
-
-            justify-content: center;
-        }
-
-
-        .dados p {
-
-            margin: 5px 0;
-
-            font-size: 11px;
-
-            line-height: 1.3;
-
-            border-bottom: 1px solid #222;
-
-            padding-bottom: 2px;
-        }
-
-
-        .dados strong {
-
-            color: #ffd700;
-
-            display: block;
-
-            font-size: 10px;
-
-            text-transform: uppercase;
-        }
-
-
-        /* =========================================================
-           ESTÁGIOS DE ROTAÇÃO
-           ========================================================= */
-
-        .estagio-1 {
-
-            transform: rotateY(0deg);
-        }
-
-
-        .estagio-2 {
-
-            transform: rotateY(-120deg);
-        }
-
-
-        .estagio-3 {
-
-            transform: rotateY(-240deg);
-        }
-
-
-        /* =========================================================
-           HUD TÁTICO
-           ========================================================= */
-
-        .hud-container {
-
-            width: 100%;
-
-            max-width: 360px;
-
-            background:
-                rgba(15, 15, 15, 0.95);
-
-            border: 2px solid #222;
-
-            border-radius: 12px;
-
-            padding: 15px;
-
-            box-shadow:
-                inset 0 0 15px rgba(0,0,0,0.5);
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 12px;
-
-            margin-top: 20px;
-
-            opacity: 0;
-
-            visibility: hidden;
-
-            transform: translateY(20px);
-
-            transition:
-                opacity 0.5s ease,
-                transform 0.5s ease,
-                visibility 0.5s;
-        }
-
-
-        .hud-container.visivel {
-
-            opacity: 1;
-
-            visibility: visible;
-
-            transform: translateY(0);
-        }
-
-
-        .hud-titulo {
-
-            font-size: 11px;
-
-            color: #ffd700;
-
-            text-align: center;
-
-            letter-spacing: 2px;
-
-            text-transform: uppercase;
-
-            border-bottom: 1px dashed #333;
-
-            padding-bottom: 6px;
-        }
-
-
-        .hud-subtitulo {
-
-            text-align: center;
-
-            font-size: 13px;
-
-            font-weight: bold;
-
-            color: #aaa;
-
-            margin-bottom: 5px;
-
-            text-transform: uppercase;
-        }
-
-
-        .barra-status {
-
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 4px;
-        }
-
-
-        .label-container {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            font-size: 11px;
-
-            color: #ccc;
-        }
-
-
-        .grid-energia {
-
-            width: 100%;
-
-            height: 12px;
-
-            background: #111;
-
-            border: 1px solid #333;
-
-            border-radius: 3px;
-
-            overflow: hidden;
-        }
-
-
-        .preenchimento-energia {
-
-            height: 100%;
-
-            width: 0%;
-
-            transition:
-                width 0.6s ease,
-                background-color 0.4s;
-
-            box-shadow:
-                0 0 8px currentColor;
-        }
-
-    </style>
+    }
+                </style>
+                </style>
 </head>
 
-<body>
+<body class="pulsar">
 
-    <!-- =========================================================
-         TÍTULO DO JOGO
-         ========================================================= -->
+<div class="container-principal">
 
     <div id="titulo-jogo" class="container-titulo">
-
         <img
             id="img-titulo-autobot"
             class="img-titulo"
             src="titulo_autobot.jpg"
-            alt="Transformers Autobots Logo"
+            alt="Autobots"
         >
 
         <img
             id="img-titulo-decepticon"
             class="img-titulo"
             src="titulo_decepticon.jpg"
-            alt="Transformers Decepticons Logo"
+            alt="Decepticons"
         >
-
     </div>
 
-
-    <!-- =========================================================
-         PLAYER DE MÚSICA
-         ========================================================= -->
-
-    <div class="audio-container">
-
-        <audio
-            id="bg-music"
-            src="tema.mp3"
-            controls
-            loop
-        ></audio>
-
-    </div>
-
-
-    <!-- SOM DE TRANSFORMAÇÃO -->
+    <audio
+        id="bg-music"
+        src="tema.mp3"
+        controls
+        loop
+    ></audio>
 
     <audio
         id="transform-sound"
         src="transformacao.mp3"
         preload="auto"
     ></audio>
-
-
-    <!-- =========================================================
-         BANCO DE ÁUDIOS — TELETRAAN
-         ========================================================= -->
-
-    <!-- Autobots -->
 
     <audio
         id="teletraan-autobot-0"
@@ -861,9 +414,6 @@
         preload="auto"
     ></audio>
 
-
-    <!-- Decepticons -->
-
     <audio
         id="teletraan-decepticon-0"
         src="teletraan_decepticon0.mp3"
@@ -882,38 +432,29 @@
         preload="auto"
     ></audio>
 
-
-    <!-- Alerta Nemesis Prime -->
-
     <audio
-        id="teletraan-alert"
-        src="teletraan_alert.mp3"
+        id="teletraan-alert-0"
+        src="teletraan_alert0.mp3"
         preload="auto"
     ></audio>
 
-
-    <!-- =========================================================
-         ÁUDIOS DOS AUTOBOTS
-         ========================================================= -->
-
     <audio
         id="optimus-frase-0"
-        src="optimus1.mp3"
+        src="optimus0.mp3"
         preload="auto"
     ></audio>
 
     <audio
         id="optimus-frase-1"
-        src="optimus2.mp3"
+        src="optimus1.mp3"
         preload="auto"
     ></audio>
 
     <audio
         id="optimus-frase-2"
-        src="optimus3.mp3"
+        src="optimus2.mp3"
         preload="auto"
     ></audio>
-
 
     <audio
         id="jazz-frase-0"
@@ -933,7 +474,6 @@
         preload="auto"
     ></audio>
 
-
     <audio
         id="cliffjumper-frase-0"
         src="cliffjumper0.mp3"
@@ -951,7 +491,6 @@
         src="cliffjumper2.mp3"
         preload="auto"
     ></audio>
-
 
     <audio
         id="wheeljack-frase-0"
@@ -971,11 +510,6 @@
         preload="auto"
     ></audio>
 
-
-    <!-- GRIMLOCK
-         CORREÇÃO IMPORTANTE:
-         o ID do terceiro áudio agora está corretamente escrito. -->
-
     <audio
         id="grimlock-frase-0"
         src="grimlock0.mp3"
@@ -994,29 +528,23 @@
         preload="auto"
     ></audio>
 
-
-    <!-- =========================================================
-         ÁUDIOS DECEPTICONS
-         ========================================================= -->
-
     <audio
         id="megatron-frase-0"
-        src="megatron1.mp3"
+        src="megatron0.mp3"
         preload="auto"
     ></audio>
 
     <audio
         id="megatron-frase-1"
-        src="megatron2.mp3"
+        src="megatron1.mp3"
         preload="auto"
     ></audio>
 
     <audio
         id="megatron-frase-2"
-        src="megatron3.mp3"
+        src="megatron2.mp3"
         preload="auto"
     ></audio>
-
 
     <audio
         id="starscream-frase-0"
@@ -1036,7 +564,6 @@
         preload="auto"
     ></audio>
 
-
     <audio
         id="soundwave-frase-0"
         src="soundwave0.mp3"
@@ -1054,7 +581,6 @@
         src="soundwave2.mp3"
         preload="auto"
     ></audio>
-
 
     <audio
         id="shockwave-frase-0"
@@ -1074,7 +600,6 @@
         preload="auto"
     ></audio>
 
-
     <audio
         id="blitzwing-frase-0"
         src="blitzwing0.mp3"
@@ -1093,56 +618,56 @@
         preload="auto"
     ></audio>
 
+    <audio
+        id="nemesis-frase-0"
+        src="nemesis0.mp3"
+        preload="auto"
+    ></audio>
 
-    <!-- =========================================================
-         TELA INICIAL DE SELEÇÃO DE FACÇÃO
-         ========================================================= -->
+    <audio
+        id="nemesis-frase-1"
+        src="nemesis1.mp3"
+        preload="auto"
+    ></audio>
 
-    <div
-        id="container-faccoes"
-        class="tela-faccoes"
-    >
+    <audio
+        id="nemesis-frase-2"
+        src="nemesis2.mp3"
+        preload="auto"
+    ></audio>
+
+    <div id="container-faccoes" class="tela-faccoes">
 
         <div
             class="card-faccao escolha-autobot"
             onclick="selecionarFaccao('autobot')"
         >
-
             <img
                 src="logo_autobot.jpg"
-                alt="Símbolo Autobot"
+                alt="Autobot"
             >
 
-            <h2>Autobots</h2>
-
+            <h2>AUTOBOTS</h2>
         </div>
-
 
         <div
             class="card-faccao escolha-decepticon"
             onclick="selecionarFaccao('decepticon')"
         >
-
             <img
                 src="logo_decepticon.jpg"
-                alt="Símbolo Decepticon"
+                alt="Decepticon"
             >
 
-            <h2>Decepticons</h2>
-
+            <h2>DECEPTICONS</h2>
         </div>
 
     </div>
 
-        <!-- =========================================================
-         TELA 2 — GRID DE PERSONAGENS
-         ========================================================= -->
-
-    <div id="grid-personagens" class="tela-personagens">
-
-        <!-- =====================================================
-             BOTÃO VOLTAR
-             ===================================================== -->
+    <div
+        id="grid-personagens"
+        class="tela-personagens"
+    >
 
         <button
             id="btn-voltar"
@@ -1152,1904 +677,962 @@
             ← VOLTAR ÀS FACÇÕES
         </button>
 
-
-        <!-- =====================================================
-             AUTOBOTS
-             ===================================================== -->
-
-
-        <!-- OPTIMUS PRIME -->
-
         <div
-            class="card autobot grupo-autobot escondido"
+            class="card grupo-autobot escondido"
             onclick="girarCard(this, 'optimus')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_autobot.jpg"
-                        alt="Logo Autobot"
+                        alt="Autobot"
                     >
 
-                    <h3>Optimus Prime</h3>
-
+                    <h3>AUTOBOT</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="optimus.jpg"
                         alt="Optimus Prime"
                     >
 
-                    <h3>Optimus Prime</h3>
-
+                    <h3>OPTIMUS PRIME</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Autobots
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Líder
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        6,5 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Caminhão
-                    </p>
-
+                    <p>Força: 10</p>
+                    <p>Inteligência: 10</p>
+                    <p>Velocidade: 8</p>
+                    <p>Poder: 10</p>
                 </div>
 
             </div>
-
         </div>
 
-
-
-        <!-- =====================================================
-             JAZZ
-             ===================================================== -->
-
         <div
-            class="card autobot grupo-autobot escondido"
+            class="card grupo-autobot escondido"
             onclick="girarCard(this, 'jazz')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_autobot.jpg"
-                        alt="Logo Autobot"
+                        alt="Autobot"
                     >
 
-                    <h3>Jazz</h3>
-
+                    <h3>AUTOBOT</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="jazz.jpg"
                         alt="Jazz"
                     >
 
-                    <h3>Jazz</h3>
-
+                    <h3>JAZZ</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Autobots
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Especialista
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        4,5 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Carro Esportivo
-                    </p>
-
+                    <p>Força: 7</p>
+                    <p>Inteligência: 9</p>
+                    <p>Velocidade: 9</p>
+                    <p>Poder: 6</p>
                 </div>
 
             </div>
-
         </div>
 
-
-
-        <!-- =====================================================
-             CLIFFJUMPER
-             ===================================================== -->
-
         <div
-            class="card autobot grupo-autobot escondido"
+            class="card grupo-autobot escondido"
             onclick="girarCard(this, 'cliffjumper')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_autobot.jpg"
-                        alt="Logo Autobot"
+                        alt="Autobot"
                     >
 
-                    <h3>Cliffjumper</h3>
-
+                    <h3>AUTOBOT</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="cliffjumper.jpg"
                         alt="Cliffjumper"
                     >
 
-                    <h3>Cliffjumper</h3>
-
+                    <h3>CLIFFJUMPER</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Autobots
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Guerreiro
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        4,2 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Carro
-                    </p>
-
+                    <p>Força: 6</p>
+                    <p>Inteligência: 5</p>
+                    <p>Velocidade: 7</p>
+                    <p>Poder: 7</p>
                 </div>
 
             </div>
-
         </div>
 
-
-
-        <!-- =====================================================
-             WHEELJACK
-             ===================================================== -->
-
         <div
-            class="card autobot grupo-autobot escondido"
+            class="card grupo-autobot escondido"
             onclick="girarCard(this, 'wheeljack')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_autobot.jpg"
-                        alt="Logo Autobot"
+                        alt="Autobot"
                     >
 
-                    <h3>Wheeljack</h3>
-
+                    <h3>AUTOBOT</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="wheeljack.jpg"
                         alt="Wheeljack"
                     >
 
-                    <h3>Wheeljack</h3>
-
+                    <h3>WHEELJACK</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Autobots
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Cientista
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        5,0 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Carro
-                    </p>
-
+                    <p>Força: 7</p>
+                    <p>Inteligência: 9</p>
+                    <p>Velocidade: 7</p>
+                    <p>Poder: 7</p>
                 </div>
 
             </div>
-
         </div>
 
-
-
-        <!-- =====================================================
-             GRIMLOCK
-             ===================================================== -->
-
         <div
-            class="card autobot grupo-autobot escondido"
+            class="card grupo-autobot escondido"
             onclick="girarCard(this, 'grimlock')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_autobot.jpg"
-                        alt="Logo Autobot"
+                        alt="Autobot"
                     >
 
-                    <h3>Grimlock</h3>
-
+                    <h3>AUTOBOT</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="grimlock.jpg"
                         alt="Grimlock"
                     >
 
-                    <h3>Grimlock</h3>
-
+                    <h3>GRIMLOCK</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Autobots
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Guerreiro
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        6,0 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Dinossauro
-                    </p>
-
+                    <p>Força: 10</p>
+                    <p>Inteligência: 4</p>
+                    <p>Velocidade: 3</p>
+                    <p>Poder: 8</p>
                 </div>
 
             </div>
-
         </div>
-
-
-
-        <!-- =====================================================
-             DECEPTICONS
-             ===================================================== -->
-
-
-        <!-- MEGATRON -->
-
-        <div
-            class="card decepticon grupo-decepticon escondido"
+                <div
+            class="card grupo-decepticon escondido"
             onclick="girarCard(this, 'megatron')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_decepticon.jpg"
-                        alt="Logo Decepticon"
+                        alt="Decepticon"
                     >
 
-                    <h3>Megatron</h3>
-
+                    <h3>DECEPTICON</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="megatron.jpg"
                         alt="Megatron"
                     >
 
-                    <h3>Megatron</h3>
-
+                    <h3>MEGATRON</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Decepticons
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Líder
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        6,0 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Pistola
-                    </p>
-
+                    <p>Força: 10</p>
+                    <p>Inteligência: 9</p>
+                    <p>Velocidade: 9</p>
+                    <p>Poder: 10</p>
                 </div>
 
             </div>
-
         </div>
 
-
-
-        <!-- =====================================================
-             STARSCREAM
-             ===================================================== -->
-
         <div
-            class="card decepticon grupo-decepticon escondido"
+            class="card grupo-decepticon escondido"
             onclick="girarCard(this, 'starscream')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_decepticon.jpg"
-                        alt="Logo Decepticon"
+                        alt="Decepticon"
                     >
 
-                    <h3>Starscream</h3>
-
+                    <h3>DECEPTICON</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="starscream.jpg"
                         alt="Starscream"
                     >
 
-                    <h3>Starscream</h3>
-
+                    <h3>STARSCREAM</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Decepticons
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Segundo em Comando
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        5,5 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Caça
-                    </p>
-
+                    <p>Força: 7</p>
+                    <p>Inteligência: 7</p>
+                    <p>Velocidade: 10</p>
+                    <p>Poder: 8</p>
                 </div>
 
             </div>
-
         </div>
 
-
-
-        <!-- =====================================================
-             SOUNDWAVE
-             ===================================================== -->
-
         <div
-            class="card decepticon grupo-decepticon escondido"
+            class="card grupo-decepticon escondido"
             onclick="girarCard(this, 'soundwave')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_decepticon.jpg"
-                        alt="Logo Decepticon"
+                        alt="Decepticon"
                     >
 
-                    <h3>Soundwave</h3>
-
+                    <h3>DECEPTICON</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="soundwave.jpg"
                         alt="Soundwave"
                     >
 
-                    <h3>Soundwave</h3>
-
+                    <h3>SOUNDWAVE</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Decepticons
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Comunicações
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        5,2 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Gravador
-                    </p>
-
+                    <p>Força: 8</p>
+                    <p>Inteligência: 9</p>
+                    <p>Velocidade: 5</p>
+                    <p>Poder: 6</p>
                 </div>
 
             </div>
-
         </div>
 
-
-
-        <!-- =====================================================
-             SHOCKWAVE
-             ===================================================== -->
-
         <div
-            class="card decepticon grupo-decepticon escondido"
+            class="card grupo-decepticon escondido"
             onclick="girarCard(this, 'shockwave')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_decepticon.jpg"
-                        alt="Logo Decepticon"
+                        alt="Decepticon"
                     >
 
-                    <h3>Shockwave</h3>
-
+                    <h3>DECEPTICON</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="shockwave.jpg"
                         alt="Shockwave"
                     >
 
-                    <h3>Shockwave</h3>
-
+                    <h3>SHOCKWAVE</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Decepticons
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Cientista
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        6,5 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Canhão Laser
-                    </p>
-
+                    <p>Força: 9</p>
+                    <p>Inteligência: 10</p>
+                    <p>Velocidade: 4</p>
+                    <p>Poder: 9</p>
                 </div>
 
             </div>
-
         </div>
 
-
-
-        <!-- =====================================================
-             BLITZWING
-             ===================================================== -->
-
         <div
-            class="card decepticon grupo-decepticon escondido"
+            class="card grupo-decepticon escondido"
             onclick="girarCard(this, 'blitzwing')"
         >
-
             <div
                 class="card-inner estagio-1"
                 data-estagio="1"
             >
 
                 <div class="lado logo">
-
                     <img
                         src="logo_decepticon.jpg"
-                        alt="Logo Decepticon"
+                        alt="Decepticon"
                     >
 
-                    <h3>Blitzwing</h3>
-
+                    <h3>DECEPTICON</h3>
                 </div>
 
-
                 <div class="lado lider">
-
                     <img
                         src="blitzwing.jpg"
                         alt="Blitzwing"
                     >
 
-                    <h3>Blitzwing</h3>
-
+                    <h3>BLITZWING</h3>
                 </div>
 
-
                 <div class="lado dados">
+                    <h3>DADOS</h3>
 
-                    <p>
-                        <strong>Facção</strong>
-                        Decepticons
-                    </p>
-
-                    <p>
-                        <strong>Função</strong>
-                        Guerreiro
-                    </p>
-
-                    <p>
-                        <strong>Altura</strong>
-                        5,8 metros
-                    </p>
-
-                    <p>
-                        <strong>Planeta</strong>
-                        Cybertron
-                    </p>
-
-                    <p>
-                        <strong>Modo</strong>
-                        Tanque/Caça
-                    </p>
-
+                    <p>Força: 8</p>
+                    <p>Inteligência: 5</p>
+                    <p>Velocidade: 9</p>
+                    <p>Poder: 7</p>
                 </div>
 
             </div>
-
         </div>
 
     </div>
 
-    <!-- FIM DA PARTE 2 -->
+    <div id="hud-combate">
 
-    <script>
-    // ============================================================
-    // VARIÁVEIS GLOBAIS
-    // ============================================================
+        <h3 id="hud-nome">---</h3>
 
-    let personagemAtivo = null;
-    let faccaoAtiva = null;
+        <div class="barra">
+            <div class="barra-label">
+                <span>FORÇA</span>
+                <span id="val-forca" class="valor">0</span>
+            </div>
 
-    const audio = document.getElementById('bg-music');
-    const somTransformacao = document.getElementById('transform-sound');
+            <div class="barra-fundo">
+                <div
+                    id="bar-forca"
+                    class="barra-preenchimento"
+                ></div>
+            </div>
+        </div>
 
-    if (audio) {
-        audio.volume = 0.25;
+        <div class="barra">
+            <div class="barra-label">
+                <span>INTELIGÊNCIA</span>
+                <span id="val-int" class="valor">0</span>
+            </div>
+
+            <div class="barra-fundo">
+                <div
+                    id="bar-int"
+                    class="barra-preenchimento"
+                ></div>
+            </div>
+        </div>
+
+        <div class="barra">
+            <div class="barra-label">
+                <span>VELOCIDADE</span>
+                <span id="val-vel" class="valor">0</span>
+            </div>
+
+            <div class="barra-fundo">
+                <div
+                    id="bar-vel"
+                    class="barra-preenchimento"
+                ></div>
+            </div>
+        </div>
+
+        <div class="barra">
+            <div class="barra-label">
+                <span>PODER</span>
+                <span id="val-pow" class="valor">0</span>
+            </div>
+
+            <div class="barra-fundo">
+                <div
+                    id="bar-pow"
+                    class="barra-preenchimento"
+                ></div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const audio = document.getElementById("bg-music");
+const somTransformacao =
+    document.getElementById("transform-sound");
+
+if (somTransformacao) {
+    somTransformacao.volume = 0.2;
+}
+
+if (audio) {
+    audio.volume = 0.25;
+}
+
+const falasDisponiveis = {
+    optimus: ["0", "1", "2"],
+    jazz: ["0", "1", "2"],
+    cliffjumper: ["0", "1", "2"],
+    wheeljack: ["0", "1", "2"],
+    grimlock: ["0", "1", "2"],
+
+    megatron: ["0", "1", "2"],
+    starscream: ["0", "1", "2"],
+    soundwave: ["0", "1", "2"],
+    shockwave: ["0", "1", "2"],
+    blitzwing: ["0", "1", "2"],
+
+    teletraan_autobot: ["0", "1", "2"],
+    teletraan_decepticon: ["0", "1", "2"],
+    teletraan_alert: ["0"],
+
+    nemesis: ["0", "1", "2"]
+};
+
+const atributosG1 = {
+    optimus: {
+        nome: "Optimus Prime",
+        cor: "#e50000",
+        str: 10,
+        int: 10,
+        vel: 8,
+        pow: 10
+    },
+
+    nemesis: {
+        nome: "Nemesis Prime",
+        cor: "#00f5d4",
+        str: 10,
+        int: 10,
+        vel: 9,
+        pow: 10
+    },
+
+    jazz: {
+        nome: "Jazz",
+        cor: "#e50000",
+        str: 7,
+        int: 9,
+        vel: 9,
+        pow: 6
+    },
+
+    cliffjumper: {
+        nome: "Cliffjumper",
+        cor: "#e50000",
+        str: 6,
+        int: 5,
+        vel: 7,
+        pow: 7
+    },
+
+    wheeljack: {
+        nome: "Wheeljack",
+        cor: "#e50000",
+        str: 7,
+        int: 9,
+        vel: 7,
+        pow: 7
+    },
+
+    grimlock: {
+        nome: "Grimlock",
+        cor: "#e50000",
+        str: 10,
+        int: 4,
+        vel: 3,
+        pow: 8
+    },
+
+    megatron: {
+        nome: "Megatron",
+        cor: "#7b2cbf",
+        str: 10,
+        int: 9,
+        vel: 9,
+        pow: 10
+    },
+
+    starscream: {
+        nome: "Starscream",
+        cor: "#7b2cbf",
+        str: 7,
+        int: 7,
+        vel: 10,
+        pow: 8
+    },
+
+    soundwave: {
+        nome: "Soundwave",
+        cor: "#7b2cbf",
+        str: 8,
+        int: 9,
+        vel: 5,
+        pow: 6
+    },
+
+    shockwave: {
+        nome: "Shockwave",
+        cor: "#7b2cbf",
+        str: 9,
+        int: 10,
+        vel: 4,
+        pow: 9
+    },
+
+    blitzwing: {
+        nome: "Blitzwing",
+        cor: "#7b2cbf",
+        str: 8,
+        int: 5,
+        vel: 9,
+        pow: 7
     }
+};
 
-    if (somTransformacao) {
-        somTransformacao.volume = 0.2;
-    }
-
-
-    // ============================================================
-    // FALAS DISPONÍVEIS
-    // ============================================================
-
-    const falasDisponiveis = {
-        optimus: ["0", "1", "2"],
-        jazz: ["0", "1", "2"],
-        cliffjumper: ["0", "1", "2"],
-        wheeljack: ["0", "1", "2"],
-        grimlock: ["0", "1", "2"],
-
-        megatron: ["0", "1", "2"],
-        starscream: ["0", "1", "2"],
-        soundwave: ["0", "1", "2"],
-        shockwave: ["0", "1", "2"],
-        blitzwing: ["0", "1", "2"],
-
-        teletraan_autobot: ["0", "1", "2"],
-        teletraan_decepticon: ["0", "1", "2"],
-
-        teletraan_alert: ["0"],
-        nemesis: ["0", "1", "2"]
-    };
-
-
-    // ============================================================
-    // CONTROLE PARA NÃO REPETIR A MESMA FALA
-    // ============================================================
-
-    const falasUsadas = {};
-
+let personagemAtivo = null;
+let cliquesOptimus = 0;
+let tempoUltimoClique = 0;
+let nemesisDesbloqueado = false;
     function tocarFalaPersonagem(personagem) {
+    if (!falasDisponiveis[personagem]) return;
 
-        if (!falasDisponiveis[personagem]) {
-            return;
-        }
+    const opcoes = falasDisponiveis[personagem];
+    const numero = opcoes[Math.floor(Math.random() * opcoes.length)];
 
-        if (!falasUsadas[personagem]) {
-            falasUsadas[personagem] = [];
-        }
+    const audioFala = document.getElementById(
+        personagem + "-frase-" + numero
+    );
 
-        let disponiveis = falasDisponiveis[personagem].filter(
-            numero => !falasUsadas[personagem].includes(numero)
-        );
+    if (!audioFala) return;
 
-        if (disponiveis.length === 0) {
-            falasUsadas[personagem] = [];
-            disponiveis = [...falasDisponiveis[personagem]];
-        }
+    audioFala.pause();
+    audioFala.currentTime = 0;
 
-        const numero =
-            disponiveis[Math.floor(Math.random() * disponiveis.length)];
+    const promessa = audioFala.play();
 
-        falasUsadas[personagem].push(numero);
+    if (promessa && promessa.catch) {
+        promessa.catch(() => {});
+    }
+}
 
-        const audioFala = document.getElementById(
-            `${personagem}-frase-${numero}`
-        );
 
-        if (!audioFala) {
-            console.warn(
-                `Áudio não encontrado: ${personagem}-frase-${numero}`
-            );
-            return;
-        }
+function selecionarFaccao(faccao) {
+    const body = document.body;
+    const containerFaccoes = document.getElementById("container-faccoes");
+    const grid = document.getElementById("grid-personagens");
+    const botaoVoltar = document.getElementById("btn-voltar");
+    const titulo = document.getElementById("titulo-jogo");
 
-        audioFala.currentTime = 0;
+    if (faccao === "autobot") {
+        body.style.setProperty("--cor-fundo", "#050b18");
+        body.style.setProperty("--cor-luz", "#e50000");
+    } else {
+        body.style.setProperty("--cor-fundo", "#10051a");
+        body.style.setProperty("--cor-luz", "#7b2cbf");
+    }
 
-        const promessa = audioFala.play();
+    const numeroTeletraan = Math.floor(Math.random() * 3);
+    const audioTeletraan = document.getElementById(
+        "teletraan-" + faccao + "-" + numeroTeletraan
+    );
 
-        if (promessa !== undefined) {
-            promessa.catch(() => {
-                console.warn(
-                    `Não foi possível reproduzir a fala de ${personagem}.`
-                );
-            });
+    if (audioTeletraan) {
+        audioTeletraan.pause();
+        audioTeletraan.currentTime = 0;
+
+        const promessa = audioTeletraan.play();
+
+        if (promessa && promessa.catch) {
+            promessa.catch(() => {});
         }
     }
 
+    containerFaccoes.classList.add("fade-out");
 
-    // ============================================================
-    // MÚSICA DE FUNDO
-    // ============================================================
-
-    document.addEventListener("DOMContentLoaded", () => {
-
-        if (!audio) {
-            return;
-        }
-
-        audio.play().catch(() => {
-
-            const iniciarMusica = () => {
-
-                audio.play().catch(() => {});
-
-                document.removeEventListener(
-                    "click",
-                    iniciarMusica
-                );
-            };
-
-            document.addEventListener(
-                "click",
-                iniciarMusica
-            );
-        });
-    });
-
-
-    // ============================================================
-    // SELEÇÃO DE FACÇÃO
-    // ============================================================
-
-    function selecionarFaccao(faccao) {
-
-        faccaoAtiva = faccao;
-
-        const body = document.body;
-        const containerFaccoes =
-            document.getElementById("container-faccoes");
-
-        const grid =
-            document.getElementById("grid-personagens");
-
-        const botaoVoltar =
-            document.getElementById("btn-voltar");
-
-        const tituloAutobot =
-            document.getElementById("img-titulo-autobot");
-
-        const tituloDecepticon =
-            document.getElementById("img-titulo-decepticon");
-
-
-        // --------------------------------------------------------
-        // CORES DA FACÇÃO
-        // --------------------------------------------------------
-
-        if (faccao === "autobot") {
-
-            body.style.setProperty(
-                "--cor-fundo",
-                "#050505"
-            );
-
-            body.style.setProperty(
-                "--cor-luz",
-                "#e50000"
-            );
-
-        } else {
-
-            body.style.setProperty(
-                "--cor-fundo",
-                "#08030d"
-            );
-
-            body.style.setProperty(
-                "--cor-luz",
-                "#7b2cbf"
-            );
-        }
-
-
-        // --------------------------------------------------------
-        // TOCAR TELETRAAN
-        // --------------------------------------------------------
-
-        const nomeTeletraan =
-            `teletraan_${faccao}`;
-
-        const listaTeletraan =
-            falasDisponiveis[nomeTeletraan];
-
-        if (listaTeletraan) {
-
-            const numero =
-                listaTeletraan[
-                    Math.floor(
-                        Math.random() *
-                        listaTeletraan.length
-                    )
-                ];
-
-            const audioTeletraan =
-                document.getElementById(
-                    `teletraan-${faccao}-${numero}`
-                );
-
-            if (audioTeletraan) {
-
-                audioTeletraan.currentTime = 0;
-
-                audioTeletraan.play().catch(() => {});
-
-            } else {
-
-                console.warn(
-                    `Teletraan não encontrado: teletraan-${faccao}-${numero}`
-                );
-            }
-        }
-
-
-        // --------------------------------------------------------
-        // ANIMAÇÃO DO TÍTULO
-        // --------------------------------------------------------
-
-        if (tituloAutobot) {
-            tituloAutobot.style.opacity =
-                faccao === "autobot" ? "1" : "0";
-        }
-
-        if (tituloDecepticon) {
-            tituloDecepticon.style.opacity =
-                faccao === "decepticon" ? "1" : "0";
-        }
-
-
-        // --------------------------------------------------------
-        // ESCONDER TELA DE FACÇÕES
-        // --------------------------------------------------------
-
-        if (containerFaccoes) {
-
-            containerFaccoes.style.opacity = "0";
-
-            setTimeout(() => {
-
-                containerFaccoes.style.display = "none";
-
-            }, 400);
-        }
-
-
-        // --------------------------------------------------------
-        // MOSTRAR PERSONAGENS DA FACÇÃO
-        // --------------------------------------------------------
-
-        setTimeout(() => {
-
-            if (grid) {
-
-                grid.classList.add("visivel");
-
-                grid.style.display = "grid";
-            }
-
-            if (botaoVoltar) {
-                botaoVoltar.style.display = "block";
-            }
-
-            document
-                .querySelectorAll(".grupo-autobot, .grupo-decepticon")
-                .forEach(card => {
-
-                    card.classList.add("escondido");
-
-                });
-
-
-            document
-                .querySelectorAll(
-                    `.grupo-${faccao}`
-                )
-                .forEach(card => {
-
-                    card.classList.remove("escondido");
-
-                });
-
-        }, 450);
+    if (titulo) {
+        titulo.classList.add("fade-out");
     }
 
+    setTimeout(() => {
+        containerFaccoes.style.display = "none";
 
-    // ============================================================
-    // VOLTAR PARA A SELEÇÃO DE FACÇÕES
-    // ============================================================
-
-    function voltarParaFaccoes() {
-
-        const containerFaccoes =
-            document.getElementById("container-faccoes");
-
-        const grid =
-            document.getElementById("grid-personagens");
-
-        const botaoVoltar =
-            document.getElementById("btn-voltar");
-
-        const tituloAutobot =
-            document.getElementById("img-titulo-autobot");
-
-        const tituloDecepticon =
-            document.getElementById("img-titulo-decepticon");
-
-
-        // --------------------------------------------------------
-        // ESCONDER PERSONAGENS
-        // --------------------------------------------------------
-
-        if (grid) {
-
-            grid.classList.remove("visivel");
-
-            grid.style.display = "none";
+        if (titulo) {
+            titulo.style.display = "none";
         }
 
-        if (botaoVoltar) {
-            botaoVoltar.style.display = "none";
-        }
-
-
-        // --------------------------------------------------------
-        // RESETAR CARTAS
-        // --------------------------------------------------------
+        grid.style.display = "grid";
+        botaoVoltar.style.display = "block";
 
         document
-            .querySelectorAll(".card-inner")
-            .forEach(inner => {
-
-                inner.classList.remove(
-                    "estagio-1",
-                    "estagio-2",
-                    "estagio-3"
-                );
-
-                inner.classList.add("estagio-1");
-
-                inner.dataset.estagio = "1";
+            .querySelectorAll(".grupo-autobot, .grupo-decepticon")
+            .forEach(card => {
+                card.classList.add("escondido");
             });
 
-
-        // --------------------------------------------------------
-        // ESCONDER HUD
-        // --------------------------------------------------------
-
-        const hud =
-            document.getElementById("hud-combate");
-
-        if (hud) {
-            hud.style.opacity = "0";
-        }
-
-
-        // --------------------------------------------------------
-        // RESTAURAR TÍTULOS
-        // --------------------------------------------------------
-
-        if (tituloAutobot) {
-            tituloAutobot.style.opacity = "1";
-        }
-
-        if (tituloDecepticon) {
-            tituloDecepticon.style.opacity = "0";
-        }
-
-
-        // --------------------------------------------------------
-        // RESTAURAR TELA DE FACÇÕES
-        // --------------------------------------------------------
-
-        if (containerFaccoes) {
-
-            containerFaccoes.style.display = "flex";
-
-            setTimeout(() => {
-
-                containerFaccoes.style.opacity = "1";
-
-            }, 50);
-        }
-
-
-        faccaoAtiva = null;
-        personagemAtivo = null;
-    }
-
-
-    // ============================================================
-    // HUD DE COMBATE
-    // ============================================================
-
-    function atualizarHUD(personagem, estagio) {
-
-        const hud =
-            document.getElementById("hud-combate");
-
-        if (!hud) {
-            return;
-        }
-
-
-        // HUD somente aparece no estágio 2 e 3
-
-        if (
-            estagio <= 1 ||
-            !personagem ||
-            !atributosG1[personagem]
-        ) {
-
-            hud.style.opacity = "0";
-
-            return;
-        }
-
-
-        const dados =
-            atributosG1[personagem];
-
-
-        // --------------------------------------------------------
-        // NOME
-        // --------------------------------------------------------
-
-        const nomeHUD =
-            document.getElementById("hud-nome");
-
-        if (nomeHUD) {
-
-            nomeHUD.textContent =
-                dados.nome;
-
-            nomeHUD.style.color =
-                dados.cor;
-        }
-
-
-        // --------------------------------------------------------
-        // VALORES
-        // --------------------------------------------------------
-
-        const valores = {
-            str: "val-forca",
-            int: "val-int",
-            vel: "val-vel",
-            pow: "val-pow"
-        };
-
-
-        const barras = {
-            str: "bar-forca",
-            int: "bar-int",
-            vel: "bar-vel",
-            pow: "bar-pow"
-        };
-
-
-        Object.keys(valores).forEach(tipo => {
-
-            const valor =
-                dados[tipo];
-
-            const valorElemento =
-                document.getElementById(
-                    valores[tipo]
-                );
-
-            const barraElemento =
-                document.getElementById(
-                    barras[tipo]
-                );
-
-
-            if (valorElemento) {
-
-                valorElemento.textContent =
-                    valor;
-            }
-
-
-            if (barraElemento) {
-
-                barraElemento.style.width =
-                    `${valor * 10}%`;
-            }
-
-        });
-
-
-        hud.style.opacity = "1";
-    }
-
-
-    // ============================================================
-    // EASTER EGG — NEMESIS PRIME
-    // ============================================================
-
-    let cliquesOptimus = 0;
-    let tempoUltimoClique = 0;
-    let nemesisDesbloqueado = false;
-
-
-    function verificarEasterEggOptimus() {
-
-        const agora = Date.now();
-
-        // Se passou tempo demais, reinicia a contagem
-
-        if (
-            agora - tempoUltimoClique >
-            800
-        ) {
-
-            cliquesOptimus = 0;
-        }
-
-
-        cliquesOptimus++;
-
-        tempoUltimoClique = agora;
-
-
-        // Cinco cliques rápidos
-
-        if (
-            cliquesOptimus >= 5 &&
-            !nemesisDesbloqueado
-        ) {
-
-            desbloquearNemesis();
-
-            cliquesOptimus = 0;
-        }
-    }
-
-
-    function desbloquearNemesis() {
-
-        nemesisDesbloqueado = true;
-
-
-        const carta =
-            document.querySelector(
-                ".card-optimus"
-            );
-
-
-        if (!carta) {
-            return;
-        }
-
-
-        // --------------------------------------------------------
-        // ALTERAR IDENTIDADE
-        // --------------------------------------------------------
-
-        carta.dataset.personagem =
-            "nemesis";
-
-
-        // --------------------------------------------------------
-        // NOME
-        // --------------------------------------------------------
-
-        const nomes =
-            carta.querySelectorAll(
-                "h3"
-            );
-
-        nomes.forEach(nome => {
-
-            if (
-                nome.textContent
-                    .toLowerCase()
-                    .includes("optimus")
-            ) {
-
-                nome.textContent =
-                    "NEMESIS PRIME";
-            }
-        });
-
-
-        // --------------------------------------------------------
-        // IMAGENS
-        // --------------------------------------------------------
-
-        const imagens =
-            carta.querySelectorAll(
-                "img"
-            );
-
-
-        imagens.forEach(img => {
-
-            if (
-                img.src.includes(
-                    "optimus"
-                )
-            ) {
-
-                img.src =
-                    "nemesis.jpg";
-            }
-
-        });
-
-
-        // --------------------------------------------------------
-        // ATRIBUTOS
-        // --------------------------------------------------------
-
-        personagemAtivo =
-            "nemesis";
-
-
-        // --------------------------------------------------------
-        // ALERTA SONORO
-        // --------------------------------------------------------
-
-        const alerta =
-            document.getElementById(
-                "teletraan-alert-0"
-            );
-
-
-        if (alerta) {
-
-            alerta.currentTime = 0;
-
-            alerta.play().catch(() => {});
-        }
-
-
-        // --------------------------------------------------------
-        // EFEITO VISUAL
-        // --------------------------------------------------------
-
-        carta.classList.add(
-            "nemesis-desbloqueado"
-        );
-
-
-        setTimeout(() => {
-
-            carta.classList.remove(
-                "nemesis-desbloqueado"
-            );
-
-        }, 1200);
-    }
-
-
-    // ============================================================
-    // GIRAR CARTA
-    // ============================================================
-
-    function girarCard(carta, personagem) {
-
-        if (!carta) {
-            return;
-        }
-
-
-        const inner =
-            carta.querySelector(
-                ".card-inner"
-            );
-
-
-        if (!inner) {
-            return;
-        }
-
-
-        let estagio =
-            parseInt(
-                inner.dataset.estagio || "1"
-            );
-
-
-        // --------------------------------------------------------
-        // EASTER EGG DO OPTIMUS
-        // --------------------------------------------------------
-
-        if (
-            personagem === "optimus" &&
-            estagio === 1
-        ) {
-
-            verificarEasterEggOptimus();
-        }
-
-
-        // --------------------------------------------------------
-        // VERIFICAR SE NEMESIS FOI DESBLOQUEADO
-        // --------------------------------------------------------
-
-        if (
-            personagem === "optimus" &&
-            nemesisDesbloqueado &&
-            carta.dataset.personagem === "nemesis"
-        ) {
-
-            personagem =
-                "nemesis";
-        }
-
-
-        // --------------------------------------------------------
-        // PRÓXIMO ESTÁGIO
-        // --------------------------------------------------------
-
-        let proximoEstagio;
-
-        if (estagio === 1) {
-
-            proximoEstagio = 2;
-
-        } else if (estagio === 2) {
-
-            proximoEstagio = 3;
-
-        } else {
-
-            proximoEstagio = 1;
-        }
-
-
-        // --------------------------------------------------------
-        // PERSONAGEM ATIVO
-        // --------------------------------------------------------
-
-        personagemAtivo =
-            personagem;
-
-
-        // --------------------------------------------------------
-        // SOM DE TRANSFORMAÇÃO
-        // --------------------------------------------------------
-
-        if (somTransformacao) {
-
-            somTransformacao.pause();
-
-            somTransformacao.currentTime = 0;
-
-
-            somTransformacao.onended =
-                () => {
-
-                    tocarFalaPersonagem(
-                        personagemAtivo
-                    );
-                };
-
-
-            const tocarTransformacao =
-                somTransformacao.play();
-
-
-            if (
-                tocarTransformacao !== undefined
-            ) {
-
-                tocarTransformacao.catch(() => {
-
-                    // Se o navegador bloquear
-                    // o som de transformação,
-                    // ainda reproduzimos a fala.
-
-                    tocarFalaPersonagem(
-                        personagemAtivo
-                    );
-
-                });
-            }
-        }
-
-
-        // --------------------------------------------------------
-        // EFEITO DE BRILHO
-        // --------------------------------------------------------
-
-        carta.classList.remove(
-            "brilho-transformacao"
-        );
-
-
-        void carta.offsetWidth;
-
-
-        carta.classList.add(
-            "brilho-transformacao"
-        );
-
-
-        // --------------------------------------------------------
-        // CORES DA CARTA
-        // --------------------------------------------------------
-
-        if (
-            personagem === "nemesis"
-        ) {
-
-            carta.style.setProperty(
-                "--cor-carta",
-                "#00f5d4"
-            );
-
-        } else if (
-            faccaoAtiva === "autobot"
-        ) {
-
-            carta.style.setProperty(
-                "--cor-carta",
-                "#e50000"
-            );
-
-        } else {
-
-            carta.style.setProperty(
-                "--cor-carta",
-                "#7b2cbf"
-            );
-        }
-
-
-        // --------------------------------------------------------
-        // APLICAR NOVO ESTÁGIO
-        // --------------------------------------------------------
-
+        document
+            .querySelectorAll(".grupo-" + faccao)
+            .forEach(card => {
+                card.classList.remove("escondido");
+            });
+    }, 400);
+}
+
+
+function voltarParaFaccoes() {
+    const containerFaccoes = document.getElementById("container-faccoes");
+    const grid = document.getElementById("grid-personagens");
+    const botaoVoltar = document.getElementById("btn-voltar");
+    const titulo = document.getElementById("titulo-jogo");
+
+    grid.style.display = "none";
+    botaoVoltar.style.display = "none";
+
+    document.querySelectorAll(".card-inner").forEach(inner => {
         inner.classList.remove(
             "estagio-1",
             "estagio-2",
             "estagio-3"
         );
 
+        inner.classList.add("estagio-1");
+        inner.dataset.estagio = "1";
+    });
 
-        inner.classList.add(
-            `estagio-${proximoEstagio}`
+    document
+        .querySelectorAll(".grupo-autobot, .grupo-decepticon")
+        .forEach(card => {
+            card.classList.add("escondido");
+        });
+
+    containerFaccoes.style.display = "flex";
+    containerFaccoes.classList.remove("fade-out");
+
+    if (titulo) {
+        titulo.style.display = "block";
+        titulo.classList.remove("fade-out");
+    }
+
+    document.body.classList.add("pulsar");
+
+    personagemAtivo = null;
+    cliquesOptimus = 0;
+    tempoUltimoClique = 0;
+
+    atualizarHUD(null, 1);
+}
+
+
+function atualizarHUD(personagem, estagio) {
+    const hud = document.getElementById("hud-combate");
+
+    if (!hud) return;
+
+    if (!personagem || estagio <= 1 || !atributosG1[personagem]) {
+        hud.style.display = "none";
+        return;
+    }
+
+    const dados = atributosG1[personagem];
+
+    hud.style.display = "block";
+
+    const nome = document.getElementById("hud-nome");
+    const valForca = document.getElementById("val-forca");
+    const valInt = document.getElementById("val-int");
+    const valVel = document.getElementById("val-vel");
+    const valPow = document.getElementById("val-pow");
+
+    const barForca = document.getElementById("bar-forca");
+    const barInt = document.getElementById("bar-int");
+    const barVel = document.getElementById("bar-vel");
+    const barPow = document.getElementById("bar-pow");
+
+    if (nome) {
+        nome.textContent = dados.nome;
+        nome.style.color = dados.cor;
+    }
+
+    if (valForca) valForca.textContent = dados.str;
+    if (valInt) valInt.textContent = dados.int;
+    if (valVel) valVel.textContent = dados.vel;
+    if (valPow) valPow.textContent = dados.pow;
+
+    if (barForca) barForca.style.width = (dados.str * 10) + "%";
+    if (barInt) barInt.style.width = (dados.int * 10) + "%";
+    if (barVel) barVel.style.width = (dados.vel * 10) + "%";
+    if (barPow) barPow.style.width = (dados.pow * 10) + "%";
+}
+
+
+function desbloquearNemesis(card) {
+    if (nemesisDesbloqueado) return;
+
+    const agora = Date.now();
+
+    if (agora - tempoUltimoClique > 800) {
+        cliquesOptimus = 0;
+    }
+
+    tempoUltimoClique = agora;
+    cliquesOptimus++;
+
+    if (cliquesOptimus < 5) return;
+
+    cliquesOptimus = 0;
+    nemesisDesbloqueado = true;
+
+    const alerta = document.getElementById("teletraan-alert-0");
+
+    if (alerta) {
+        alerta.pause();
+        alerta.currentTime = 0;
+
+        const promessa = alerta.play();
+
+        if (promessa && promessa.catch) {
+            promessa.catch(() => {});
+        }
+    }
+
+    const imagem = card.querySelector(".lider img");
+    const nome = card.querySelector(".lider h3");
+    const logo = card.querySelector(".logo img");
+    const tituloLogo = card.querySelector(".logo h3");
+
+    if (imagem) imagem.src = "nemesis_prime.jpg";
+    if (logo) logo.src = "logo_decepticon.jpg";
+
+    if (nome) {
+        nome.textContent = "Nemesis Prime";
+    }
+
+    if (tituloLogo) {
+        tituloLogo.textContent = "NEMESIS PRIME";
+    }
+
+    card.dataset.personagem = "nemesis";
+    personagemAtivo = "nemesis";
+
+    const inner = card.querySelector(".card-inner");
+
+    if (inner) {
+        inner.classList.remove(
+            "estagio-1",
+            "estagio-2",
+            "estagio-3"
         );
 
+        inner.classList.add("estagio-1");
+        inner.dataset.estagio = "1";
+    }
 
-        inner.dataset.estagio =
-            proximoEstagio;
-
-
-        // --------------------------------------------------------
-        // ATUALIZAR HUD
-        // --------------------------------------------------------
-
-        atualizarHUD(
-            personagem,
-            proximoEstagio
-        );
-
-        </script>
-    <!-- ============================================================
-     ÁUDIOS DOS PERSONAGENS
-     ============================================================ -->
-
-<!-- AUTOBOTS -->
-
-<audio
-    id="optimus-frase-0"
-    src="optimus0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="optimus-frase-1"
-    src="optimus1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="optimus-frase-2"
-    src="optimus2.mp3"
-    preload="auto">
-</audio>
-
-
-<audio
-    id="jazz-frase-0"
-    src="jazz0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="jazz-frase-1"
-    src="jazz1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="jazz-frase-2"
-    src="jazz2.mp3"
-    preload="auto">
-</audio>
-
-
-<audio
-    id="cliffjumper-frase-0"
-    src="cliffjumper0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="cliffjumper-frase-1"
-    src="cliffjumper1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="cliffjumper-frase-2"
-    src="cliffjumper2.mp3"
-    preload="auto">
-</audio>
-
-
-<audio
-    id="wheeljack-frase-0"
-    src="wheeljack0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="wheeljack-frase-1"
-    src="wheeljack1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="wheeljack-frase-2"
-    src="wheeljack2.mp3"
-    preload="auto">
-</audio>
-
-
-<!-- ============================================================
-     GRIMLOCK
-     ============================================================ -->
-
-<audio
-    id="grimlock-frase-0"
-    src="grimlock0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="grimlock-frase-1"
-    src="grimlock1.mp3"
-    preload="auto">
-</audio>
-
-<!-- CORRIGIDO: o ID não pode estar quebrado em duas linhas -->
-<audio
-    id="grimlock-frase-2"
-    src="grimlock2.mp3"
-    preload="auto">
-</audio>
-
-
-<!-- ============================================================
-     DECEPTICONS
-     ============================================================ -->
-
-<audio
-    id="megatron-frase-0"
-    src="megatron0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="megatron-frase-1"
-    src="megatron1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="megatron-frase-2"
-    src="megatron2.mp3"
-    preload="auto">
-</audio>
-
-
-<audio
-    id="starscream-frase-0"
-    src="starscream0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="starscream-frase-1"
-    src="starscream1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="starscream-frase-2"
-    src="starscream2.mp3"
-    preload="auto">
-</audio>
-
-
-<audio
-    id="soundwave-frase-0"
-    src="soundwave0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="soundwave-frase-1"
-    src="soundwave1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="soundwave-frase-2"
-    src="soundwave2.mp3"
-    preload="auto">
-</audio>
-
-
-<audio
-    id="shockwave-frase-0"
-    src="shockwave0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="shockwave-frase-1"
-    src="shockwave1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="shockwave-frase-2"
-    src="shockwave2.mp3"
-    preload="auto">
-</audio>
-
-
-<audio
-    id="blitzwing-frase-0"
-    src="blitzwing0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="blitzwing-frase-1"
-    src="blitzwing1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="blitzwing-frase-2"
-    src="blitzwing2.mp3"
-    preload="auto">
-</audio>
-
-
-<!-- ============================================================
-     TELETRAAN AUTOBOT
-     ============================================================ -->
-
-<audio
-    id="teletraan-autobot-0"
-    src="teletraan_autobot0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="teletraan-autobot-1"
-    src="teletraan_autobot1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="teletraan-autobot-2"
-    src="teletraan_autobot2.mp3"
-    preload="auto">
-</audio>
-
-
-<!-- ============================================================
-     TELETRAAN DECEPTICON
-     
-     ATENÇÃO:
-     Os nomes dos arquivos abaixo permanecem exatamente como
-     estavam no projeto original.
-     ============================================================ -->
-
-<audio
-    id="teletraan-decepticon-0"
-    src="teletraan_decepticon0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="teletraan-decepticon-1"
-    src="teletraan_decepticon2.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="teletraan-decepticon-2"
-    src="teletraan_decepticon3.mp3"
-    preload="auto">
-</audio>
-
-
-<!-- ============================================================
-     ALERTA / NEMESIS PRIME
-     ============================================================ -->
-
-<audio
-    id="teletraan-alert-0"
-    src="teletraan_alert0.mp3"
-    preload="auto">
-</audio>
-
-
-<audio
-    id="nemesis-frase-0"
-    src="nemesis0.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="nemesis-frase-1"
-    src="nemesis1.mp3"
-    preload="auto">
-</audio>
-
-<audio
-    id="nemesis-frase-2"
-    src="nemesis2.mp3"
-    preload="auto">
-</audio>
-
-
-<!-- ============================================================
-     FECHAMENTO
-     ============================================================ -->
+    const frase = document.getElementById("nemesis-frase-0");
+
+    if (frase) {
+        frase.pause();
+        frase.currentTime = 0;
+
+        const promessa = frase.play();
+
+        if (promessa && promessa.catch) {
+            promessa.catch(() => {});
+        }
+    }
+}
+
+
+function girarCard(card, personagem) {
+    const inner = card.querySelector(".card-inner");
+
+    if (!inner) return;
+
+    const estagioAtual = Number(inner.dataset.estagio || 1);
+
+    let proximoEstagio;
+
+    if (estagioAtual === 1) {
+        proximoEstagio = 2;
+    } else if (estagioAtual === 2) {
+        proximoEstagio = 3;
+    } else {
+        proximoEstagio = 1;
+    }
+
+    if (personagem === "optimus") {
+        desbloquearNemesis(card);
+
+        if (nemesisDesbloqueado) {
+            personagem = "nemesis";
+        }
+    }
+
+    personagemAtivo = personagem;
+
+    inner.classList.remove(
+        "estagio-1",
+        "estagio-2",
+        "estagio-3"
+    );
+
+    inner.classList.add("estagio-" + proximoEstagio);
+    inner.dataset.estagio = proximoEstagio;
+
+    if (somTransformacao) {
+        somTransformacao.pause();
+        somTransformacao.currentTime = 0;
+
+        somTransformacao.onended = () => {
+            tocarFalaPersonagem(personagemAtivo);
+        };
+
+        const promessa = somTransformacao.play();
+
+        if (promessa && promessa.catch) {
+            promessa
+                .then(() => {})
+                .catch(() => {
+                    tocarFalaPersonagem(personagemAtivo);
+                });
+        }
+    } else {
+        tocarFalaPersonagem(personagemAtivo);
+    }
+
+    card.classList.remove("brilho-card");
+
+    void card.offsetWidth;
+
+    card.classList.add("brilho-card");
+
+    setTimeout(() => {
+        card.classList.remove("brilho-card");
+    }, 500);
+
+    atualizarHUD(personagemAtivo, proximoEstagio);
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (audio) {
+        audio.volume = 0.25;
+
+        const tentativa = audio.play();
+
+        if (tentativa && tentativa.catch) {
+            tentativa.catch(() => {
+                const iniciarMusica = () => {
+                    audio.play().catch(() => {});
+                    document.removeEventListener(
+                        "click",
+                        iniciarMusica
+                    );
+                };
+
+                document.addEventListener(
+                    "click",
+                    iniciarMusica,
+                    { once: true }
+                );
+            });
+        }
+    }
+
+    if (somTransformacao) {
+        somTransformacao.volume = 0.2;
+    }
+});
+
+
+document.addEventListener("click", event => {
+    const card = event.target.closest(".card");
+
+    if (!card) return;
+
+    if (
+        card.classList.contains("grupo-autobot") ||
+        card.classList.contains("grupo-decepticon")
+    ) {
+        document.body.classList.remove("pulsar");
+    }
+});
+</script>
 
 </body>
-    </html>
-    
+</html>
